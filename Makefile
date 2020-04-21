@@ -10,8 +10,8 @@ SRCDIR = src
 OBJDIR = obj
 BINDIR = bin
 
-DEPS = $(wildcard $(SRCDIR)/*.h)
-SRC = $(wildcard $(SRCDIR)/*.c)
+DEPS = $(wildcard $(SRCDIR)/*.h) $(wildcard $(SRCDIR)/*/*.h)
+SRC = $(wildcard $(SRCDIR)/*.c) $(wildcard $(SRCDIR)/*/*.c)
 OBJ = $(SRC:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
 FLAG = -Wall -g3
@@ -35,9 +35,9 @@ run:
 	
 clean:
 	@ if [ $(ARCHIVE).$(TAR) ]; then rm -f $(ARCHIVE).$(TAR); echo "Archive removed!"; fi
-	@ rm -f $(OBJDIR)/*
+	@ rm -rf $(OBJDIR)
 	@ echo "Object files removed!"
-	@ rm -f $(BINDIR)/*
+	@ rm -rf $(BINDIR)
 	@ echo "Executable removed!"
 	
 package: clean
@@ -45,5 +45,4 @@ package: clean
 	@ echo "Archive created!"
 
 config:
-	@ if [ ! -d "bin/" ]; then mkdir bin; fi
-	@ if [ ! -d "obj/" ]; then mkdir obj; fi
+	@ $(shell ./.script.sh)
