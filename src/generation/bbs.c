@@ -3,6 +3,7 @@
 #include <gmp.h>
 #include <string.h>
 #include <time.h>
+#include "bbs.h"
 //Génère un blum  prime "p", tel que    p mod 4 = 3 
 void  blum_prime(mpz_t p, int  taille)
 {
@@ -83,13 +84,3 @@ void  bbs(mpz_t res , int  taille)
       mpz_clear(mod);
 
 } 
-int main(int argc, char const *argv[])
-{
-	mpz_t p;
-	mpz_init(p);
-	system("clear");
-	bbs(p,1024);
-	mpz_out_str(stdout,2,p);
-	printf("\n\n");
-	return 0;
-}
