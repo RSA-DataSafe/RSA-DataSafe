@@ -1,5 +1,8 @@
+#include <gmp.h>
+#include "structure/structure.h"
+#include "gestion_fichier/lecture.h"
 
 int main(void) {
-
-    return 0;
+    int a = chercher_utilisateur("er", "rt");
+    return a;
 }
