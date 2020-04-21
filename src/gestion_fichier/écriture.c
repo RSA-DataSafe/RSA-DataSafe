@@ -166,17 +166,3 @@ int  ecrire_fichier(char *chemin , char *message)
 {
 
 }
-int main(int argc, char const *argv[])
-{
-	int x=nouvel_utilisateur("lynda","MBLNH");
-	if(x==0)
-	{
-		printf("Parfait\n");
-	}
-	else
-	printf("Echou:%d\n", x);
- //Change_Email("lynda","love","lynda always happy");
-  //Change_MotDePasse("lynda always happy","love","aucun mot de passe");
-
-	return 0;
-}
