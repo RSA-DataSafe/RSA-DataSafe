@@ -5,7 +5,7 @@ if [ ! -d "bin/" ]; then
 fi
 
 if [ ! -d "obj/" ]; then 
-	mkdir obj;
+	mkdir obj
 	mkdir obj/gestion_fichier
 	mkdir obj/generation
 	mkdir obj/interface
