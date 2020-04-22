@@ -1,3 +1,5 @@
+<center>![RSA-Database](feature/logo.png)</center>
+
 # Projet RSA
 
 Le but de ce projet est d'implémenter RSA. Nous auront la possibilité de signer et de vérifier un fichier pour s'assurer de l'identiter de l'envoyeur (afin d'éviter l'attaque de l'homme du milieu). 
