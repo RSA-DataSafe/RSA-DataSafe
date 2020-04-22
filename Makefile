@@ -45,4 +45,4 @@ package: clean
 	@ echo "Archive created!"
 
 config:
-	@ $(shell ./.script.sh)
+	@ $(shell ./.script.sh) 
