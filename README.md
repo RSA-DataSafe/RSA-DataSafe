@@ -1,4 +1,4 @@
-<center>![RSA-Database](feature/logo.png)</center>
+<center>![RSA-Database](features/logo.png)</center>
 
 # Projet RSA
 
@@ -6,19 +6,19 @@ Le but de ce projet est d'implémenter RSA. Nous auront la possibilité de signe
 
 # Installation - Déployement du produit 
 
-## Compiler le projet
+## ⚒ Compiler le projet
 
 make
 
-## Executer le projet
+## ▶ Executer le projet
 
 make run
 
-## Le code source
+## 🗏 Le code source
 
-Il se trouve dans le répertoire src/.
+Il se trouve dans le répertoire `src/`.
 
-<pre>cd src/</pre>
+`cd src/`
 
 # Module de notre projet
 
