@@ -14,7 +14,7 @@ make
 
 make run
 
-## 🗏 Le code source
+## ℹ Le code source
 
 Il se trouve dans le répertoire `src/`.
 
