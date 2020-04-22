@@ -1,4 +1,4 @@
-<center>![RSA-Database](features/logo.png)</center>
+<center>![RSA-Database](features/rsa_logo.png)</center>
 
 # Projet RSA
 
