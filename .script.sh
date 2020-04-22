@@ -1,16 +1,11 @@
 #!/bin/bash
 
-if [ ! -d "bin/" ]; then 
-    mkdir bin
-fi
-
-if [ ! -d "obj/" ]; then 
-	mkdir obj
-	mkdir obj/gestion_fichier
-	mkdir obj/generation
-	mkdir obj/interface
-	mkdir obj/chiffrement
-	mkdir obj/dechiffrement
-	mkdir obj/signature
-	mkdir obj/calcul
-fi
+mkdir bin 2> /dev/null ;
+mkdir obj 2> /dev/null ;
+mkdir obj/gestion_fichier 2> /dev/null;
+mkdir obj/generation 2> /dev/null ;
+mkdir obj/interface 2>/dev/null ;
+mkdir obj/chiffrement 2> /dev/null ;
+mkdir obj/dechiffrement 2> /dev/null ;
+mkdir obj/signature 2> /dev/null ;
+mkdir obj/calcul 2> /dev/null
