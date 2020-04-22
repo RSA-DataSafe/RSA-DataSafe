@@ -1,22 +1,24 @@
+![RSA-Database](features/rsa_logo.png)
+
 # Projet RSA
 
 Le but de ce projet est d'implémenter RSA. Nous auront la possibilité de signer et de vérifier un fichier pour s'assurer de l'identiter de l'envoyeur (afin d'éviter l'attaque de l'homme du milieu). 
 
 # Installation - Déployement du produit 
 
-## Compiler le projet
+## ⚒ Compiler le projet
 
 make
 
-## Executer le projet
+## ▶ Executer le projet
 
 make run
 
-## Le code source
+## ℹ Le code source
 
-Il se trouve dans le répertoire src/.
+Il se trouve dans le répertoire `src/`.
 
-<pre>cd src/</pre>
+`cd src/`
 
 # Module de notre projet
 
