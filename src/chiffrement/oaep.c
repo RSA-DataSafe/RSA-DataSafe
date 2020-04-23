@@ -80,3 +80,7 @@ void oaep_block(mpz_t premiere_entree, mpz_t deuxieme_entree, mpz_t premiere_sor
     mpz_clear(tmp_message->taille);
     free(tmp_message);
 }
+
+block *oaep(block *b, mpz_t donnee_alea) {
+    return b;
+}
