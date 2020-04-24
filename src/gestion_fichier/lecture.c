@@ -10,22 +10,21 @@
 #define MAX_CARACT 60
 
 int chercher_utilisateur(char *email, char *mdp) {
-    
+		
 		FILE * fichier = NULL;
 		char user[MAX_CARACT], mot_passe[MAX_CARACT];
 		char* buffer = NULL;
-		size_t length = 0;
 		int ligne = 0;
 		
 		fichier = fopen("rsa/connexion","r");
-
-	 	if (fichier == NULL) {
+	 	
+		if (fichier == NULL) {
 					return ERR_LECT;
 		}
 		
-		while (getline(&buffer, &length, fichier) != -1) {ligne++;}
+		while (getline(&buffer, NULL, fichier) != -1) ligne++; 
 		if(buffer) free(buffer);
-		
+
 		rewind(fichier); // retour au début
 	  
 		for(int i = 0; i < ligne ; i++) {		
@@ -47,6 +46,10 @@ int chercher_utilisateur(char *email, char *mdp) {
 int recupere_cle_publique(char * email, char * mdp, cle_publique * publique) {
 		if(!chercher_utilisateur(email,mdp) == 0) {
 				char * chemin = malloc(sizeof(char)*MAX_CARACT + sizeof("rsa/") + sizeof("cle_privee"));
+				if(chemin == NULL) {
+						fprinf(stderr,"Erreur d'allocation Mémoire");
+						exit(1);
+				}
 				strcat(chemin,"rsa/");
 				strcat(chemin,email);
 				strcat(chemin,"/cle_privee");
@@ -67,6 +70,10 @@ int recupere_cle_publique(char * email, char * mdp, cle_publique * publique) {
 int recupere_cle_privee(char * email, char * mdp, cle_prive * prive) {
 		if(!chercher_utilisateur(email,mdp) == 0) {
 					char * chemin = malloc(sizeof(char) * MAX_CARACT + sizeof("rsa/") + sizeof("/cle_pub"));
+					if(chemin == NULL) {
+							fprintf(stderr,"Erreur d'allocation Mémoire");
+							exit(1);
+					}
 					char * res = lire_fichier(chemin);
 					
 					strcat(chemin,"rsa/");
@@ -86,6 +93,10 @@ int recupere_cle_privee(char * email, char * mdp, cle_prive * prive) {
 
 int lire_boite(char *email, boite * b) {
 	 char * chemin = malloc(sizeof("rsa/") + sizeof(email)+ sizeof("/boiteN"));
+	 if(chemin == NULL) {
+			fprintf(stderr,"Erreur d'allocation Mémoire");
+			exit(1);
+	 }
 	 strcat(chemin,email);	
 	 strcat(chemin,"boite");
 	 // cat le num
@@ -97,6 +108,10 @@ int lire_boite(char *email, boite * b) {
 
 char *lire_fichier(char * chemin) {
 		char * res = malloc(sizeof(char)*2000); // longueur d'une clée à changer je ne sais pas si bin ou hexa ? 
+		if(res == NULL) {
+			fprintf(stderr,"Erreur d'allocation Mémoire");
+			exit(1);
+		}
 		FILE * fichier = NULL;
 		fichier = fopen(chemin,"r");
 		if(fichier == NULL) {
