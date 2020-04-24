@@ -1,10 +1,10 @@
 #include <gmp.h>
 #include <stdio.h>
-#include "structure/structure.h"
-#include "gestion_fichier/lecture.h"
-
+#include "generation/bbs.c"
+#include "gestion_fichier/ecriture.c"
 int main(void) {
-    int a = chercher_utilisateur("user2@email.com", "mdp2");
-		printf("%d",a);    
+  
+	nouvel_utilisateur("hadjablynda99@gmail.com","lynda");
+	Change_Email("hadjablynda99@gmail.com","lynda","hadjabLNASFNE@gmail.fr");
 		return 0;
 }

@@ -1,3 +1,11 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
+#include <time.h>
+#include <gmp.h>
+#include "erreur.h"
+#include "../structure/structure.h"
 #ifndef _ecriture_h
 #define _ecriture_h
 
@@ -16,7 +24,7 @@ int nouvel_utilisateur(char *email, char *mdp);
  * @param newemail : nouvel email de l'utilisateur
  * @return 0 si ça fonctionne, sinon un des signaux d'erreur
  * */
-int Change_Email(char *email, char *mdp, char *newemail)
+int Change_Email(char *email, char *mdp, char *newemail);
 
 /**
  * Permet de modifier le mot de passe  de l'utilisateur courant 
@@ -25,7 +33,7 @@ int Change_Email(char *email, char *mdp, char *newemail)
  * @param newmdp : le nouveau mot de passe  de l'utilisateur courant 
  * @return 0 si ça fonctionne, sinon un des signaux d'erreur
  * */
-int Change_MotDePasse (char*email, char *mdp, char* newmdp)
+int Change_MotDePasse (char*email, char *mdp, char* newmdp);
 
 /**
  * Permet de générer de nouvelles clés  pour l'utilisateur courant
