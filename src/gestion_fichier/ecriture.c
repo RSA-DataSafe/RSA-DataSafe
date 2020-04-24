@@ -142,6 +142,32 @@ int  Change_MotDePasse (char*email , char *mdp , char* newmdp)
 }
 int  change_cle(informations * InfoUser)
 {
+  mpz_set_ui(InfoUser->prive.d,213);//on va les remplcaer après avec l vrai clée
+  mpz_set_ui(InfoUser->prive.n,214);
+  mpz_set_ui(InfoUser->publique.e,547);
+  mpz_set_ui(InfoUser->publique.n,214);
+  char *email=malloc((strlen(InfoUser->email) +20)*sizeof(char));
+  strcpy(email,InfoUser->email);
+  strcat(email,"cles.txt");
+  FILE *fichier=fopen(email,"w");
+  if(fichier!=NULL)
+  {
+  char *d =malloc(1024*sizeof(char));
+  char *e =malloc(1024*sizeof(char));
+  char *n =malloc(1024*sizeof(char));
+  mpz_get_str(d,10,InfoUser->prive.d);
+  mpz_get_str(e,10,InfoUser->publique.e);
+  mpz_get_str(n,10,InfoUser->publique.n);
+ ecrire_fichier(email,d);
+ ecrire_fichier(email,e);
+ ecrire_fichier(email,n);
+  fclose(fichier);
+  return 0;
+}
+else
+{
+  return ERR_ERCI;
+}
 
 }
 int  stocker_message(char *email , mpz_t  message , char *boite)
@@ -154,7 +180,7 @@ int  ecrire_fichier(char *chemin , char *message)
      fichier =fopen(chemin,"a");
      if(fichier!=NULL)
      {
-              fputs("\n",fichier);
+             
               fputs(message,fichier);
               fputs("\n",fichier);
               fclose(fichier);
