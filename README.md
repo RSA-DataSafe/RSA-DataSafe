@@ -1,6 +1,6 @@
 ![RSA-Database](features/rsa_logo.png)
 
-![GitHub top language](https://img.shields.io/github/languages/top/RSA-Datasafe/RSA-Datasafe)
+[![GitHub top language](https://img.shields.io/github/languages/top/RSA-Datasafe/RSA-Datasafe)](https://github.com/RSA-DataSafe)
 
 # Projet RSA
 
