@@ -19,7 +19,11 @@ int main(void) {
 	    mpz_out_str(stdout,10,u);
 	    printf("\n\n");
 	    mpz_out_str(stdout,10,v);
-	    printf("\n\n");
+	   printf("\n\n");
+	shift_gauche(e,2);
+	printf("e= ");
+	mpz_out_str(stdout,10,e);
+	printf("\n\n");
 	
 		return 0;
 }
