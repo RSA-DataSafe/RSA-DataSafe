@@ -1,4 +1,8 @@
+<p align="center">
 ![RSA-Database](features/rsa_logo.png)
+</p>
+
+---
 
 [![GitHub top language](https://img.shields.io/github/languages/top/RSA-Datasafe/RSA-Datasafe)](https://github.com/RSA-DataSafe/RSA-DataSafe)
 
