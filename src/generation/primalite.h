@@ -1,3 +1,4 @@
+#include "../calcul/calcul.h"
 #ifndef _primalite_h
 #define _primalite_h
 

@@ -1,3 +1,4 @@
+
 #ifndef _euclide_h
 #define _euclide_h
 
