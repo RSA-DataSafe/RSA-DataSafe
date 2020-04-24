@@ -9,6 +9,6 @@
  * @param phi_n : le phi(n) de RSA 
  * @param e : clé publique de RSA 
  * */
-void euclide_etendu(mpz_t u, mpz_t v, mpz_t phi_n, mpz_t e);
+void euclide_etendu(mpz_t u_1, mpz_t v_1, mpz_t phi_n, mpz_t e,mpz_t pgcd);
 
 #endif // !_euclide_h

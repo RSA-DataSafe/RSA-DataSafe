@@ -5,16 +5,24 @@
 #include "gestion_fichier/ecriture.c"
 #include "calcul/calcul.c"
 #include "generation/primalite.c"
+#include "generation/euclide.c"
 int main(void) {
 	
-    mpz_t x;
-mpz_t n;
-mpz_init(x);
-mpz_init(n);
-mpz_set_ui(x,19319);
-mpz_set_ui(n,20);
-printf("%d\n", miller_rabbin(x,n));  
-
-printf("\n\n");
+    mpz_t u,v,phi,e,pgcd;
+	mpz_init(u);
+	mpz_init(v);
+	mpz_init(phi);
+	mpz_init(e);
+	mpz_init(pgcd);
+	mpz_set_ui(phi,5);
+	mpz_set_ui(e,3);
+	euclide_etendu( u, v, phi, e , pgcd );
+	 mpz_out_str(stdout,10,pgcd);
+	    printf("\n\n");
+	    mpz_out_str(stdout,10,u);
+	    printf("\n\n");
+	    mpz_out_str(stdout,10,v);
+	    printf("\n\n");
+	
 		return 0;
 }
