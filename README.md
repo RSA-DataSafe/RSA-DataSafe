@@ -1,5 +1,7 @@
 <p align="center">
+
 ![RSA-Database](features/rsa_logo.png)
+
 </p>
 
 ---
