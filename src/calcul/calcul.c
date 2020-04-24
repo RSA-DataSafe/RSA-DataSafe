@@ -15,7 +15,7 @@ void expo_mod(mpz_t res, mpz_t x, mpz_t n, mpz_t m)
 }
 void shift_gauche(mpz_t nombre, int decalage)
 {
-
+  mpz_mul_2exp (nombre,nombre, decalage);
 }
 void shift_droite(mpz_t nombre, int decalage)
 {
