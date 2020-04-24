@@ -1,6 +1,7 @@
 #include <gmp.h>
 
 #include "../structure/structure.h"
+#include "../calcul/calcul.h"
 #include "chiffrement.h"
 
 message *chiffrement(message *m, cle_publique *publique, message *encodage) {
