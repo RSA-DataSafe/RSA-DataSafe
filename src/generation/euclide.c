@@ -1,6 +1,6 @@
 #include "euclide.h"
 
-void euclide_etendu(mpz_t u_1, mpz_t v_1, mpz_t phi_n, mpz_t e,mpz_t pgcd)
+void euclide_etendu(mpz_t u_1, mpz_t v_1, mpz_t phi_n, mpz_t e)
 {
   mpz_t r;
   mpz_init(r);
@@ -49,7 +49,6 @@ void euclide_etendu(mpz_t u_1, mpz_t v_1, mpz_t phi_n, mpz_t e,mpz_t pgcd)
           mpz_mul(mu,q,v1);
           mpz_sub(v1,vs,mu);
     }
-    mpz_set(pgcd,r);
     mpz_set(u_1,u);
     mpz_set(v_1,v);
      
