@@ -48,8 +48,6 @@ void mgf(mpz_t res, message *graine, mpz_t taille) {
         free(tmp_sha3);
     }
 
-    
-
     mpz_clear(tmp_i2osp->nombre);
     mpz_clear(tmp_i2osp->taille);
     free(tmp_i2osp);
