@@ -8,6 +8,7 @@
 #include "generation/euclide.c"
 int main(void) {
 	
+<<<<<<< HEAD
    //nouvel_utilisateur("hadjablynda99@gmail.com","lynda");
   // nouvel_utilisateur("SFNLDNLVE@gmail.fr","SFN");
 	//Change_Email("SFNLDNLVE@gmail.fr","SFN","LNDSFN2015@gmail.com");
@@ -28,5 +29,24 @@ mpz_set_ui(user.prive.n,27);
 
 
 	change_cle(&user);*/
+=======
+    mpz_t u,v,phi,e;
+	mpz_init(u);
+	mpz_init(v);
+	mpz_init(phi);
+	mpz_init(e);
+	mpz_set_ui(phi,5);
+	mpz_set_ui(e,3);
+	euclide_etendu( u, v, phi, e );
+	    mpz_out_str(stdout,10,u);
+	    printf("\n\n");
+	    mpz_out_str(stdout,10,v);
+	   printf("\n\n");
+	shift_gauche(e,2);
+	printf("e= ");
+	mpz_out_str(stdout,10,e);
+	printf("\n\n");
+	
+>>>>>>> 29a2df12e8351a327fc89cfa6e0c16f37afd99e6
 		return 0;
 }
