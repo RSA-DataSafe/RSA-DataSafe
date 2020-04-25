@@ -6,6 +6,8 @@
 #include <gmp.h>
 #include "erreur.h"
 #include "../structure/structure.h"
+#include <sys/stat.h>
+#include <sys/types.h>
 #ifndef _ecriture_h
 #define _ecriture_h
 
