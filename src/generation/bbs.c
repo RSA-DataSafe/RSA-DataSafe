@@ -20,6 +20,9 @@ void  blum_prime(mpz_t p, int  taille)
 	do
 	{
 		mpz_urandomb(nombre,etat,taille);
+    printf("p=");
+    mpz_out_str(stdout,10,nombre);
+    printf("\n\n");
 		mpz_mod_ui(mod,nombre,4);
 	}while(mpz_cmp_ui(mod,3)!=0);
 	mpz_set(p,nombre);
