@@ -7,7 +7,27 @@
 //Génère un blum  prime "p", tel que    p mod 4 = 3 
 void  blum_prime(mpz_t p, int  taille)
 {
-	//je v l revoir
+	time_t t;
+	mpz_t nombre;
+	mpz_init(nombre);
+	mpz_t mod;
+	mpz_init(mod);
+	int seed;
+	seed=(int) time(&t);
+	gmp_randstate_t etat ;
+	gmp_randinit_default(etat);
+	gmp_randseed_ui(etat, seed);
+	do
+	{
+		mpz_urandomb(nombre,etat,taille);
+    printf("p=");
+    mpz_out_str(stdout,10,nombre);
+    printf("\n\n");
+		mpz_mod_ui(mod,nombre,4);
+	}while(mpz_cmp_ui(mod,3)!=0);
+	mpz_set(p,nombre);
+	mpz_clear(nombre);
+	mpz_clear(mod);
 }
 //Génère un  nombre "s" aléatoirement  tel que 1  <= s  <= n-1
 void  GenererS(mpz_t s, mpz_t n)
