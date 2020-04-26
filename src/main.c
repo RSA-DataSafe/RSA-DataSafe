@@ -11,6 +11,9 @@ int main(void) {
 
 mpz_t p;
 mpz_init(p);
-blum_prime(p,2048);
+bbs(p,1024);
+printf("\n\n");
+mpz_out_str(stdout,10,p);
+printf("\n\n");
 		return 0;
 }
