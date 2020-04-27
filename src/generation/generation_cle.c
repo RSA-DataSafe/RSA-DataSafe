@@ -95,7 +95,8 @@ void genere_cle(cle_publique *publique, cle_prive *prive, int taille){
 	
 
 	calculerD(prive, publique);
-	
+	mpz_set(prive->n,publique->n);
+
 
 	mpz_clears(p,q,n,phi_n, NULL);
 }
