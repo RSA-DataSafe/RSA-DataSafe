@@ -10,37 +10,41 @@
 void  blum_prime(mpz_t p, int  taille)
 {
 	
-  time_t t; 
-  int seed;
-  seed = (int) time(&t);
   gmp_randstate_t etat ;
   gmp_randinit_default(etat);
-  gmp_randseed_ui(etat, seed);
+  gmp_randseed_ui(etat, (unsigned)clock());
+  
   for(;;)
  {
+	
+  
     mpz_urandomb(p, etat, taille); 
-  if(mpz_probab_prime_p(p,2) && mpz_fdiv_ui(p,4)==3)
+	mpz_nextprime(p,p);
+
+  if( mpz_fdiv_ui(p,4)==3 )
   {
          break;
+
   }
+
+
 }
+     gmp_randclear( etat );
   
 }
 //Génère un  nombre "s" aléatoirement  tel que 1  <= s  <= n-1
 void  GenererS(mpz_t s, mpz_t n)
 {
-	time_t t;
-	int seed=(int) time(&t);
 	mpz_t res;
 	mpz_init(res);
 	gmp_randstate_t etat ;
 	gmp_randinit_default(etat);
-	gmp_randseed_ui(etat,seed);
-	do{
-   mpz_urandomm(res,etat,n);
-	}while(mpz_cmp_ui(res,0)==0);
-	mpz_set(s,res);
+	gmp_randseed_ui(etat,(unsigned)time(NULL));
+	mpz_sub_ui(res, n, 2);
+	mpz_urandomm (s, etat, res);
+	mpz_add_ui(s, s, 1);
     mpz_clear(res);
+    gmp_randclear( etat );
 }
 //générer un nombre res d taille souhaité 
 void  bbs(mpz_t res , int  taille)
