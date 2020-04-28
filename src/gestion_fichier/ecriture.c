@@ -228,7 +228,14 @@ else
 }
 int  stocker_message(char *email , mpz_t  message , char *boite)
 {
-    
+    char *str=malloc(1024*sizeof(char));
+    mpz_get_str(str,10,message);
+    char dossier[300];
+    strcpy(dossier,"../../RSA-DataSafe/rsa/");
+    strcat(dossier,email);
+    strcat(dossier,"/");
+    strcat(dossier,boite);
+    ecrire_fichier(dossier,str);
 }
 int  ecrire_fichier(char *chemin , char *message)
 {
