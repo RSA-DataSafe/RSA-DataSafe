@@ -1,3 +1,15 @@
+#include <gmp.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <signal.h>
+#include "euclide.h"
+#include <unistd.h>
+#include <errno.h>
+#include <sys/wait.h> 
+#include <assert.h>
+#include <sys/types.h>
+#include <time.h>
+#include "primalite.h"
 /**
  * Procédure qui permet de calculer phi(n) = (p -1) * (q-1)
  * @param p : p de RSA
