@@ -9,7 +9,7 @@
 #include <assert.h>
 #include <sys/types.h>
 #include <time.h>
-#include "miller-rabin.h"
+#include "primalite.h"
 
 /**
  * Procédure qui permet de calculer phi(n) = (p -1) * (q-1)
@@ -20,7 +20,7 @@
 void calculPhi(mpz_t p, mpz_t q, mpz_t phi_n){
 	//p-1
 	mpz_sub_ui(p,p,1);
-	//p-1
+	//q-1
 	mpz_sub_ui(q,q,1);
 	//phi(n)=(p-1)(q-1)
 	mpz_mul(phi_n,p,q);	
@@ -58,15 +58,18 @@ void calculerD(cle_prive *prive, cle_publique *publique){
 
 void GenererPQRSA(mpz_t p, mpz_t q, mpz_t n, int taille){
 
+    mpz_t tour;
+    mpz_init(tour);
+    mpz_set_ui(tour,40);
 		do{
 			bbs(p,taille);
-			}while(mpz_cmp_ui(p,0)==0 || Miller_Rabin(p,40)!=1);
+			}while(mpz_cmp_ui(p,0)==0 || miller_rabbin(p,tour)!=1);
 				mpz_set(n,p);
 
 		do{
 			bbs(q,taille);
 
-		}while(mpz_cmp_ui(q,0)==0 || Miller_Rabin(q,40)!=1|| mpz_cmp(p,q)==0);
+		}while(mpz_cmp_ui(q,0)==0 || miller_rabbin(q,tour)!=1|| mpz_cmp(p,q)==0);
 			mpz_mul(n,n,q);
 	
 
