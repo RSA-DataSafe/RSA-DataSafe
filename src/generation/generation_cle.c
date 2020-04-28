@@ -60,13 +60,13 @@ void GenererPQRSA(mpz_t p, mpz_t q, mpz_t n, int taille){
 
 		do{
 			bbs(p,taille);
-			}while(mpz_cmp_ui(p,0)==0 || Miller_Rabin(p,4)!=1);
+			}while(mpz_cmp_ui(p,0)==0 || Miller_Rabin(p,40)!=1);
 				mpz_set(n,p);
 
 		do{
 			bbs(q,taille);
 
-		}while(mpz_cmp_ui(q,0)==0 || Miller_Rabin(q,4)!=1|| mpz_cmp(p,q)==0);
+		}while(mpz_cmp_ui(q,0)==0 || Miller_Rabin(q,40)!=1|| mpz_cmp(p,q)==0);
 			mpz_mul(n,n,q);
 	
 
