@@ -10,13 +10,7 @@
 
 int main(void) {
 	
-   mpz_t n;
-   mpz_init(n);
-   mpz_set_ui(n,23);
-   mpz_t tour;
-   mpz_init(tour);
-   mpz_set_ui(tour,2);
-   printf("%d\n", miller_rabbin(n,tour)); 
+  
 
 		return 0;
 }
