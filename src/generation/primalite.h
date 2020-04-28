@@ -1,3 +1,4 @@
+#include "../calcul/calcul.h"
 #ifndef _primalite_h
 #define _primalite_h
 
@@ -6,6 +7,7 @@
  * @param a : nombre aléatoire compris dans l'intervalle [2, n – 2]
  * @param n : nombre à tester
  * @return retourne 1 si c'est un témoin de Miller, 0 sinon
+ *on a oublié un paramètre 
  * */
 int temoin_de_miller(mpz_t a , mpz_t n);
 

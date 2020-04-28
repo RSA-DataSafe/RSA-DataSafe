@@ -1,5 +1,5 @@
 *.exe
 *.o
-bin
-obj
 *.pdf
+bin/
+obj/

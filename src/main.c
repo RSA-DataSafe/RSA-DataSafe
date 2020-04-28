@@ -1,10 +1,17 @@
 #include <gmp.h>
 #include <stdio.h>
-#include "structure/structure.h"
-#include "gestion_fichier/lecture.h"
+#include <string.h>
+#include "generation/bbs.c"
+#include "gestion_fichier/ecriture.c"
+#include "calcul/calcul.c"
+#include "generation/primalite.c"
+#include "generation/euclide.c"
+#include "generation/generation_cle.c"
 
 int main(void) {
-    int a = chercher_utilisateur("user2@email.com", "mdp2");
-		printf("%d",a);    
+	
+
+    
+
 		return 0;
 }
