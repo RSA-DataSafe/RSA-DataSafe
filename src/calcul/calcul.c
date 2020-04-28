@@ -1,4 +1,5 @@
 #include "calcul.h"
+
 void expo_mod(mpz_t res, mpz_t x, mpz_t n, mpz_t m)
 {
     mpz_t e1;

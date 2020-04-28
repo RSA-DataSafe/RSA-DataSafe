@@ -1,5 +1,7 @@
 #ifndef _chiffrement_h
 #define _chiffrement_h
+#include <time.h>
+#include <stdlib.h>
 
 /**
  * Permet le chiffrement

@@ -9,8 +9,9 @@
 #include <assert.h>
 #include <sys/types.h>
 #include <time.h>
-#include "miller-rabin.h"
-
+// >>> include inexistant 
+// #include "miller-rabin.h"
+// <<<
 /**
  * Procédure qui permet de calculer phi(n) = (p -1) * (q-1)
  * @param p : p de RSA

@@ -22,23 +22,27 @@ int chercher_utilisateur(char *email, char *mdp) {
 					return ERR_LECT;
 		}
 		
-		while (getline(&buffer, NULL, fichier) != -1) ligne++; 
-		if(buffer) free(buffer);
-
-		rewind(fichier); // retour au début
-	  
-		for(int i = 0; i < ligne ; i++) {		
-						fscanf(fichier,"%s %s",user,mot_passe);
-						if(!strcmp(user,email)) {
-										if(!(strcmp(mdp,mot_passe))) {
-												fclose(fichier);
-												return 1;
-										}
-										else {
-												break; // on ne vérifie pas le reste car le mot de passe est faux 
-										}
-						}
-		}
+		while (getline(&user, NULL, fichier) != -1) {
+				if(getline(&mdp,NULL,fichier) == -1) {
+						if(user) free(user);
+						if(mdp) free(mdp); // si ce n'est pas la première fois...
+						fclose(fichier);
+					 	return ERR_LECT; // Le fichier n'est pas correcte
+				}
+				if(!strcmp(user,email)) {
+						if(!(strcmp(mdp,mot_passe))) {
+							if(user) free(user);
+							if(mdp) free(mdp);
+							fclose(fichier)
+							return 1;
+							}
+							else {
+								break; // On ne vérifie pas le reste car le mot de passe est faux
+							}
+				}	
+		}	 
+		if(user) free(user);
+		if(mdp) free(mdp);
 		fclose(fichier);	
 		return 0;
 }
