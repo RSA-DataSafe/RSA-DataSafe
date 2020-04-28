@@ -6,39 +6,36 @@
 #include "bbs.h"
 #include "primalite.h"
 #include <math.h>
+
 void  blum_prime(mpz_t p, int  taille)
 {
-  time_t t; 
-  int seed;
-  seed = (int) time(&t);
   gmp_randstate_t etat ;
   gmp_randinit_default(etat);
-  gmp_randseed_ui(etat, seed);
- for(;;)
+  gmp_randseed_ui(etat, (unsigned)clock());
+  for(;;)
  {
-    mpz_urandomb(p, etat, taille);
-  if(mpz_probab_prime_p(p,2) && mpz_fdiv_ui(p,4)==3)
+  mpz_urandomb(p, etat, taille); 
+  mpz_nextprime(p,p);
+  if( mpz_fdiv_ui(p,4)==3 )
   {
-    break;
+         break;
   }
-}
+} gmp_randclear(etat); 
 }
 void  GenererS(mpz_t s, mpz_t n)
 {
-	gmp_randstate_t etat ;
-	gmp_randinit_default(etat);
-  time_t t; 
-  int seed;
-  seed = (int) time(&t);
-	gmp_randseed_ui(etat,seed);
-	for(;;)
+  gmp_randstate_t etat ;
+  gmp_randinit_default(etat);
+  gmp_randseed_ui(etat,(unsigned)clock());
+  for(;;)
   {
-     mpz_urandomm(s,etat,n);
+     mpz_urandomm (s, etat, n);
      if(mpz_cmp_ui(s,0)!=0)
      {
-           break;
+      break;
      }
-  }
+  }	
+  gmp_randclear(etat);
 }
 void  bbs(mpz_t res , int  taille)
 {
@@ -55,7 +52,7 @@ void  bbs(mpz_t res , int  taille)
     mpz_t mod;
     mpz_init(mod);
     int j=0;
-     blum_prime(p,taille);
+    blum_prime(p,taille);
     do
     {
      blum_prime(q,taille);
@@ -65,12 +62,11 @@ void  bbs(mpz_t res , int  taille)
     mpz_setbit(tmp,taille-1);
     while(j<taille)
     {
-    	mpz_powm_ui(mod,s,2,n);
-    	if(mpz_odd_p(mod)!=0) mpz_setbit(tmp,taille-1-j) ;
-    	mpz_set(s,mod);
-    	j++;
-    	if(mpz_cmp_ui(mod,0)==0)
-    		break;
+     mpz_powm_ui(mod,s,2,n);
+     if(mpz_odd_p(mod)!=0) mpz_setbit(tmp,taille-1-j) ;
+     mpz_set(s,mod);
+     j++;
+      if(mpz_cmp_ui(mod,0)==0) break;
     }
       mpz_set(res,tmp);
       mpz_clear(p);
