@@ -1,16 +1,30 @@
-#include "calcul.h"
-void expo_mod(mpz_t res, mpz_t x, mpz_t n, mpz_t m)
-{
-    mpz_t e1;
-    mpz_init(e1);
-    mpz_set_ui(res,1);
-    mpz_t tmp;
-    mpz_init(tmp);
-    while(mpz_cmp(e1,n)<0)
-    { 
-      mpz_add_ui(e1,e1,1);
-      mpz_mul(tmp,x,res);
-      mpz_mod(res,tmp,m);
+#include <gmp.h>
+#include <time.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+//eponentiation modulaire 
+
+void square_and_multiply(mpz_t res, mpz_t num, mpz_t exp, mpz_t mod){
+    mpz_set(res, num);
+    
+    // taille de l'eposant "exp" en nombre de bit
+    int j=mpz_sizeinbase(exp,2);
+    
+    //-2 car on compte pas le bit de poid fort et on commence à partir de l'indice 0
+    j=j-2;
+    
+    for(int i=j; i>=0; i--)
+    {
+        // si bit à 0 square
+        mpz_mul(res,res,res);
+        mpz_mod(res,res,mod);
+		// si bit à 1 mutiply en plus du square 
+        if( mpz_tstbit(exp, i) == 1 ) 
+        { 
+            mpz_mul(res,res, num);
+            mpz_mod(res,res,mod);
+		}
     }
 }
 void shift_gauche(mpz_t nombre, int decalage)
