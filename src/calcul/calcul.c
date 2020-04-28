@@ -8,18 +8,16 @@
 void square_and_multiply(mpz_t res, mpz_t num, mpz_t exp, mpz_t mod){
     mpz_set(res, num);
     
-    // taille de l'eposant "exp" en nombre de bit
-    int j=mpz_sizeinbase(exp,2);
     
-    //-2 car on compte pas le bit de poid fort et on commence à partir de l'indice 0
-    j=j-2;
+    int j=mpz_sizeinbase(exp,2);
+      j=j-2;
     
     for(int i=j; i>=0; i--)
     {
-        // si bit à 0 square
+        
         mpz_mul(res,res,res);
         mpz_mod(res,res,mod);
-		// si bit à 1 mutiply en plus du square 
+		
         if( mpz_tstbit(exp, i) == 1 ) 
         { 
             mpz_mul(res,res, num);
