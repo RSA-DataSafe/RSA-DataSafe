@@ -10,88 +10,99 @@
 #define MAX_CARACT 60
 
 int chercher_utilisateur(char *email, char *mdp) {
-		FILE * fichier = NULL;
-		char user[MAX_CARACT], mot_passe[MAX_CARACT];
-		char* buffer = NULL;
-		int ligne = 0;
-		
-		fichier = fopen("rsa/connexion","r");
-	 	
-		if (fichier == NULL) {
-					return ERR_LECT;
+int chercher_utilisateur(char *email, char *mdp) {
+
+	FILE * fichier = NULL;
+	
+	fichier = fopen("rsa/connexion","r");
+	
+	if (fichier == NULL) {
+		return ERR_LECT;
+	}
+	
+	size_t bufsize = 32;
+	
+	char * user = malloc(sizeof(char) * bufsize);
+	char * mot_de_passe = malloc(sizeof(char) * bufsize);
+	char * email_tmp = malloc(sizeof(char) * bufsize);
+	char * mdp_tmp = malloc(sizeof(char) * bufsize);
+	
+	if(user == NULL || mot_de_passe == NULL || email_tmp==NULL || mdp_tmp == NULL) {
+		fprintf(stderr,"Erreur d'allocation de mémoire");
+		exit(1);
+	}
+	
+	memcpy(email_tmp,email,strlen(email));
+	memcpy(mdp_tmp,mdp,strlen(mdp));
+	strcat(email_tmp,"\n");
+	strcat(mdp_tmp,"\n");
+	
+	int est_present = 1; // si l'email et mdp sont presents 
+	
+	while(getline(&user,&bufsize,fichier) != -1) {
+		getline(&mot_de_passe,&bufsize,fichier);
+		if(strcmp(email_tmp,user) == 0) {
+			if(strcmp(mdp_tmp,mot_de_passe) == 0) {
+				est_present = 1 - est_present;
+			}
+			break; // Si le mot de passe est faux on arrete aussi
 		}
-		
-		while (getline(&user, NULL, fichier) != -1) {
-				if(getline(&mdp,NULL,fichier) == -1) {
-						if(user) free(user);
-						if(mdp) free(mdp); // si ce n'est pas la première fois...
-						fclose(fichier);
-					 	return ERR_LECT; // Le fichier n'est pas correcte
-				}
-				if(!strcmp(user,email)) {
-						if(!(strcmp(mdp,mot_passe))) {
-							if(user) free(user);
-							if(mdp) free(mdp);
-							fclose(fichier)
-							return 1;
-							}
-							else {
-								break; // On ne vérifie pas le reste car le mot de passe est faux
-							}
-				}	
-		}	 
-		if(user) free(user);
-		if(mdp) free(mdp);
-		fclose(fichier);	
-		return 0;
+	}
+	
+	free(user);
+	free(mot_de_passe);
+	free(email_tmp);
+	free(mdp_tmp);
+	fclose(fichier);	
+	return est_present;
 }
 
 int recupere_cle_publique(char * email, char * mdp, cle_publique * publique) {
-		if(!chercher_utilisateur(email,mdp) == 0) {
-				char * chemin = malloc(sizeof(char)*MAX_CARACT + sizeof("rsa/") + sizeof("cle_privee"));
-				if(chemin == NULL) {
-						fprinf(stderr,"Erreur d'allocation Mémoire");
-						exit(1);
-				}
-				strcat(chemin,"rsa/");
-				strcat(chemin,email);
-				strcat(chemin,"/cle_privee");
-
-				char * res = lire_fichier(chemin);
-				
-				if(res[0] == -1) {
-						return ERR_LECT;
-				}
-				// init cle publique avec res
-				free(chemin);
-				free(res);
-				return 0;	
+	if(!chercher_utilisateur(email,mdp) == 0) {
+		char * chemin = malloc(sizeof(char)*MAX_CARACT + sizeof("rsa/") + sizeof("cle_privee"));
+		if(chemin == NULL) {
+			fprinf(stderr,"Erreur d'allocation Mémoire");
+			exit(1);
 		}
-		return ERR_LECT;
+		strcat(chemin,"rsa/");
+		strcat(chemin,email);
+		strcat(chemin,"/cle_privee");
+
+		char * res = lire_fichier(chemin);
+		
+		if(res[0] == -1) {
+			return ERR_LECT;
+		}
+		// init cle publique avec res
+		free(chemin);
+		free(res);
+		return 0;	
+	}
+	return ERR_LECT;
 }
 
 int recupere_cle_privee(char * email, char * mdp, cle_prive * prive) {
-		if(!chercher_utilisateur(email,mdp) == 0) {
-					char * chemin = malloc(sizeof(char) * MAX_CARACT + sizeof("rsa/") + sizeof("/cle_pub"));
-					if(chemin == NULL) {
-							fprintf(stderr,"Erreur d'allocation Mémoire");
-							exit(1);
-					}
-					char * res = lire_fichier(chemin);
-					
-					strcat(chemin,"rsa/");
-					strcat(chemin,email);
-					strcat(chemin,"cle_pub");
-
-					if(res[0] == -1) {
-								return ERR_LECT;
-					}
-					//init cle privée avec res
-					free(chemin);
-					free(res);
-					return 0;
+	if(!chercher_utilisateur(email,mdp) == 0) {
+		char * chemin = malloc(sizeof(char) * MAX_CARACT + sizeof("rsa/") + sizeof("/cle_pub"));
+		if(chemin == NULL) {
+			fprintf(stderr,"Erreur d'allocation Mémoire");
+			exit(1);
 		}
-		return ERR_LECT;
+		char * res = lire_fichier(chemin);
+		
+		strcat(chemin,"rsa/");
+		strcat(chemin,email);
+		strcat(chemin,"cle_pub");
+
+		if(res[0] == -1) {
+					return ERR_LECT;
+		}
+		//init cle privée avec res
+		free(chemin);
+		free(res);
+		return 0;
+	}
+	return ERR_LECT;
 }
 
 int lire_boite(char *email, boite * b) {
