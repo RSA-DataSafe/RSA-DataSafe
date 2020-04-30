@@ -6,7 +6,7 @@
 
 [![GitHub top language](https://img.shields.io/github/languages/top/RSA-Datasafe/RSA-Datasafe)](https://github.com/RSA-DataSafe/RSA-DataSafe)
 
-# Projet autout de l'algorithme de RSA
+# Projet autour de l'algorithme de RSA
 
 Le but de ce projet est d'implémenter RSA. Nous auront la possibilité de signer et de vérifier un fichier pour s'assurer de l'identiter de l'envoyeur. 
 
