@@ -10,7 +10,6 @@
 #define MAX_CARACT 60
 
 int chercher_utilisateur(char *email, char *mdp) {
-int chercher_utilisateur(char *email, char *mdp) {
 
 	FILE * fichier = NULL;
 	
