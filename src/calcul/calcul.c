@@ -5,7 +5,7 @@
 
 //eponentiation modulaire 
 
-void square_and_multiply(mpz_t res, mpz_t num, mpz_t exp, mpz_t mod){
+void expo_mod(mpz_t res, mpz_t num, mpz_t exp, mpz_t mod){
     mpz_set(res, num);
     
     
