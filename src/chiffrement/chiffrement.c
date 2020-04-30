@@ -1,11 +1,14 @@
 #include <gmp.h>
+#include <time.h>
+#include <stdlib.h>
 
 #include "../structure/structure.h"
 #include "../calcul/calcul.h"
 #include "chiffrement.h"
 
 message *chiffrement(message *m, cle_publique *publique, message *encodage) {
-    // alea
+    
+		// alea
     mpz_t alea;
     mpz_init(alea);
 
@@ -36,8 +39,8 @@ message *chiffrement(message *m, cle_publique *publique, message *encodage) {
     for(int i = 0; mpz_cmp_ui(b->nb_block, i) < 0; i++) {
         mpz_clear(b->tab[i]);
     }
-    free(b);
-
+    free(b); 
+		
     // return
     return m;
 }
