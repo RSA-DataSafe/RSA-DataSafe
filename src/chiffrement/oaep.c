@@ -1,7 +1,10 @@
 #include <gmp.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #include "../structure/structure.h"
 #include "../signature/sha3.h"
+#include "../calcul/calcul.h"
 #include "oaep.h"
 
 #define TAILLE_INT 32
@@ -9,7 +12,7 @@
 #define TAILLE_BLOCK_GAUCHE 1792
 
 void i2osp(mpz_t res, mpz_t graine, mpz_t nombre) {
-    mpz_set(res, graine)
+    mpz_set(res, graine);
     shift_gauche(res, TAILLE_INT);
     mpz_t tmp;
     mpz_init(tmp);

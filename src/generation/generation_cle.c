@@ -9,9 +9,8 @@
 #include <assert.h>
 #include <sys/types.h>
 #include <time.h>
-// >>> include inexistant 
-// #include "miller-rabin.h"
-// <<<
+#include "primalite.h"
+
 /**
  * Procédure qui permet de calculer phi(n) = (p -1) * (q-1)
  * @param p : p de RSA
@@ -98,9 +97,5 @@ void genere_cle(cle_publique *publique, cle_prive *prive, int taille){
 	calculerD(prive, publique);
 	mpz_set(prive->n,publique->n);
 
-
 	mpz_clears(p,q,n,phi_n, NULL);
 }
-
-
-

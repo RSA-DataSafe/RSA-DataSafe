@@ -72,11 +72,11 @@ int recupere_cle_publique(char * email, char * mdp, cle_publique * publique) {
 		if(res[0] == -1) {
 			return ERR_LECT;
 		}
-		
+
 		mpz_init_set_str(cle_publique->e,res,10); // je ne sais pas ici
 		mzp_init_set_str(cle_publique->n,res,10); // pour l'instant car je ne sais pas 
-
-		free(chemin);
+		
+    free(chemin);
 		free(res);
 		return 0;	
 	}
@@ -99,11 +99,11 @@ int recupere_cle_privee(char * email, char * mdp, cle_prive * prive) {
 		if(res[0] == -1) {
 					return ERR_LECT;
 		}
-	// je ne sais pas comment il sera stoké	
+    
 		mpz_init_set_str(cle_prive->e,res,10);
 		mpz_init_set_str(cle_prive->n,res,10);
-
-		free(chemin);
+		
+    free(chemin);
 		free(res);
 		return 0;
 	}
