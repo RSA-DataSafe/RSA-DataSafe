@@ -72,8 +72,11 @@ int recupere_cle_publique(char * email, char * mdp, cle_publique * publique) {
 		if(res[0] == -1) {
 			return ERR_LECT;
 		}
-		// init cle publique avec res
-		free(chemin);
+
+		mpz_init_set_str(cle_publique->e,res,10); // je ne sais pas ici
+		mzp_init_set_str(cle_publique->n,res,10); // pour l'instant car je ne sais pas 
+		
+    free(chemin);
 		free(res);
 		return 0;	
 	}
@@ -96,8 +99,11 @@ int recupere_cle_privee(char * email, char * mdp, cle_prive * prive) {
 		if(res[0] == -1) {
 					return ERR_LECT;
 		}
-		//init cle privée avec res
-		free(chemin);
+    
+		mpz_init_set_str(cle_prive->e,res,10);
+		mpz_init_set_str(cle_prive->n,res,10);
+		
+    free(chemin);
 		free(res);
 		return 0;
 	}
@@ -111,16 +117,15 @@ int lire_boite(char *email, boite * b) {
 			exit(1);
 	 }
 	 strcat(chemin,email);	
-	 strcat(chemin,"boite");
-	 // cat le num
-	 // obtenir le numéro de la boite
-	 // b.boite = lire_fichier(chemin); 
+	 strcat(chemin,"boite"); // nom inconnu ? 
+	 // je ne sais pas comment le message sera écrit ? 
+	 b->m->message = lire_fichier(chemin); 
 	 free(chemin);	
 	 return 0;	
 }
 
 char *lire_fichier(char * chemin) {
-		char * res = malloc(sizeof(char)*2000); // longueur d'une clée à changer je ne sais pas si bin ou hexa ? 
+		char * res = malloc(sizeof(char)*2048);  
 		if(res == NULL) {
 			fprintf(stderr,"Erreur d'allocation Mémoire");
 			exit(1);

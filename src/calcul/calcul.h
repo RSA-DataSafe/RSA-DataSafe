@@ -1,5 +1,6 @@
 #ifndef _calcul_h
 #define _calcul_h
+#include <gmp.h>
 
 /**
  * Permet de réduire considérablement le temps de calcul des grandes puissances.
