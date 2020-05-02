@@ -10,7 +10,6 @@
 #include <sys/types.h>
 #include <time.h>
 #include "primalite.h"
-
 /**
  * Procédure qui permet de calculer phi(n) = (p -1) * (q-1)
  * @param p : p de RSA
