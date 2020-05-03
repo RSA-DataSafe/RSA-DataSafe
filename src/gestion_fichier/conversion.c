@@ -1,4 +1,6 @@
 #include "conversion.h"
+#include "../structure/structure.h"
+
 message * conversion_char_mpz( char * chaine ) {
 	char byte[8]; 	// Un élément de 8 bits
 	int len_chaine = strlen(chaine);
