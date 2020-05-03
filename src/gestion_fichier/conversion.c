@@ -48,6 +48,7 @@ char * conversion_mpz_char( message * m ) {
 		ret[i-1] = caractere;
 		caractere = 0;
 	}
+	free(str);
 	ret[m->taille/7] = '\0';
 	return ret;
 }
