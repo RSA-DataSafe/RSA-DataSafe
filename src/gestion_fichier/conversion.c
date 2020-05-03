@@ -1,5 +1,4 @@
 #include "conversion.h"
-
 message * conversion_char_mpz( char * chaine ) {
 	char byte[8]; 	// Un élément de 8 bits
 	int len_chaine = strlen(chaine);
@@ -15,7 +14,7 @@ message * conversion_char_mpz( char * chaine ) {
 	int j;
 	mpz_t message;
 
-	message.taille = (sizeof(char) * 7) * len_chaine;	
+	m.taille = (sizeof(char) * 7) * len_chaine;	
 	for(int i = 0 ; i < len_nbr ; i++) {
 		c = nbr[i];
 		for(j = 6 ; j >= 0 ; j--) {
