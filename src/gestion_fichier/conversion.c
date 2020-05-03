@@ -11,12 +11,12 @@ message * conversion_char_mpz( char * chaine ) {
 		exit(0);
 	}
 
-	Message m;
+	message m;
 	char c;
 	int j;
-	mpz_t message;
-
+	
 	m.taille = (sizeof(char) * 7) * len_chaine;	
+	
 	for(int i = 0 ; i < len_nbr ; i++) {
 		c = nbr[i];
 		for(j = 6 ; j >= 0 ; j--) {
@@ -25,8 +25,8 @@ message * conversion_char_mpz( char * chaine ) {
 		} 	
 		strcat(res,byte); // Concatene un Byte dans la chaine de caractères	
 	}
-	mpz_init_set_str(message,res,2); // Le nombre en base de deux sera en ascii
-	m.message = message;
+	
+	mpz_init_set_str(m.message,res,2); // Le nombre en base de deux sera en ascii
 	free(res);
 	return &m; // Pour éviter de faire un malloc pour un élément
 }
