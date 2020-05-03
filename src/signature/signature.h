@@ -1,6 +1,9 @@
 #ifndef _signature_h
 #define _signature_h
 
+#include <gmp.h>
+#include "../structure/structure.h"
+
 /**
  *  Permet de signer un message. 
  * @param signature : la signature qui sera retournée après hachage de Sha-3.

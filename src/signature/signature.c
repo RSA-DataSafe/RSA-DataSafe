@@ -1,9 +1,6 @@
 #include "signature.h"
-#include "../structure/structure.h"
 #include "sha3.h"
 #include "../calcul/calcul.h"
-
-#include <gmp.h>
 
 void signer(signature,message,cle_prive) {
 	mpz_t hache;
