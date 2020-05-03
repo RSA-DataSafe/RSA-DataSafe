@@ -9,7 +9,17 @@
 #include "generation/generation_cle.c"
 
 int main(void) {
+	cle_publique publique;
+	cle_prive prive;
+	mpz_inits(publique.n, publique.e, prive.d, prive.n, NULL);
+	//generation des cles,p et q de taille 1024 donc n de taille 2048
+	genere_cle(&publique,&prive,1024);
 	
+	
+	
+	
+	
+	mpz_clears(publique.n, publique.e, prive.d, prive.n, NULL);
   
 
 		return 0;
