@@ -28,7 +28,7 @@ message * conversion_char_mpz( char * chaine ) {
 	
 	mpz_init_set_str(m.message,res,2); // Le nombre en base de deux sera en ascii
 	free(res);
-	return &m; // Pour éviter de faire un malloc pour un élément
+	return &m;
 }
 
 char * conversion_mpz_char( message * m ) {
