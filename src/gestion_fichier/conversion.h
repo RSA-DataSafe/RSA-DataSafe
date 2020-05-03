@@ -1,6 +1,8 @@
-
 #ifndef _conversion_h
 #define _conversion_h
+
+#include "../structure/structure.h"
+#include <gmp.h>
 
 /**
  * Permet de convertir une cha î ne de caract è res en un message
