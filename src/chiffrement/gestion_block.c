@@ -7,7 +7,7 @@
 void creer_block_oaep(message *m,message *encodage,mpz_t donnee_alea){
 	
 	
-	  int bloc_lenght=1536; 
+    int bloc_lenght=1536; 
     int size_array;
     int zero_adding;
     
