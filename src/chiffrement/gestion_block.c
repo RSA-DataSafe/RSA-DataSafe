@@ -30,7 +30,7 @@ void creer_block_oaep(message *m,message *encodage,mpz_t donnee_alea){
 	mpz_t array[size];
 	
 	//Split into blocs of 1536
-	for (int i = 0; i < size ; i++) {
+   for (int i = 0; i < size ; i++) {
         mpz_init(array[i]);
         mpz_add_ui(array[i],array[i],1);
         mpz_mul_2exp(array[i],array[i],bloc_lenght-1);
@@ -53,7 +53,7 @@ void creer_block_oaep(message *m,message *encodage,mpz_t donnee_alea){
        //encodage+donne_alea
      for (int k = 0; k < size ; k++) {
         mpz_mul_2exp(close[k],close[k],256);
-		mpz_ior(close[k], close[k],encodage->nombre);
+	mpz_ior(close[k], close[k],encodage->nombre);
         mpz_mul_2exp(close[k],close[k],256);
         mpz_ior(close[k], close[k],donnee_alea);
   }    
