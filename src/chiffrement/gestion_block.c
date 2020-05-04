@@ -2,7 +2,29 @@
 #include <stdlib.h>
 
 #include "../structure/structure.h"
+#include "../calcul/calcul.h"
 #include "gestion_block.h"
+
+#define TAILLE_SHA3_256 256
+
+void extraction(mpz_t x, mpz_t y, mpz_t b) {
+    // Init
+    mpz_t tmp;
+    mpz_init(tmp);
+    
+    // Code
+    mpz_set(x, b);
+    shift_droite(x, TAILLE_SHA3_256);
+
+    mpz_set(y, b);
+    mpz_set_ui(tmp, 1);
+    shift_gauche(tmp, TAILLE_SHA3_256);
+    mpz_sub_ui(tmp, tmp, 1);
+    mpz_and(y, y, tmp);
+
+    // Clear
+    mpz_clear(tmp);
+}
 
 void creer_block_oaep(message *m,message *encodage,mpz_t donnee_alea){
 	
