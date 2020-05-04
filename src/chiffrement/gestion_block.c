@@ -55,12 +55,12 @@ block *creer_block_oaep(message *m,message *encodage , mpz_t donnee_alea) {
     b->tab = malloc(sizeof(mpz_t) * i_block);
     for(int i = 0; i < i_block; i++) {
         mpz_init(b->tab[i]);
-        mpz_tdiv_q_2exp(tmp,m->nombre, (i_block-i)*5);
+        mpz_tdiv_q_2exp(tmp,m->nombre, (i_block-i)*1536);
         // Calcul 2^1536-1
         mpz_t base;
       	mpz_init(base);   
         mpz_add_ui(base,base, 2);
-        mpz_pow_ui(base,base,5);  
+        mpz_pow_ui(base,base,1536);  
         mpz_sub_ui(base,base, 1);  
         mpz_and(b->tab[i],base,tmp);        
     }
