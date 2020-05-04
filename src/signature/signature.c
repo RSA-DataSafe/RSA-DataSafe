@@ -2,7 +2,7 @@
 #include "sha3.h"
 #include "../calcul/calcul.h"
 
-void signer(signature,message,cle_prive) {
+void signer(mpz_t signature, message *message, cle_prive *prive) {
 	mpz_t hache;
 	
 	mpz_init_set(hache, message);
@@ -15,7 +15,7 @@ void signer(signature,message,cle_prive) {
 	mpz_clear(hache);
 }
 
-int verifie_signature(chiffre,signature,cle_publique) {
+int verifie_signature(mpz_t chiffre, mpz_t signature, cle_publique *publique) {
 	mzp_t hache;
 	mpz_t signature_prime;
 	int res = 0;
