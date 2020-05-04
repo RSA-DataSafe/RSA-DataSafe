@@ -1,4 +1,7 @@
 #include "conversion.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 message * conversion_char_mpz( char * chaine ) {
 	char byte[8]; 	// Un élément de 8 bits
@@ -10,14 +13,14 @@ message * conversion_char_mpz( char * chaine ) {
 		exit(0);
 	}
 
-	message m;
+	message * m;
 	char c;
 	int j;
 	
-	mpz_init_set_ui(m.taille, (sizeof(char) * 7) * len_chaine);	
+	mpz_init_set_ui(m->taille, (sizeof(char) * 7) * len_chaine);	
 	
-	for(int i = 0 ; i < len_nbr ; i++) {
-		c = nbr[i];
+	for(int i = 0 ; i < len_chaine ; i++) {
+		c = chaine[i];
 		for(j = 6 ; j >= 0 ; j--) {
 			byte[j] = 48 + (c & 1); // On le met sous forme ascii
 			c = c >> 1;
@@ -25,16 +28,16 @@ message * conversion_char_mpz( char * chaine ) {
 		strcat(res,byte); // Concatene un Byte dans la chaine de caractères	
 	}
 	
-	mpz_init_set_str(m.message,res,2); // Le nombre en base de deux sera en ascii
+	mpz_init_set_str(m->nombre,res,2); // Le nombre en base de deux sera en ascii
 	free(res);
-	return &m;
+	return m;
 }
 
 char * conversion_mpz_char( message * m ) {
 	char * str = malloc(sizeof(char) * mpz_get_ui(m->taille));
 	char * ret = malloc(sizeof(char) * (mpz_get_ui(m->taille)/7) + 1); // On divise par la longueur d'un byte + \0 
 	
-	if(mpz_get_str(str,2,m->message) == NULL || str == NULL) { // mpz renvoie NULL si problème de stockage  
+	if(mpz_get_str(str,2,m->nombre) == NULL || str == NULL) { // mpz renvoie NULL si problème de stockage  
 		fprintf(stderr,"Erreur d'allocation de Mémoire");
 		exit(0);
 	}
