@@ -31,5 +31,5 @@ void shift_gauche(mpz_t nombre, int decalage)
 }
 void shift_droite(mpz_t nombre, int decalage)
 {
-
+mpz_tdiv_q_2exp(nombre,nombre,decalage);
 }
