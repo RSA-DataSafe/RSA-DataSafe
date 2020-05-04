@@ -1,3 +1,9 @@
+#include <gmp.h>
+#include <stdlib.h>
+
+#include "../structure/structure.h"
+#include "gestion_block.h"
+
 void creer_block_oaep(message *m,message *encodage,mpz_t donnee_alea){
 	
 	
@@ -29,7 +35,8 @@ void creer_block_oaep(message *m,message *encodage,mpz_t donnee_alea){
         mpz_add_ui(array[i],array[i],1);
         mpz_mul_2exp(array[i],array[i],bloc_lenght-1);
         mpz_tdiv_r_2exp(tmp, m->nombre,bloc_lenght-1);
-		    mpz_ior(array[i], array[i],tmp);
+		
+    mpz_ior(array[i], array[i],tmp);
         mpz_tdiv_q_2exp(m->nombre, m->nombre, bloc_lenght-1);
   
   }
