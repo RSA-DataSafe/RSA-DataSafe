@@ -83,6 +83,13 @@ void oaep_block(mpz_t premiere_entree, mpz_t deuxieme_entree, mpz_t premiere_sor
 }
 
 block *oaep(block *b, mpz_t donnee_alea) {
+
+    mpz_t m;
+    mpz_init(m);
+
+    mpz_t r;
+    mpz_init(r);
+
     mpz_t x;
     mpz_init(x);
 
@@ -93,9 +100,8 @@ block *oaep(block *b, mpz_t donnee_alea) {
     mpz_init(tmp);
 
     for(int i = 0; mpz_cmp_ui(b->nb_block, i) < 0; i++) {
-        mpz_set(tmp, b->tab[i]);
-        shift_droite(tmp, TAILLE_SHA3_256);
-        oaep_block(tmp, donnee_alea, x, y);
+        extraction(m, r, b->tab[i]);
+        oaep_block(m, r, x, y);
         shift_gauche(x, TAILLE_SHA3_256);
         mpz_set(b->tab[i], x);
         mpz_add(b->tab[i], b->tab[i], y);
@@ -104,6 +110,8 @@ block *oaep(block *b, mpz_t donnee_alea) {
     mpz_clear(tmp);
     mpz_clear(y);
     mpz_clear(x);
+    mpz_clear(m);
+    mpz_clear(r);
 
     return b; // sert à rien mais bon ...
 }
