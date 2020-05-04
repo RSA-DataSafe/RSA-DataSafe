@@ -27,17 +27,34 @@ block *decoupage_block(message* m, int taille);
 
 /**
  * Round
- * @param matrice : matrice de nombres de 64 bits
- * @param RC : constante différente pour chaque round (standardisé par sha-3)
+ * @param matrice : matrice de nombres de 64 bits 
+ * @param taille : taille de sortie de sha3
  * @param nb_tour : nombre de tours
  */
-void round(mpz_t **matrice, mpz_t RC, int nb_tour);
+void round_sha3(mpz_t **matrice, int nb_tour);
 
 /**
  * keccak-f
  * @param matrice : matrice de nombres de 64 bits
- * @param taille : taille de sortie de sha3
+ * @param RC : constante différente pour chaque round (standardisé par sha-3)
  */
-void keccak_f(mpz_t **matrice, int taille);
+void keccak_f(mpz_t **matrice, mpz_t RC);
+
+
+
+// Fonctions suivantes non décrites dans les spécifications = trivial
+
+/**
+ * Effectue une rotation circulaire sur la donnée en entrée
+ * @param x : donnée d'entrée
+ * @param n : nombre de rotations
+ */
+void rot (mpz_t x, int n);
+
+/**
+ * Inverse bit à bit
+ * @param x : donnée à inverser
+ */
+void invert (mpz_t x);
 
 #endif // !_sha3_h
