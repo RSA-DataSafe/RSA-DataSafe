@@ -1,5 +1,6 @@
 #ifndef _structure_h
 #define _structure_h
+#include <gmp.h>
 
 /*Regroupe les modules de la clé publique*/
 typedef struct {
