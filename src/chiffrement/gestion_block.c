@@ -61,3 +61,40 @@ void creer_block_oaep(message *m,message *encodage,mpz_t donnee_alea){
        
   mpz_clears(tmp,close,array, NULL);
 }
+
+block *creer_block_oaep(message *m, message *encodage, mpz_t donnee_alea) {
+    // Calcul le nombre de block
+    mpz_t nb_block;
+    mpz_init(nb_block);
+
+    mpz_div_ui(nb_block, m->taille, 1536);
+
+    mpz_t rest;
+    mpz_init(rest);
+
+    mpz_mod_ui(rest, m->taille, 1536);
+
+    if (mpz_cmp_ui(rest, 0) != 0) {
+        mpz_add_ui(nb_block, nb_block, 1);
+    }
+
+    int i_block = mpz_get_ui(nb_block);
+
+    // creer les block
+    block *b = malloc(sizeof(block));
+
+    mpz_init(b->nb_block);
+    mpz_set(b->nb_block, nb_block);
+
+    b->tab = malloc(sizeof(mpz_t) * i_block);
+    for(int i = 0; i < i_block; i++) {
+        mpz_init(b->tab[i]);
+        // et la bah faut decouper et ajouter lencodage et la donne alea
+    }
+
+    // Clear
+    mpz_clear(nb_block);
+    mpz_clear(rest);
+
+    return b;
+}
