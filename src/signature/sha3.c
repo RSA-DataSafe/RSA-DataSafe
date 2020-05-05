@@ -240,28 +240,29 @@ void keccak_f(mpz_t **matrice, mpz_t RC) {
 };
 
 void rot (mpz_t x, int n) {
-    int size = mpz_sizeinbase (x, 2);
-    int tmp[size];
-    for (int i=0; i<size; i++) tmp[i] = 0;
-    for (int i=size-1; i>=0; i--)
-        tmp[i] = mpz_tstbit (x, i);
-    char *str = malloc (sizeof (char) * size);
-    for (int i=0; i<size; i++) {
-        str[i] =  tmp[(i+n+1)%size] + '0';
+    int size = mpz_sizeinbase (x, 2);                   // size = taille de x
+    int tmp[64];                                        // tmp permet de stocker chaque bit à l'indice correspondant
+    for (int i=0; i<64; i++) tmp[i] = 0;                // init tmp à 0
+    for (int i=0; i<size; i++)                          // on remplit tmp avec x, au bon endroit
+        tmp[64-i-1] = mpz_tstbit (x, i);
+    char *str = malloc (sizeof (char) * 64);
+    for (int i=0; i<64; i++) {                          // on transforme tmp en chaîne de caractères, en effectuant la rotation
+        str[i] =  tmp[(i+n)%64] + '0';                  
     }
-    mpz_set_str (x, str, 2);
+    mpz_set_str (x, str, 2);                            // on remplace x par sa nouvelle valeur
     free (str);
 };
 
 void invert (mpz_t x) {
-    for (int i=0; i<mpz_sizeinbase (x, 2); i++) {
-        mpz_t tmp;
-        int k = pow (2, i);
-        mpz_init_set_ui (tmp, k);
-        if (mpz_tstbit (x, i))
-            mpz_sub (x, x, tmp);
-        else
-            mpz_add (x, x, tmp);
-        mpz_clear (tmp);
+    int size = mpz_sizeinbase (x, 2);                   // size = taille de x
+    int tmp[64];                                        // tmp permet de stocker chaque bit à l'indice correspondant
+    for (int i=0; i<64; i++) tmp[i] = 1;                // init tmp à 1
+    for (int i=0; i<size; i++)                          // on remplit tmp avec l'inverse de x
+        tmp[64-i-1] = (mpz_tstbit (x, i)+1)%2;
+    char *str = malloc (sizeof (char) * 64);
+    for (int i=0; i<64; i++) {                          // on transforme tmp en chaîne de caractères
+        str[i] =  tmp[i] + '0';                  
     }
+    mpz_set_str (x, str, 2);                            // on remplace x par sa nouvelle valeur
+    free (str);
 };
