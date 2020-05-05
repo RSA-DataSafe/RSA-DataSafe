@@ -27,9 +27,9 @@ message *sha3(message *m, int taille) {
     mpz_init_set (res->nombre, m->nombre);
     mpz_init_set (res->taille, m->taille);              // res = m
 
-    res = padding_sha3 (m, b_size);
+    res = padding_sha3 (res, b_size);
 
-    block *r = decoupage_block (m, b_size);
+    block *r = decoupage_block (res, b_size);
 
     mpz_t **matrice = malloc (sizeof (*matrice) * 5);
     for (int i=0; i<5; i++) {
@@ -41,6 +41,7 @@ message *sha3(message *m, int taille) {
         }
     }
 
+    // Pour chaque bloc, on xor un bloc avec la matrice puis on la traite avec round
     int cnt = 0;
     while (cnt<r->nb_block) {
         for (int i=0; i<9; i++) {
@@ -56,6 +57,13 @@ message *sha3(message *m, int taille) {
         cnt++;
     }
 
+    // on génère la sortie
+    mpz_set_ui (res->taille, taille);                       // on fixe la taille de la sortie
+    mpz_t cut;
+    mpz_init (cut);
+    mpz_sub_ui (cut, m->taille, taille);                    // cut = la taille de la partie "en trop"
+    int tmp = mpz_get_ui (cut);                         
+    mpz_div_ui (res->nombre, res->nombre, pow (2, tmp));    // on 'tronque' la sortie
 
     // on libère la mémoire
     for (int i=0; i<5; i++) {
@@ -64,6 +72,7 @@ message *sha3(message *m, int taille) {
         }
     }
 
+    mpz_clear (cut);
     free (r);
     for (int i=0; i<5; i++) {
         free (matrice[i]);
