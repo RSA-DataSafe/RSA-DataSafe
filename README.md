@@ -6,9 +6,9 @@
 
 [![GitHub top language](https://img.shields.io/github/languages/top/RSA-Datasafe/RSA-Datasafe)](https://github.com/RSA-DataSafe/RSA-DataSafe)
 
-# Projet RSA
+# Projet autour de l'algorithme de RSA
 
-Le but de ce projet est d'implémenter RSA. Nous auront la possibilité de signer et de vérifier un fichier pour s'assurer de l'identiter de l'envoyeur (afin d'éviter l'attaque de l'homme du milieu). 
+Le but de ce projet est d'implémenter RSA. Nous auront la possibilité de signer et de vérifier un fichier pour s'assurer de l'identiter de l'envoyeur. 
 
 # Installation - Déployement du produit 
 
@@ -43,10 +43,10 @@ Chiffre un message.
 ## Signature
 
 Il a deux principale fonctionnalité :
-<ul>
-	<li>générer une signature</li>
-	<li>verifier une signature</li>
-</ul>
+
+- générer une signature
+- verifier une signature
+
 Ce module utilise une fonction de hashage. On a choisi d'utiliser sha3.
 
 ## Déchiffrement
@@ -55,4 +55,4 @@ Déchiffre un message.
 
 ## Gestion de fichier
 
-Gére la connection à l'application ainsi que la sauvegarde des clés de l'utilisateur et de ces messages.
+Gére la connection à l'application ainsi que la sauvegarde des clés de l'utilisateur et de ses messages.

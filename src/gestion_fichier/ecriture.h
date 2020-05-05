@@ -5,7 +5,10 @@
 #include <time.h>
 #include <gmp.h>
 #include "erreur.h"
+#include "conversion.h"
 #include "../structure/structure.h"
+#include <sys/stat.h>
+#include <sys/types.h>
 #ifndef _ecriture_h
 #define _ecriture_h
 
@@ -45,7 +48,7 @@ int Change_MotDePasse (char*email, char *mdp, char* newmdp);
  *  InfoUser->publique: nouvelle clé publique
  *  InfoUser->prive: nouvelle clé privée
  * */
-int change_cle(informations * InfoUser);
+int change_cle(informations * InfoUser,cle_publique * pub ,cle_prive * priv);
 
 /** ok mais dans cette fonction on a qu un seul parametre nn ?  ou
  * Permet l'envoie d'un message

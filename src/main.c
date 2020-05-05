@@ -6,24 +6,21 @@
 #include "calcul/calcul.c"
 #include "generation/primalite.c"
 #include "generation/euclide.c"
+#include "generation/generation_cle.c"
+
 int main(void) {
+	cle_publique publique;
+	cle_prive prive;
+	mpz_inits(publique.n, publique.e, prive.d, prive.n, NULL);
+	//generation des cles,p et q de taille 1024 donc n de taille 2048
+	genere_cle(&publique,&prive,1024);
 	
-    mpz_t u,v,phi,e;
-	mpz_init(u);
-	mpz_init(v);
-	mpz_init(phi);
-	mpz_init(e);
-	mpz_set_ui(phi,5);
-	mpz_set_ui(e,3);
-	euclide_etendu( u, v, phi, e );
-	    mpz_out_str(stdout,10,u);
-	    printf("\n\n");
-	    mpz_out_str(stdout,10,v);
-	   printf("\n\n");
-	shift_gauche(e,2);
-	printf("e= ");
-	mpz_out_str(stdout,10,e);
-	printf("\n\n");
 	
+	
+	
+	
+	mpz_clears(publique.n, publique.e, prive.d, prive.n, NULL);
+  
+
 		return 0;
 }
