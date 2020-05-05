@@ -29,7 +29,6 @@ message *sha3(message *m, int taille) {
 
     // on ajoute le padding à res
     res = padding_sha3 (m, b_size);
-    mpz_out_str (stdout, 2, res->nombre); printf (" = padding\n");
 
     // on découpe en blocs
     block *r = decoupage_block (res, b_size);
@@ -281,23 +280,3 @@ void invert (mpz_t x) {
     mpz_set_str (x, str, 2);                            // on remplace x par sa nouvelle valeur
     free (str);
 };
-
-int main (int argc, char **argv) {
-    mpz_t test;
-    mpz_init_set_str (test, argv[1], 2);
-    printf ("init_set ok : ");
-    mpz_out_str (stdout, 2, test); printf ("\n");
-
-    message *m = malloc (sizeof (message));
-    mpz_init_set (m->nombre, test);
-    mpz_init_set_ui (m->taille, mpz_sizeinbase (test, 2));
-
-    message *res = malloc (sizeof (message));
-    mpz_init_set_ui (res->nombre, 0);
-    mpz_init_set_ui (res->taille, 0);
-    res = sha3 (m, 512);
-
-    mpz_out_str (stdout, 2, res->nombre); printf (" = resultat de sha3\n");
-    mpz_out_str (stdout, 10, res->taille); printf (" = taille du résultat de sha3\n");
-    return 0;
-}
