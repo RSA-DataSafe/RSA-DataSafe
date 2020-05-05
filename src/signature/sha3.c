@@ -71,7 +71,6 @@ message *sha3(message *m, int taille) {
         }
     }
     mpz_set (res->nombre, output);
-    mpz_out_str (stdout, 2, res->nombre); printf (" = res entier\n");
 
     // on génère la sortie
     mpz_set_ui (res->taille, taille);                       // on fixe la taille de la sortie
