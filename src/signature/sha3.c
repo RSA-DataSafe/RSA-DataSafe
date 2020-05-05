@@ -21,16 +21,20 @@ message *sha3(message *m, int taille) {
             fprintf (stderr, "Wrong size input for sha3\n");
             exit(107);
     }
-	
-    // on alloue la mémoire
+
+    // on alloue la mémoire et on initialise (res = m)
     message *res = malloc (sizeof (message));
     mpz_init_set (res->nombre, m->nombre);
-    mpz_init_set (res->taille, m->taille);              // res = m
+    mpz_init_set (res->taille, m->taille);
 
-    res = padding_sha3 (res, b_size);
+    // on ajoute le padding à res
+    res = padding_sha3 (m, b_size);
+    mpz_out_str (stdout, 2, res->nombre); printf (" = padding\n");
 
+    // on découpe en blocs
     block *r = decoupage_block (res, b_size);
 
+    // on créé la matrice pour keccak (round)
     mpz_t **matrice = malloc (sizeof (*matrice) * 5);
     for (int i=0; i<5; i++) {
         matrice[i] = malloc (sizeof (mpz_t) * 5);
@@ -41,7 +45,7 @@ message *sha3(message *m, int taille) {
         }
     }
 
-    // Pour chaque bloc, on xor un bloc avec la matrice puis on la traite avec round
+    // Pour chaque bloc, on xor un bloc avec la matrice puis on la traite (round, keccak-f)
     int cnt = 0;
     while (cnt<r->nb_block) {
         for (int i=0; i<9; i++) {
@@ -57,14 +61,26 @@ message *sha3(message *m, int taille) {
         cnt++;
     }
 
+    // on met le résultat final dans res
+    mpz_t output;
+    mpz_init (output);
+    for (int i=0; i<5; i++) {
+        for (int j=0; j<5; j++) {
+            mpz_mul_2exp (output, output, mpz_sizeinbase (matrice[i][j], 2));
+            mpz_add (output, output, matrice[i][j]);
+        }
+    }
+    mpz_set (res->nombre, output);
+    mpz_out_str (stdout, 2, res->nombre); printf (" = res entier\n");
+
     // on génère la sortie
     mpz_set_ui (res->taille, taille);                       // on fixe la taille de la sortie
-    mpz_t cut;
-    mpz_init (cut);
-    mpz_sub_ui (cut, m->taille, taille);                    // cut = la taille de la partie "en trop"
-    int tmp = mpz_get_ui (cut);                         
-    mpz_div_ui (res->nombre, res->nombre, pow (2, tmp));    // on 'tronque' la sortie
-
+    mpz_t cut, nbr;
+    mpz_inits (cut, nbr, NULL);
+    mpz_set_ui (nbr, mpz_sizeinbase (res->nombre, 2));
+    mpz_sub_ui (cut, nbr, taille);                          // cut = la taille de la partie "en trop"
+    int tmp = mpz_get_ui (cut);
+    mpz_tdiv_q_2exp (res->nombre, res->nombre, tmp);        // on 'tronque' la sortie
     // on libère la mémoire
     for (int i=0; i<5; i++) {
         for (int j=0; i<5; i++) {
@@ -72,7 +88,7 @@ message *sha3(message *m, int taille) {
         }
     }
 
-    mpz_clear (cut);
+    mpz_clears (cut, nbr, output, NULL);
     free (r);
     for (int i=0; i<5; i++) {
         free (matrice[i]);
@@ -266,3 +282,23 @@ void invert (mpz_t x) {
     mpz_set_str (x, str, 2);                            // on remplace x par sa nouvelle valeur
     free (str);
 };
+
+int main (int argc, char **argv) {
+    mpz_t test;
+    mpz_init_set_str (test, argv[1], 2);
+    printf ("init_set ok : ");
+    mpz_out_str (stdout, 2, test); printf ("\n");
+
+    message *m = malloc (sizeof (message));
+    mpz_init_set (m->nombre, test);
+    mpz_init_set_ui (m->taille, mpz_sizeinbase (test, 2));
+
+    message *res = malloc (sizeof (message));
+    mpz_init_set_ui (res->nombre, 0);
+    mpz_init_set_ui (res->taille, 0);
+    res = sha3 (m, 512);
+
+    mpz_out_str (stdout, 2, res->nombre); printf (" = resultat de sha3\n");
+    mpz_out_str (stdout, 10, res->taille); printf (" = taille du résultat de sha3\n");
+    return 0;
+}
