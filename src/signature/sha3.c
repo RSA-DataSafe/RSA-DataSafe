@@ -21,7 +21,7 @@ message *sha3(message *m, int taille) {
             fprintf (stderr, "Wrong size input for sha3\n");
             exit(107);
     }
-
+	
     // on alloue la mémoire
     message *res = malloc (sizeof (message));
     mpz_init_set (res->nombre, m->nombre);
@@ -33,7 +33,7 @@ message *sha3(message *m, int taille) {
 
     mpz_t **matrice = malloc (sizeof (*matrice) * 5);
     for (int i=0; i<5; i++) {
-        matrice[i] = malloc (sizeof (matrice) * 5);
+        matrice[i] = malloc (sizeof (mpz_t) * 5);
     }
     for (int i=0; i<5; i++) {
         for (int j=0; i<5; i++) {
@@ -53,6 +53,7 @@ message *sha3(message *m, int taille) {
             mpz_clear (tmp);
         }
         round_sha3 (matrice, 24);
+        cnt++;
     }
 
 
@@ -89,10 +90,11 @@ message *padding_sha3(message *m, int taille) {
 
 block *decoupage_block(message* m, int taille) {
     block *res = malloc (sizeof (res));                 // on réserve de l'espace mémoire pour res
+    res->tab = malloc (sizeof (mpz_t));                 // on réserve de l'espace mémoire pour res
     int j,cnt = 0;                                      // cnt comptera le nombre de blocs, j sert d'indice au parcours du bloc en cours
     int m_size = mpz_get_ui (m->taille);                // on récupère la taille de m
     for (int i=0; i+j<m_size; cnt++) {                  // tant que la lecture de m n'est pas terminée, i sert à marquer l'endroit du début d'un bloc sur m
-        res->tab = realloc (res, sizeof (res) * cnt+1); // on réserve une nouvelle "case mémoire" pour le nouveau bloc à ajouter
+        res->tab = realloc (res->tab, sizeof (res) * cnt+1); // on réserve une nouvelle "case mémoire" pour le nouveau bloc à ajouter
         mpz_init (res->tab[cnt]);                       // on initialise ce nouveau bloc à 0
         for (j=0; j<taille; j++) {                      // on parcours sur m le bloc en cours
             int tmp = mpz_tstbit (m->nombre, i+j);      // on récupère la valeur du bit à l'endroit où on se trouve
@@ -161,7 +163,7 @@ void keccak_f(mpz_t **matrice, mpz_t RC) {
         {28,55,25,21,56},   //r[3]
         {27,20,39,8,14}     //r[4]
     };
-
+	
     //teta step
     for (int i = 0; i<5; i++) {
         for (int j = 0; j<5; j++) {
@@ -171,14 +173,14 @@ void keccak_f(mpz_t **matrice, mpz_t RC) {
     for (int i = 0; i<5; i++) {
         mpz_set (C[i], A[i]);
         rot (C[i], 1);
-        mpz_xor (B[i], A[(i-1)%5], C[(i+1)%5]);
+        mpz_xor (B[i], A[(i+1)%5], C[(i+1)%5]);
     }
     for (int i = 0; i<5; i++) {
         for (int j = 0; j<5; j++) {
             mpz_xor (matrice[i][j], matrice[i][j], B[i]);
         }
     }
-    
+
     //rho step
     for (int i = 0; i<5; i++) {
         for (int j = 0; j<5; j++) {
