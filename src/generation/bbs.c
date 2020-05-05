@@ -4,7 +4,6 @@
 #include <string.h>
 #include <time.h>
 #include "bbs.h"
-#include "primalite.h"
 #include <math.h>
 
 void  blum_prime(mpz_t p, int  taille)
