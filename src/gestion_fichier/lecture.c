@@ -163,7 +163,7 @@ int lire_boite(char *email, boite * b) {
 				if(donnee_structurelle == 1) {
 					char * buff1 = malloc(sizeof(char) * 150);
 					b->m[nbr_mail_traiter].dest_email = malloc(sizeof(char) * 50);
-					if(buff1 == NULL || b->m[nbr_mail_traiter == NULL) {
+					if(buff1 == NULL || b->m[nbr_mail_traiter == NULL]) {
 						fprintf(stderr,"Erreur d'allocation Mémoire");
 						exit(0);
 					}
@@ -183,7 +183,7 @@ int lire_boite(char *email, boite * b) {
 				if(donnee_structurelle == 2) {
 					char * buff2 = malloc(sizeof(char) * 2000);
 					b->m[nbr_mail_traiter].message = malloc(sizeof(char) * 2000);
-					if(buff2 == NULL || b->m[nbr_mail_traiter].message == NULL]) {
+					if(buff2 == NULL || b->m[nbr_mail_traiter].message == NULL) {
 						fprintf(stderr,"Erreur d'allocation Mémoire");
 						exit(0);
 					}
@@ -204,7 +204,7 @@ int lire_boite(char *email, boite * b) {
 					if(b->m[nbr_mail_traiter].signer != 0) {
 						char * buff3 = malloc(sizeof(char) * 2000);
 						b->m[nbr_mail_traiter].signature = malloc(sizeof(char) * 2000);
-						if(buff3 == NULL || b->m[nbr_mail_traiter == NULL) {
+						if(buff3 == NULL || b->m[nbr_mail_traiter == NULL]) {
 							fprintf(stderr,"Erreur d'allocation Mémoire");
 							exit(0);
 						}
