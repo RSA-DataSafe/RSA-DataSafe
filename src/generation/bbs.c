@@ -27,14 +27,12 @@ void  GenererS(mpz_t s, mpz_t n)
   gmp_randstate_t etat ;
   gmp_randinit_default(etat);
   gmp_randseed_ui(etat,(unsigned)clock());
-  for(;;)
-  {
-     mpz_urandomm (s, etat, n);
-     if(mpz_cmp_ui(s,0)!=0)
-     {
-      break;
-     }
-  }	
+  mpz_t res;
+  mpz_init(res);
+  mpz_sub_ui(res,n,2);
+  mpz_urandomm (s, etat, res);
+  mpz_add_ui(s,s,1);
+  mpz_clear(res);
   gmp_randclear(etat);
 }
 void  bbs(mpz_t res , int  taille)
