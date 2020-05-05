@@ -116,87 +116,107 @@ int lire_boite(char *email, boite * b) {
 	 strcat(chemin, b->nom_boite);
 
 	 FILE * fichier = fopen(chemin,"r");
-	 char c;
+	 char c;					  // Va permettre de lire caractère par caractère
 	 int alternateur = 0;		  // permet d'alterner entre les caractères non utilisé
 	 int donnee_structurelle = 0; // position à traiter
 	 int nbr_mail_traiter = 0;    // le nombre de mail qu'on aura traiter
-	 //b->m = malloc(sizeof(mail)*100); // on peut avoir 100 mails
+	 b->m = malloc(sizeof(mail)*1000); // on peut avoir 1000 mails
+	 
+	 if(b->m == NULL) {
+		 fprintf(stderr,"Erreur d'allocation Mémoire");
+		 exit(0);
+	 }
 	 
 	 // Parser de lecture on lit caractere par caractere: 
 	 do {
-		 debut:
+		 debut: // etiquette qui permet de revenir au début. De '\n' à ':' se trouve des caractère non utilisé
 		  c = fgetc(fichier);
-		 if(c == ':' || c == '\n') {
+		 if(c == ':' || c == '\n') { 
 			 alternateur = 1 - alternateur;
 			 c = fgetc(fichier);
 		 }
 		  if(alternateur == 1) {
+			  // Vérifié si message signé
 			  if(donnee_structurelle == 0) {
-					//~ char * buff0 = malloc(sizeof(char) * 4);
+					char * buff0 = malloc(sizeof(char) * 10);
+					if(buff0 == NULL) {
+						fprintf(stderr,"Erreur d'allocation Mémoire");
+						exit(0);
+					}
 					int i = 0;
 					 do {
-						//~ buff0[i] = c;
-						printf("%c",c);
+						buff0[i] = c;
 						c = fgetc(fichier);
 						i++;
 					} while(c != '\n');
-					printf("\n");
 					alternateur = 0;
-					//~ if(strcmp(buff0,"sig") == 0) {
-						//~ b->m[nbr_mail_traiter].signer = 0;
-					//~ } else {
-						//~ b->m[nbr_mail_traiter].signer = 1;
-					//~ }
-					//~ free(buff0);
+					if(strcmp(buff0,"sig") == 0) {
+						b->m[nbr_mail_traiter].signer = 0;
+					} else {
+						b->m[nbr_mail_traiter].signer = 1;
+					}
+					free(buff0);
 					donnee_structurelle++;
 					goto debut;
 				}
+				// Récupérer le mail du destinataire
 				if(donnee_structurelle == 1) {
-					//~ char * buff1 = malloc(sizeof(char) * 50);
+					char * buff1 = malloc(sizeof(char) * 150);
+					b->m[nbr_mail_traiter].dest_email = malloc(sizeof(char) * 50);
+					if(buff1 == NULL || b->m[nbr_mail_traiter == NULL) {
+						fprintf(stderr,"Erreur d'allocation Mémoire");
+						exit(0);
+					}
 					int a = 0;
 					do {
-							printf("%c",c);
 						c = fgetc(fichier);
-						//~ buff1[a] = c;
+						buff1[a] = c;
 						a++;
 					} while(c != '\n');
-					printf("\n");
 					alternateur = 0;
-					//~ b->m[nbr_mail_traiter].dest_email = malloc(sizeof(char) * 50);
-					//~ strcpy(b->m[nbr_mail_traiter].dest_email,buff1);
-					//~ free(buff1);
+					strcpy(b->m[nbr_mail_traiter].dest_email,buff1);
+					free(buff1);
 					donnee_structurelle++;
 					goto debut;
 				}
+				// Récupérer le message
 				if(donnee_structurelle == 2) {
-					//~ char * buff2 = malloc(sizeof(char) * 2000);
+					char * buff2 = malloc(sizeof(char) * 2000);
+					b->m[nbr_mail_traiter].message = malloc(sizeof(char) * 2000);
+					if(buff2 == NULL || b->m[nbr_mail_traiter].message == NULL]) {
+						fprintf(stderr,"Erreur d'allocation Mémoire");
+						exit(0);
+					}
 					int e = 0;
 					do {
 						c = fgetc(fichier);
-						printf("%c",c);
-						//~ buff2[e] = c;
+						buff2[e] = c;
 						e++;
 					} while(c!= '\n');
 					alternateur = 0;
-					//~ b->m[nbr_mail_traiter].message = malloc(sizeof(char) * 2000);
-					//~ strcpy(b->m[nbr_mail_traiter].message,buff2);
-					//~ free(buff2);
+					strcpy(b->m[nbr_mail_traiter].message,buff2);
+					free(buff2);
 					donnee_structurelle++;
 					goto debut;
 				}
+				// Récuperer la signature
 				if(donnee_structurelle == 3) {
-					//~ if(b->m[nbr_mail_traiter].signer != 0) {
-						//~ char * buff3 = malloc(sizeof(char) * 2000);
+					if(b->m[nbr_mail_traiter].signer != 0) {
+						char * buff3 = malloc(sizeof(char) * 2000);
+						b->m[nbr_mail_traiter].signature = malloc(sizeof(char) * 2000);
+						if(buff3 == NULL || b->m[nbr_mail_traiter == NULL) {
+							fprintf(stderr,"Erreur d'allocation Mémoire");
+							exit(0);
+						}
 						int d = 0;
 						do {
 							c = fgetc(fichier);
-							printf("%c",c);
-							//~ buff3[d] = c;
+							buff3[d] = c;
 							d++;
 						} while(c!= '\n');
-						//~ strcpy(b->m[nbr_mail_traiter].signature,buff3);
-						//~ free(buff3);
-					//~ }
+						strcpy(b->m[nbr_mail_traiter].signature,buff3);
+						free(buff3);
+					}
 					alternateur = 0;
 					nbr_mail_traiter ++;
 					donnee_structurelle = 0; // remise à zéro des données 
