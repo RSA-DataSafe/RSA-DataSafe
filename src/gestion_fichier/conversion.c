@@ -14,6 +14,7 @@ message * conversion_char_mpz( char * chaine ) {
 	}
 
 	message * m;
+	m = malloc(sizeof(message));
 	char c;
 	int j;
 	
