@@ -100,6 +100,12 @@ void page_dechiffrer()
 
 void page_chargementD()
 {
+	GtkTextIter start;
+    GtkTextIter end;
+    gtk_text_buffer_get_start_iter(bufferD,&start);
+    gtk_text_buffer_get_end_iter(bufferD,&end);
+    chaineD=gtk_text_buffer_get_text(bufferD,&start, &end,FALSE);
+
   windowD = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   gtk_window_set_transient_for (GTK_WINDOW(windowD),GTK_WINDOW(MainWindow));
   gtk_window_set_position (GTK_WINDOW(windowD), GTK_WIN_POS_CENTER);
@@ -130,18 +136,12 @@ void page_chargementD()
 
 
 int page_resultatD()
-{
-      
+{     
       gtk_spinner_stop (GTK_SPINNER(spinnerD));
       gtk_container_remove (GTK_CONTAINER(vboxCD),GTK_WIDGET(spinnerD));
       gtk_widget_hide(GTK_WIDGET(vboxCD)); 
-
       GtkWidget * buttonOK = gtk_button_new_with_label ("OK"); 
       gtk_widget_set_name (buttonOK,"btnV");
-  
-	
-
-	 
 	  gtk_label_set_text  (GTK_LABEL(labelcharD),"Resulat du déchiffrement:");
 
 	   GtkWidget * Frame ; 
@@ -149,16 +149,12 @@ int page_resultatD()
         gtk_widget_set_name (GTK_WIDGET(Frame),"miniT");	
 		GtkWidget *scrolled_window = gtk_scrolled_window_new (NULL , NULL);
 	 	bufferCD= gtk_text_buffer_new (NULL);
-		gtk_text_buffer_set_text (bufferCD, "ceci est  un exemple", -1);
+		gtk_text_buffer_set_text (bufferCD,chaineD, -1);
 		text_viewCD= gtk_text_view_new_with_buffer (bufferCD);
 	   gtk_text_view_set_editable (GTK_TEXT_VIEW(text_viewCD), FALSE);
-	   gtk_container_set_border_width (GTK_CONTAINER (scrolled_window), 10);
-	   
+	   gtk_container_set_border_width (GTK_CONTAINER (scrolled_window), 10);	   
 	   gtk_container_add (GTK_CONTAINER (scrolled_window), text_viewCD);
-    
 	   gtk_container_add (GTK_CONTAINER (Frame), GTK_WIDGET(scrolled_window));
-	
-	  
 	   gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW(text_viewCD),FALSE);
 	   gtk_box_pack_start(GTK_BOX(vboxCD),GTK_WIDGET(Frame),TRUE,TRUE,0);
        gtk_box_pack_start(GTK_BOX(vboxCD),GTK_WIDGET(buttonOK),FALSE,FALSE,0);

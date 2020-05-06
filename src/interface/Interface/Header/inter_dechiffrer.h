@@ -18,6 +18,7 @@ GtkTextBuffer *bufferD , *bufferCD;
 GtkWidget *spinnerD; 
 GtkWidget *windowD;
 GtkWidget * vboxCD , * labelcharD ,*text_viewCD;
+char *chaineD;
 void page_dechiffrer();
 void Slots_dechiffer(GtkWidget * sender , gpointer * data);
 void page_chargementD();

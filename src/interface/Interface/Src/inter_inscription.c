@@ -69,8 +69,10 @@ void SLots_inscription(GtkWidget * sender , gpointer * data)
 		  if (sender ==buttoni[1] && !data)  { gtk_widget_hide(GTK_WIDGET(labeli[4])); gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (Connexion)); etati =0 ; }
           else
           {
-
-				        int trouver = 0 ;
+          	
+                     utilisateur.email = (char *)gtk_entry_get_text(GTK_ENTRY(entreei[2]));
+                     utilisateur.mdp= (char *)gtk_entry_get_text(GTK_ENTRY(entreei[1]));
+				     int trouver = 0 ;
 				        if(!gtk_entry_get_text_length(GTK_ENTRY(entreei[0])) || !gtk_entry_get_text_length(GTK_ENTRY(entreei[1]))||
 				           !gtk_entry_get_text_length(GTK_ENTRY(entreei[2])) || !gtk_entry_get_text_length(GTK_ENTRY(entreei[3]))) 
 				        {          
@@ -97,9 +99,42 @@ void SLots_inscription(GtkWidget * sender , gpointer * data)
 				        }
 				        else
 				        	{
+
 				        		gtk_widget_hide(GTK_WIDGET(labeli[4])); etati = 0 ;
 
-				        		//traitement pour linscription
-				        	}
+                      
+				        		if ( !nouvel_utilisateur(utilisateur.email , utilisateur.mdp))
+				        		{
+				        			
+				        			mpz_inits(utilisateur.prive.n , utilisateur.prive.d,NULL);
+  									mpz_inits(utilisateur.publique.e , utilisateur.publique.n,NULL);
+				  
+				        			genere_cle(&utilisateur.publique, &utilisateur.prive, 1024);
+				        			
+				        			
+				        			 char* chemin = malloc (sizeof (char)*200);
+				        			strcpy(chemin,"rsa/");
+				        			strcat(chemin,utilisateur.email);
+				        			strcat(chemin,"/Cles.txt");
+				        			
+				        			char * clees= malloc (sizeof(char)*2048*4);
+				        			strcpy(clees,mpz_get_str(NULL,10,utilisateur.prive.d));
+				        			strcat(clees,"\n");
+				        			strcat(clees,mpz_get_str(NULL,10,utilisateur.publique.e));
+				        			strcat(clees,"\n");
+				        			strcat(clees,mpz_get_str(NULL,10,utilisateur.prive.n));
+				        			
+				        			if (!ecrire_fichier(chemin,clees))	 printf("stockage de la clé\n");
+				        			else  printf("erreur decriture\n");
+				        			free(chemin);
+				        			free(clees);
+				        			gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (Connexion));
+				        	      }
+				        			
+				        			
+				        		}
+				        		    
+				        	
+				        
            }
 }

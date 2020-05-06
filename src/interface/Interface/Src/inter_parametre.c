@@ -66,7 +66,7 @@ void Slots_parametre(GtkWidget * sender , gpointer * data)
    	                             gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (Connexion));
    
    if (GTK_WIDGET(buttonP[1]) == sender && !data )
-   {					char * nom= g_strdup_printf("%s  %s", "Bienvenue", id);
+   {					char * nom= g_strdup_printf("%s  %s", "Bienvenue", utilisateur.email);
                         gtk_label_set_text(GTK_LABEL(lbcompte),nom);
                         free(nom); 
    	                    gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (Compte));
@@ -74,7 +74,7 @@ void Slots_parametre(GtkWidget * sender , gpointer * data)
    
    if (GTK_WIDGET(buttonP[2]) == sender && !data )
    {
-								 char * nom= g_strdup_printf("%s  %s", "Bienvenue", id);
+								 char * nom= g_strdup_printf("%s  %s", "Bienvenue", utilisateur.email);
 								 gtk_label_set_text(GTK_LABEL(lbsecurite),nom);
 								 free(nom);  
    	                             gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (Securite));

@@ -19,12 +19,14 @@
 	GtkWidget *spinner; 
 	GtkWidget *window;
 	GtkWidget * vboxCC , * labelcharc ,*text_viewCC;
+	char* chaine;
 
 	void page_chiffrer();
 	void page_chargementC();
 	int  page_resultatC();
 	void detuire_mini_f_resultat();
 	void Slots_Chiffrer(GtkWidget * sender , gpointer *data);
+	void file_selected (GtkFileChooser *chooser, gpointer user_data);
 	
 
 #endif

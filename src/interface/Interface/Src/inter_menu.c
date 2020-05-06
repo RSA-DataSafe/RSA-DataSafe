@@ -66,7 +66,7 @@ void page_Menu()
 
 void slots_Menu(GtkWidget * sender, gpointer * data )
 {
-     gchar * nom= g_strdup_printf("%s  %s", "Bienvenue", id);
+     gchar * nom= g_strdup_printf("%s  %s", "Bienvenue", utilisateur.email);
  if (GTK_WIDGET(buttonM[2]) == sender && !data )
  {
  	 							

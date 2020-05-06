@@ -1,6 +1,7 @@
 FLAGS =`pkg-config --libs --cflags gtk+-3.0`
 DEBUG = `pkg-config --libs gtk+-3.0`
 NAME =  App
+GMP = -lgmp
 FIC = Test
 WARNINGS = -Wall 
 CC = gcc 
@@ -12,7 +13,7 @@ export NAMEL = lib.a
 run:target
 	./$(NAME)
 target:lib object 
-	$(CC) $(WARNINGS) $(MAIN).o  $(CFLAGS) -L. $(NAMEL) -o $(NAME) $(DEBUG)
+	$(CC) $(WARNINGS) $(MAIN).o  $(CFLAGS) -L. $(NAMEL) -o $(NAME) $(DEBUG) $(GMP)
 object: 
 	$(CC) $(WARNINGS) $(FLAGS) -c  $(MAIN).c -o $(MAIN).o
 lib:
