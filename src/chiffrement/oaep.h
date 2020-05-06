@@ -1,6 +1,8 @@
 #ifndef _oaep_h
 #define _oaep_h
 
+#include "../structure/structure.h"
+
 /**
  * I2OSP, concatène graine et nombre
  * @param res : résultat

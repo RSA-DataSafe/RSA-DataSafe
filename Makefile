@@ -18,16 +18,18 @@ FLAG = -Wall -g3
 
 GMP = -lgmp
 
+MATH = -lm
+
 # make
 
 all: config compil
 
 compil: $(OBJ)
-	@ $(CC) -o $(BINDIR)/$(EXEC) $(OBJ) $(GMP)
+	@ $(CC) -o $(BINDIR)/$(EXEC) $(OBJ) $(GMP) $(MATH)
 	@ echo "Linking complete!"
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c $(DEPS)
-	@ $(CC) -c -o $@ $< $(GMP) $(FLAG)
+	@ $(CC) -c -o $@ $< $(GMP) $(MATH) $(FLAG)
 	@ echo "Compiled "$@" successfully!"
 
 run:
