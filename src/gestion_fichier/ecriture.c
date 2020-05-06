@@ -14,7 +14,7 @@ int  nouvel_utilisateur(char *email , char *mdp)
        char dossier1[300];
        strcpy(dossier1,dossier);
        strcat(dossier,userfile1);
-       int res1,res2;
+       int res1;int res2;
        FILE *userf1=fopen(dossier,"a+");
        if(userf1!=NULL)
        {
@@ -82,13 +82,12 @@ int  nouvel_utilisateur(char *email , char *mdp)
        strcat(cm,nom);
        FILE *fichier=fopen(cm,"a");
        char ligne [300]; 
-       char *line_buf = NULL;
       if(fichier!=NULL)
        {
-      while(fgets (ligne, sizeof ligne,fichier ) != NULL && ligne !="") ;
+      while(fgets (ligne, sizeof ligne,fichier ) != NULL && strcmp(ligne,"")!=0) ;
       res1=ecrire_fichier(cm,email);
-      res1=ecrire_fichier(cm,mdp);
-      if(res1!=0 || res2!=0)
+      res2=ecrire_fichier(cm,mdp);
+      if(res1!=0||res2!=0)
       {
         return ERR_ERCI;
       }
@@ -353,15 +352,15 @@ int envoie_message(mail *m)
         {
               char *tmp =malloc(strlen(m->titre)*sizeof(char));
               strcpy(tmp,m->titre);
-              strcat(tmp,":sig ");
+              strcat(tmp,":sig");
               char *email=malloc((strlen(m->dest_email)+50)*sizeof(char));
-              strcpy(email,"Email : ");
+              strcpy(email,"Email:");
               strcat(email,m->dest_email);
               char *message=malloc((strlen(m->message)+200)*sizeof(char));
-              strcpy(message,"Message Envoyé : ");
+              strcpy(message,"Message Envoyé:");
               strcat(message,m->message);
               char *signature=malloc((strlen(m->signature)+200)*sizeof(char));
-              strcpy(signature,"Signature Message : ");
+              strcpy(signature,"Signature Message:");
               strcat(signature,m->signature);
               char *chemin=malloc(500*sizeof(char));
               strcpy(chemin,"../../RSA-DataSafe/rsa/");
@@ -381,13 +380,13 @@ int envoie_message(mail *m)
               strcat(chemin,"/");
               strcat(chemin,"MessageIndesirable.txt");
               res1=ecrire_fichier(chemin,tmp);
-              strcpy(email,"Email : ");
+              strcpy(email,"Email:");
               strcat(email,m->env_email);
               res2=ecrire_fichier(chemin,email);
-              strcpy(message,"Message Recu : ");
+              strcpy(message,"Message Recu:");
               strcat(message,m->message);
               res3=ecrire_fichier(chemin,message);
-              strcpy(signature,"Signature Message : ");
+              strcpy(signature,"Signature Message:");
               strcat(signature,m->signature);
               res4=ecrire_fichier(chemin,signature);
               if(res1!=0 || res2!=0 || res3!=0 || res4!=0)
@@ -401,12 +400,12 @@ int envoie_message(mail *m)
        {           
               char *tmp =malloc(strlen(m->titre)*sizeof(char));
               strcpy(tmp,m->titre);
-              strcat(tmp,":Nonsig ");
+              strcat(tmp,":Nonsig");
               char *email=malloc((strlen(m->dest_email)+50)*sizeof(char));
-              strcpy(email,"Email : ");
+              strcpy(email,"Email:");
               strcat(email,m->dest_email);
               char *message=malloc((strlen(m->message)+200)*sizeof(char));
-              strcpy(message,"Message Envoyé : ");
+              strcpy(message,"Message Envoyé:");
               strcat(message,m->message);
               char *chemin=malloc(500*sizeof(char));
               strcpy(chemin,"../../RSA-DataSafe/rsa/");
@@ -425,10 +424,10 @@ int envoie_message(mail *m)
               strcat(chemin,"/");
               strcat(chemin,"MessageInvisible.txt");
               res1=ecrire_fichier(chemin,tmp);
-              strcpy(email,"Email : ");
+              strcpy(email,"Email:");
               strcat(email,m->env_email);
               res2=ecrire_fichier(chemin,email);
-              strcpy(message,"Message Recu : ");
+              strcpy(message,"Message Recu:");
               strcat(message,m->message);
               res3=ecrire_fichier(chemin,message);
               if(res1!=0 || res2!=0 || res3!=0)
@@ -437,12 +436,20 @@ int envoie_message(mail *m)
               }
               return 0;
        }
+       return 0;
 }
-int  stocker_message(char *email , mpz_t  message , char *boite)
+int  stocker_message(char *email , mpz_t  messag , char *boite)
 {   
    int res;
     char *str=malloc(1024*sizeof(char));
-    mpz_get_str(str,10,message);//conversion_mpz_char
+    message ms;
+   mpz_init(ms.nombre);
+   mpz_init(ms.taille);
+   mpz_set(ms.nombre,messag);
+   mpz_out_str(0,10,ms.nombre);
+   size_t taille=  mpz_sizeinbase(ms.nombre,2);
+   mpz_set_ui(ms.taille,taille);
+   strcpy(str,conversion_mpz_char(&ms));
     char dossier[300];
     strcpy(dossier,"../../RSA-DataSafe/rsa/");
     strcat(dossier,email);
@@ -453,9 +460,6 @@ int  stocker_message(char *email , mpz_t  message , char *boite)
     {
       return ERR_ERCI;
     }
-    if(res==0)
-    {
-      return 0;
-    }
+    
+    return 0;
 }
-
