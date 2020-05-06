@@ -59,7 +59,7 @@ int chercher_utilisateur(char *email, char *mdp) {
 
 int recupere_cle_publique(char * email, char * mdp, cle_publique * publique) {
 	if(!chercher_utilisateur(email,mdp) == 0) {
-		char * chemin = malloc(sizeof(char)*MAX_CARACT + sizeof("rsa/") + sizeof("cle_privee"));
+		char * chemin = malloc(sizeof(char)*MAX_CARACT + sizeof("rsa/") + sizeof("/Cles.txt"));
 		char * e = malloc(sizeof(char) *2048);
 		char * n = malloc(sizeof(char)* 2048);
 		if(chemin == NULL || e == NULL || n == NULL) {
@@ -68,7 +68,7 @@ int recupere_cle_publique(char * email, char * mdp, cle_publique * publique) {
 		}
 		strcat(chemin,"rsa/");
 		strcat(chemin,email);
-		strcat(chemin,"/cle_privee");
+		strcat(chemin,"/Cles.txt");
 
 		FILE fichier = fopen(chemin,"r");
 		if(fichier == NULL) {
@@ -102,7 +102,7 @@ int recupere_cle_publique(char * email, char * mdp, cle_publique * publique) {
 int recupere_cle_privee(char * email, char * mdp, cle_prive * prive) {
 	if(!chercher_utilisateur(email,mdp) == 0) {
 		
-		char * chemin = malloc(sizeof(char) * MAX_CARACT + sizeof("rsa/") + sizeof("/Clés"));
+		char * chemin = malloc(sizeof(char) * MAX_CARACT + sizeof("rsa/") + sizeof("/Cles.txt"));
 		char * d = malloc(sizeof(char) * 2048);
 		char * n = malloc(sizeof(char)* 2048);
 		
@@ -113,7 +113,7 @@ int recupere_cle_privee(char * email, char * mdp, cle_prive * prive) {
 		
 		strcat(chemin,"rsa/");
 		strcat(chemin,email);
-		strcat(chemin,"/Clés");
+		strcat(chemin,"/Cles.txt");
 		
 		FILE fichier = fopen(chemin,"r");
 		
@@ -152,7 +152,7 @@ int recupere_cle_privee(char * email, char * mdp, cle_prive * prive) {
 }
 
 int lire_boite(char *email, boite * b) {
-	 char * chemin = malloc(sizeof("rsa/") + sizeof(email)+ 50);
+	 char * chemin = malloc(sizeof("rsa/") + sizeof(email)+ 50 );
 	 if(chemin == NULL) {
 		fprintf(stderr,"Erreur d'allocation Mémoire");
 		exit(1);
