@@ -13,7 +13,7 @@ int chercher_utilisateur(char *email, char *mdp) {
 	
 	FILE * fichier = NULL;
 	
-	fichier = fopen("rsa/connexion","r");
+	fichier = fopen("rsa/connexion.txt","r");
 	
 	if (fichier == NULL) {
 		fprintf(stderr,"Fichier introuvable");
