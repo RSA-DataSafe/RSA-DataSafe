@@ -93,5 +93,31 @@ block *creer_block_oaep(message *m,message *encodage , mpz_t donnee_alea) {
 
 
 
-
+message *recupere_message_oaep(block *b){
+    
+    //taille du message 
+    mpz_t message_lenght;
+    mpz_init(message_lenght);
+    
+    int taille_m =b->nb_block * 2048 ;
+    mpz_add_ui(message_lenght,message_lenght,taille_m );
+    
+    message *m  = malloc(sizeof(message));
+    mpz_init(m->taille);
+    mpz_set(m->taille,message_lenght);
+    
+    mpz_init(m->nombre);
+    mpz_set(m->nombre,b->tab[0]);
+    
+    for(int i = 1; i < b->nb_block; i++){
+         mpz_mul_2exp(m->nombre,m->nombre,2048);
+         mpz_ior(m->nombre,m->nombre,b->tab[i]);   
+    } 
+    
+    // Clear
+    mpz_clear(message_lenght);
+    
+    return m;
+    
+}
     
