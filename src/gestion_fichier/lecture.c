@@ -67,7 +67,7 @@ int recupere_cle_publique(char * email, char * mdp, cle_publique * publique) {
 	}
 	
 	if(!chercher_utilisateur(email,mdp) == 0) {
-		char * chemin = malloc(sizeof(char)*MAX_CARACT + sizeof("rsa/") + sizeof("/Cles"));
+		char * chemin = malloc(sizeof(char)*MAX_CARACT + sizeof("rsa/") + sizeof("/Cles.txt"));
 		char * e = malloc(sizeof(char) *2048);
 		char * n = malloc(sizeof(char)* 2048);
 		if(chemin == NULL || e == NULL || n == NULL) {
@@ -76,7 +76,7 @@ int recupere_cle_publique(char * email, char * mdp, cle_publique * publique) {
 		}
 		strcat(chemin,"rsa/");
 		strcat(chemin,email);
-		strcat(chemin,"/Cles");
+		strcat(chemin,"/Cles.txt");
 		
 		FILE * fichier = fopen(chemin,"r");		
 		if(fichier == NULL) {
@@ -114,7 +114,7 @@ int recupere_cle_privee(char * email, char * mdp, cle_prive * prive) {
 	}
 	if(!chercher_utilisateur(email,mdp) == 0) {
 		
-		char * chemin = malloc(sizeof(char) * MAX_CARACT + sizeof("rsa/") + sizeof("/Cles"));
+		char * chemin = malloc(sizeof(char) * MAX_CARACT + sizeof("rsa/") + sizeof("/Cles.txt"));
 		char * d = malloc(sizeof(char) * 2048);
 		char * n = malloc(sizeof(char)* 2048);
 		
@@ -125,7 +125,7 @@ int recupere_cle_privee(char * email, char * mdp, cle_prive * prive) {
 		
 		strcat(chemin,"rsa/");
 		strcat(chemin,email);
-		strcat(chemin,"/Cles");
+		strcat(chemin,"/Cles.txt");
 		
 		FILE * fichier = fopen(chemin,"r");
 		
