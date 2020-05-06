@@ -13,7 +13,7 @@ int chercher_utilisateur(char *email, char *mdp) {
 	
 	FILE * fichier = NULL;
 	
-	fichier = fopen("rsa/connexion.txt","r");
+	fichier = fopen("rsa/connexion","r");
 	
 	if (fichier == NULL) {
 		fprintf(stderr,"Fichier introuvable");
@@ -59,7 +59,7 @@ int chercher_utilisateur(char *email, char *mdp) {
 
 int recupere_cle_publique(char * email, char * mdp, cle_publique * publique) {
 	if(!chercher_utilisateur(email,mdp) == 0) {
-		char * chemin = malloc(sizeof(char)*MAX_CARACT + sizeof("rsa/") + sizeof("/Cles.txt"));
+		char * chemin = malloc(sizeof(char)*MAX_CARACT + sizeof("rsa/") + sizeof("cle_privee"));
 		char * e = malloc(sizeof(char) *2048);
 		char * n = malloc(sizeof(char)* 2048);
 		if(chemin == NULL || e == NULL || n == NULL) {
@@ -68,9 +68,9 @@ int recupere_cle_publique(char * email, char * mdp, cle_publique * publique) {
 		}
 		strcat(chemin,"rsa/");
 		strcat(chemin,email);
-		strcat(chemin,"/Cles.txt");
+		strcat(chemin,"/cle_privee");
 
-		FILE fichier = fopen(chemin,"r");
+		FILE * fichier = fopen(chemin,"r");
 		if(fichier == NULL) {
 			free(chemin);
 			free(e);
@@ -78,19 +78,23 @@ int recupere_cle_publique(char * email, char * mdp, cle_publique * publique) {
 			fprintf(stderr,"Fichier Introuvable");
 			return ERR_LECT;
 		}
-		
+		char c;
+		int i = 0;
 		getline(NULL,NULL,fichier);
 
-		while((c=fgetc(fichier)) =! '\n') {
+		while((c=fgetc(fichier)) != '\n') {
 			e[i] = c;
+			i++;
 		}
+		mpz_init_set_str(publique->e,e,16);
 		free(e);
 		fseek(fichier,2,SEEK_CUR);
-
-		while((c=fgetc(fichier)) =! '\n') {
+		i=0;
+		while((c=fgetc(fichier)) != '\n') {
 			n[i] = c;
+			i++;
 		}
-		mpz_init_set_str(cle_prive->n,d,16);
+		mpz_init_set_str(publique->n,n,16);
 		free(n);
 		
 		free(chemin);
@@ -102,7 +106,7 @@ int recupere_cle_publique(char * email, char * mdp, cle_publique * publique) {
 int recupere_cle_privee(char * email, char * mdp, cle_prive * prive) {
 	if(!chercher_utilisateur(email,mdp) == 0) {
 		
-		char * chemin = malloc(sizeof(char) * MAX_CARACT + sizeof("rsa/") + sizeof("/Cles.txt"));
+		char * chemin = malloc(sizeof(char) * MAX_CARACT + sizeof("rsa/") + sizeof("/Clés"));
 		char * d = malloc(sizeof(char) * 2048);
 		char * n = malloc(sizeof(char)* 2048);
 		
@@ -113,9 +117,9 @@ int recupere_cle_privee(char * email, char * mdp, cle_prive * prive) {
 		
 		strcat(chemin,"rsa/");
 		strcat(chemin,email);
-		strcat(chemin,"/Cles.txt");
+		strcat(chemin,"/Clés");
 		
-		FILE fichier = fopen(chemin,"r");
+		FILE * fichier = fopen(chemin,"r");
 		
 		if(fichier == NULL) {
 			free(chemin);
@@ -125,6 +129,9 @@ int recupere_cle_privee(char * email, char * mdp, cle_prive * prive) {
 			return ERR_LECT;
 		}
 		
+		char c;
+		int i = 0;
+		
 		fseek(fichier,3,SEEK_SET);
 		
 		if(d == NULL) {
@@ -132,17 +139,20 @@ int recupere_cle_privee(char * email, char * mdp, cle_prive * prive) {
 			exit(0);
 		}
 		
-		while((c=fgetc(fichier)) =! '\n') {
+		while((c=fgetc(fichier)) != '\n') {
 			d[i] = c;
+			i++;
 		}
-		mpz_init_set_str(cle_prive->d,d,16);
+		i = 0;
+		mpz_init_set_str(prive->d,d,16);
 		free(d);
 		getline(NULL,NULL,fichier);
 		fseek(fichier,2,SEEK_CUR);
-		while((c=fgetc(fichier)) =! '\n') {
+		while((c=fgetc(fichier)) != '\n') {
 			n[i] = c;
+			i++;
 		}
-		mpz_init_set_str(cle_prive->n,d,16);
+		mpz_init_set_str(prive->n,d,16);
 		free(n);
 		
 		free(chemin);
@@ -152,7 +162,7 @@ int recupere_cle_privee(char * email, char * mdp, cle_prive * prive) {
 }
 
 int lire_boite(char *email, boite * b) {
-	 char * chemin = malloc(sizeof("rsa/") + sizeof(email)+ 50 );
+	 char * chemin = malloc(sizeof("rsa/") + sizeof(email)+ 50);
 	 if(chemin == NULL) {
 		fprintf(stderr,"Erreur d'allocation Mémoire");
 		exit(1);
