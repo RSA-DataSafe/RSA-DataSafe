@@ -146,8 +146,12 @@ int lire_boite(char *email, boite * b) {
 	 strcat(chemin,email);	
 	 strcat(chemin,"/");
 	 strcat(chemin, b->nom_boite);
-
+	
 	 FILE * fichier = fopen(chemin,"r");
+	 if(fichier == NULL) {
+		 free(chemin);
+		 return ERR_LECT;
+	 }
 	 char c;					  // Va permettre de lire caractère par caractère
 	 int alternateur = 0;		  // permet d'alterner entre les caractères non utilisé
 	 int donnee_structurelle = 0; // position à traiter
@@ -194,24 +198,24 @@ int lire_boite(char *email, boite * b) {
 				// Récupérer le mail du destinataire
 				if(donnee_structurelle == 1) {
 					char * buff1 = calloc(sizeof(char) * 150,sizeof(char));
-					b->m[nbr_mail_traiter].dest_email = calloc(sizeof(char) * 50,sizeof(char));
-					if(buff1 == NULL || b->m[nbr_mail_traiter].dest_email == NULL) {
+					b->m[nbr_mail_traiter].env_email = calloc(sizeof(char) * 150,sizeof(char));
+					if(buff1 == NULL || b->m[nbr_mail_traiter].env_email == NULL) {
 						fprintf(stderr,"Erreur d'allocation Mémoire");
 						exit(0);
 					}
 					int a = 0;
-					do {
+					do { 
 						c = fgetc(fichier);
 						buff1[a] = c;
 						a++;
 					} while(c != '\n');
 					alternateur = 0;
-					strcpy(b->m[nbr_mail_traiter].exp_email,buff1);
+					memcpy(b->m[nbr_mail_traiter].env_email,buff1,strlen(buff1));
 					free(buff1);
 					donnee_structurelle++;
 					goto debut;
 				}
-				// Récupérer le message
+				//~ // Récupérer le message
 				if(donnee_structurelle == 2) {
 					char * buff2 = calloc(sizeof(char) * 2000,sizeof(char));
 					b->m[nbr_mail_traiter].message = calloc(sizeof(char) * 2000,sizeof(char));
@@ -226,12 +230,12 @@ int lire_boite(char *email, boite * b) {
 						e++;
 					} while(c!= '\n');
 					alternateur = 0;
-					strcpy(b->m[nbr_mail_traiter].message,buff2);
+					memcpy(b->m[nbr_mail_traiter].message,buff2,strlen(buff2));
 					free(buff2);
 					donnee_structurelle++;
 					goto debut;
 				}
-				// Récuperer la signature
+				//~ // Récuperer la signature
 				if(donnee_structurelle == 3) {
 					if(b->m[nbr_mail_traiter].signer != 0) {
 						char * buff3 = calloc(sizeof(char) * 2000,sizeof(char));
@@ -246,7 +250,7 @@ int lire_boite(char *email, boite * b) {
 							buff3[d] = c;
 							d++;
 						} while(c!= '\n');
-						strcpy(b->m[nbr_mail_traiter].signature,buff3);
+						memcpy(b->m[nbr_mail_traiter].signature,buff3,strlen(buff3));
 						free(buff3);
 					}
 					alternateur = 0;
@@ -256,7 +260,7 @@ int lire_boite(char *email, boite * b) {
 				}
 			}
 	 } while(c != EOF);
-	 
+	 b->nb_mail = nbr_mail_traiter;
 	 free(chemin);	
 	 return 0;	
 }
