@@ -13,7 +13,7 @@ int chercher_utilisateur(char *email, char *mdp) {
 	
 	FILE * fichier = NULL;
 	
-	fichier = fopen("rsa/connexion","r");
+	fichier = fopen("rsa/connexion.txt","r");
 	
 	if (fichier == NULL) {
 		fprintf(stderr,"Fichier introuvable");
@@ -22,18 +22,18 @@ int chercher_utilisateur(char *email, char *mdp) {
 	
 	size_t bufsize = 32;
 	
-	char * user = malloc(sizeof(char) * bufsize);
-	char * mot_de_passe = malloc(sizeof(char) * bufsize);
-	char * email_tmp = malloc(sizeof(char) * bufsize);
-	char * mdp_tmp = malloc(sizeof(char) * bufsize);
+	char * user = calloc(sizeof(char) * bufsize,sizeof(char));
+	char * mot_de_passe = calloc(sizeof(char) * bufsize,sizeof(char));
+	char * email_tmp = calloc(sizeof(char) * bufsize,sizeof(char));
+	char * mdp_tmp = calloc(sizeof(char) * bufsize,sizeof(char));
 	
 	if(user == NULL || mot_de_passe == NULL || email_tmp==NULL || mdp_tmp == NULL) {
 		fprintf(stderr,"Erreur d'allocation de mémoire");
 		exit(1);
 	}
 	
-	memcpy(email_tmp,email,strlen(email));
-	memcpy(mdp_tmp,mdp,strlen(mdp));
+	strcpy(email_tmp,email);
+	strcpy(mdp_tmp,mdp);
 	strcat(email_tmp,"\n");
 	strcat(mdp_tmp,"\n");
 	
@@ -58,26 +58,21 @@ int chercher_utilisateur(char *email, char *mdp) {
 }
 
 int recupere_cle_publique(char * email, char * mdp, cle_publique * publique) {
-	if(publique == NULL) {
-		publique = malloc(sizeof(cle_publique));
-		if(publique == NULL) {
-			fprintf(stderr,"Erreur d'allocation mémoire");
-			exit(0);
-		}
-	}
-	
-	if(!chercher_utilisateur(email,mdp) == 0) {
-		char * chemin = malloc(sizeof(char)*MAX_CARACT + sizeof("rsa/") + sizeof("/Cles.txt"));
-		char * e = malloc(sizeof(char) *2048);
-		char * n = malloc(sizeof(char)* 2048);
+	if(chercher_utilisateur(email,mdp) != ERR_LECT) {
+		char * chemin = calloc(sizeof(char)*MAX_CARACT + sizeof("rsa/") + sizeof("/Cles.txt"),sizeof(char));
+		char * e = calloc(sizeof(char) *2048,sizeof(char));
+		char * d = calloc(sizeof(char) *2048,sizeof(char));
+		char * n = calloc(sizeof(char) *2048,sizeof(char));
+		
 		if(chemin == NULL || e == NULL || n == NULL) {
 			fprintf(stderr,"Erreur d'allocation Mémoire");
 			exit(1);
 		}
+		
 		strcat(chemin,"rsa/");
 		strcat(chemin,email);
 		strcat(chemin,"/Cles.txt");
-		
+
 		FILE * fichier = fopen(chemin,"r");		
 		if(fichier == NULL) {
 			free(chemin);
@@ -88,16 +83,15 @@ int recupere_cle_publique(char * email, char * mdp, cle_publique * publique) {
 		}
 		size_t bufsize = 32;
 		
-		if(getline(NULL,&bufsize,fichier) == -1) return ERR_LECT;
+		if(getline(&d,&bufsize,fichier) == -1) return ERR_LECT;
+		free(d);
+		if(getline(&e,&bufsize,fichier) == -1) return ERR_LECT;
 		mpz_init_set_str(publique->e,e,10);
 		free(e);
-		
-		if(getline(&e,&bufsize,fichier) == -1) return ERR_LECT;
-		
 		if(getline(&n,&bufsize,fichier) == -1) return ERR_LECT;
 		mpz_init_set_str(publique->n,n,10);
 		free(n);
-			
+		fclose(fichier);
 		free(chemin);
 		return 0;	
 	}
@@ -105,20 +99,13 @@ int recupere_cle_publique(char * email, char * mdp, cle_publique * publique) {
 }
 
 int recupere_cle_privee(char * email, char * mdp, cle_prive * prive) {
-	if(prive==NULL) {
-		prive = malloc(sizeof(cle_prive));
-		if(prive == NULL) {
-			fprintf(stderr,"Erreur d'allocation mémoire");
-			exit(0);
-		}
-	}
-	if(!chercher_utilisateur(email,mdp) == 0) {
+	if(chercher_utilisateur(email,mdp) != ERR_LECT) {
+		char * chemin = calloc(sizeof(char)*MAX_CARACT + sizeof("rsa/") + sizeof("/Cles.txt"),sizeof(char));
+		char * e = calloc(sizeof(char) *2048,sizeof(char));
+		char * d = calloc(sizeof(char) *2048,sizeof(char));
+		char * n = calloc(sizeof(char) *2048,sizeof(char));
 		
-		char * chemin = malloc(sizeof(char) * MAX_CARACT + sizeof("rsa/") + sizeof("/Cles.txt"));
-		char * d = malloc(sizeof(char) * 2048);
-		char * n = malloc(sizeof(char)* 2048);
-		
-		if(chemin == NULL || d == NULL || n == NULL) {
+		if(chemin == NULL || e == NULL || n == NULL) {
 			fprintf(stderr,"Erreur d'allocation Mémoire");
 			exit(1);
 		}
@@ -126,29 +113,25 @@ int recupere_cle_privee(char * email, char * mdp, cle_prive * prive) {
 		strcat(chemin,"rsa/");
 		strcat(chemin,email);
 		strcat(chemin,"/Cles.txt");
-		
-		FILE * fichier = fopen(chemin,"r");
-		
+		FILE * fichier = fopen(chemin,"r");		
 		if(fichier == NULL) {
 			free(chemin);
-			free(d);
+			free(e);
 			free(n);
 			fprintf(stderr,"Fichier Introuvable");
 			return ERR_LECT;
 		}
-		
 		size_t bufsize = 32;
 		
 		if(getline(&d,&bufsize,fichier) == -1) return ERR_LECT;
 		mpz_init_set_str(prive->d,d,10);
 		free(d);
-		
-		if(getline(NULL,&bufsize,fichier) == -1) return ERR_LECT;		
-		
+		if(getline(&e,&bufsize,fichier) == -1) return ERR_LECT;
+		free(e);
 		if(getline(&n,&bufsize,fichier) == -1) return ERR_LECT;
 		mpz_init_set_str(prive->n,n,10);
 		free(n);
-		
+		fclose(fichier);
 		free(chemin);
 		return 0;
 	}
@@ -156,7 +139,7 @@ int recupere_cle_privee(char * email, char * mdp, cle_prive * prive) {
 }
 
 int lire_boite(char *email, boite * b) {
-	 char * chemin = malloc(sizeof("rsa/") + sizeof(email)+ 50);
+	 char * chemin = calloc(sizeof("rsa/") + sizeof(email)+ 50,sizeof(char));
 	 if(chemin == NULL) {
 		fprintf(stderr,"Erreur d'allocation Mémoire");
 		exit(1);
@@ -171,7 +154,7 @@ int lire_boite(char *email, boite * b) {
 	 int alternateur = 0;		  // permet d'alterner entre les caractères non utilisé
 	 int donnee_structurelle = 0; // position à traiter
 	 int nbr_mail_traiter = 0;    // le nombre de mail qu'on aura traiter
-	 b->m = malloc(sizeof(mail)*1000); // on peut avoir 1000 mails
+	 b->m = calloc(sizeof(mail)*1000,sizeof(mail)); // on peut avoir 1000 mails
 	 
 	 if(b->m == NULL) {
 		 fprintf(stderr,"Erreur d'allocation Mémoire");
@@ -189,7 +172,7 @@ int lire_boite(char *email, boite * b) {
 		  if(alternateur == 1) {
 			  // Vérifié si message signé
 			  if(donnee_structurelle == 0) {
-					char * buff0 = malloc(sizeof(char) * 10);
+					char * buff0 = calloc(sizeof(char) * 10,sizeof(char));
 					if(buff0 == NULL) {
 						fprintf(stderr,"Erreur d'allocation Mémoire");
 						exit(0);
@@ -212,8 +195,8 @@ int lire_boite(char *email, boite * b) {
 				}
 				// Récupérer le mail du destinataire
 				if(donnee_structurelle == 1) {
-					char * buff1 = malloc(sizeof(char) * 150);
-					b->m[nbr_mail_traiter].dest_email = malloc(sizeof(char) * 50);
+					char * buff1 = calloc(sizeof(char) * 150,sizeof(char));
+					b->m[nbr_mail_traiter].dest_email = calloc(sizeof(char) * 50,sizeof(char));
 					if(buff1 == NULL || b->m[nbr_mail_traiter].dest_email == NULL) {
 						fprintf(stderr,"Erreur d'allocation Mémoire");
 						exit(0);
@@ -232,8 +215,8 @@ int lire_boite(char *email, boite * b) {
 				}
 				// Récupérer le message
 				if(donnee_structurelle == 2) {
-					char * buff2 = malloc(sizeof(char) * 2000);
-					b->m[nbr_mail_traiter].message = malloc(sizeof(char) * 2000);
+					char * buff2 = calloc(sizeof(char) * 2000,sizeof(char));
+					b->m[nbr_mail_traiter].message = calloc(sizeof(char) * 2000,sizeof(char));
 					if(buff2 == NULL || b->m[nbr_mail_traiter].message == NULL) {
 						fprintf(stderr,"Erreur d'allocation Mémoire");
 						exit(0);
@@ -253,8 +236,8 @@ int lire_boite(char *email, boite * b) {
 				// Récuperer la signature
 				if(donnee_structurelle == 3) {
 					if(b->m[nbr_mail_traiter].signer != 0) {
-						char * buff3 = malloc(sizeof(char) * 2000);
-						b->m[nbr_mail_traiter].signature = malloc(sizeof(char) * 2000);
+						char * buff3 = calloc(sizeof(char) * 2000,sizeof(char));
+						b->m[nbr_mail_traiter].signature = calloc(sizeof(char) * 2000,sizeof(char));
 						if(buff3 == NULL || b->m[nbr_mail_traiter].signature == NULL) {
 							fprintf(stderr,"Erreur d'allocation Mémoire");
 							exit(0);
@@ -281,23 +264,23 @@ int lire_boite(char *email, boite * b) {
 }
 
 char *lire_fichier(char * chemin) {
-		char * res = malloc(sizeof(char)*5000);
-		if(res == NULL) {
-			fprintf(stderr,"Erreur d'allocation Mémoire");
-			exit(1);
-		}
-		FILE * fichier = NULL;
-		fichier = fopen(chemin,"r");
-		if(fichier == NULL) {
-				res[0] = -1;
-				return res;
-		}
-		
-		char c;
-		for(int i = 0; (c = fgetc(fichier)) != EOF; i++) {
-					res[i] = c;
-		}
+	char * res = calloc(sizeof(char)*5000,sizeof(char));
+	if(res == NULL) {
+		fprintf(stderr,"Erreur d'allocation Mémoire");
+		exit(1);
+	}
+	FILE * fichier = NULL;
+	fichier = fopen(chemin,"r");
+	if(fichier == NULL) {
+			res[0] = -1;
+			return res;
+	}
+	
+	char c;
+	for(int i = 0; (c = fgetc(fichier)) != EOF; i++) {
+				res[i] = c;
+	}
 
-		fclose(fichier);
-		return res;
+	fclose(fichier);
+	return res;
 }
