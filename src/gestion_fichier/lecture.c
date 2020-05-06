@@ -58,6 +58,14 @@ int chercher_utilisateur(char *email, char *mdp) {
 }
 
 int recupere_cle_publique(char * email, char * mdp, cle_publique * publique) {
+	if(publique == NULL) {
+		publique = malloc(sizeof(cle_publique));
+		if(publique == NULL) {
+			fprintf(stderr,"Erreur d'allocation mémoire");
+			exit(0);
+		}
+	}
+	
 	if(!chercher_utilisateur(email,mdp) == 0) {
 		char * chemin = malloc(sizeof(char)*MAX_CARACT + sizeof("rsa/") + sizeof("/Cles"));
 		char * e = malloc(sizeof(char) *2048);
@@ -69,8 +77,8 @@ int recupere_cle_publique(char * email, char * mdp, cle_publique * publique) {
 		strcat(chemin,"rsa/");
 		strcat(chemin,email);
 		strcat(chemin,"/Cles");
-
-		FILE * fichier = fopen(chemin,"r");
+		
+		FILE * fichier = fopen(chemin,"r");		
 		if(fichier == NULL) {
 			free(chemin);
 			free(e);
@@ -78,25 +86,18 @@ int recupere_cle_publique(char * email, char * mdp, cle_publique * publique) {
 			fprintf(stderr,"Fichier Introuvable");
 			return ERR_LECT;
 		}
-		char c;
-		int i = 0;
-		getline(NULL,NULL,fichier);
-
-		while((c=fgetc(fichier)) != '\n') {
-			e[i] = c;
-			i++;
-		}
+		size_t bufsize = 32;
+		
+		if(getline(NULL,&bufsize,fichier) == -1) return ERR_LECT;
 		mpz_init_set_str(publique->e,e,10);
 		free(e);
-		fseek(fichier,2,SEEK_CUR);
-		i=0;
-		while((c=fgetc(fichier)) != '\n') {
-			n[i] = c;
-			i++;
-		}
+		
+		if(getline(&e,&bufsize,fichier) == -1) return ERR_LECT;
+		
+		if(getline(&n,&bufsize,fichier) == -1) return ERR_LECT;
 		mpz_init_set_str(publique->n,n,10);
 		free(n);
-		
+			
 		free(chemin);
 		return 0;	
 	}
@@ -104,6 +105,13 @@ int recupere_cle_publique(char * email, char * mdp, cle_publique * publique) {
 }
 
 int recupere_cle_privee(char * email, char * mdp, cle_prive * prive) {
+	if(prive==NULL) {
+		prive = malloc(sizeof(cle_prive));
+		if(prive == NULL) {
+			fprintf(stderr,"Erreur d'allocation mémoire");
+			exit(0);
+		}
+	}
 	if(!chercher_utilisateur(email,mdp) == 0) {
 		
 		char * chemin = malloc(sizeof(char) * MAX_CARACT + sizeof("rsa/") + sizeof("/Cles"));
@@ -129,30 +137,16 @@ int recupere_cle_privee(char * email, char * mdp, cle_prive * prive) {
 			return ERR_LECT;
 		}
 		
-		char c;
-		int i = 0;
+		size_t bufsize = 32;
 		
-		fseek(fichier,3,SEEK_SET);
-		
-		if(d == NULL) {
-			fprintf(stderr,"Erreur d'allocation Mémoire");
-			exit(0);
-		}
-		
-		while((c=fgetc(fichier)) != '\n') {
-			d[i] = c;
-			i++;
-		}
-		i = 0;
+		if(getline(&d,&bufsize,fichier) == -1) return ERR_LECT;
 		mpz_init_set_str(prive->d,d,10);
 		free(d);
-		getline(NULL,NULL,fichier);
-		fseek(fichier,2,SEEK_CUR);
-		while((c=fgetc(fichier)) != '\n') {
-			n[i] = c;
-			i++;
-		}
-		mpz_init_set_str(prive->n,d,10);
+		
+		if(getline(NULL,&bufsize,fichier) == -1) return ERR_LECT;		
+		
+		if(getline(&n,&bufsize,fichier) == -1) return ERR_LECT;
+		mpz_init_set_str(prive->n,n,10);
 		free(n);
 		
 		free(chemin);
