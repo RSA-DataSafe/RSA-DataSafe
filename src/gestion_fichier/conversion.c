@@ -4,7 +4,7 @@
 #include <string.h>
 
 message * conversion_char_mpz( char * chaine ) {
-	char byte[8]; 	// Un élément de 8 bits
+	char byte[8]; 	
 	int len_chaine = strlen(chaine);
 	char * res = malloc((sizeof(char) * 7) * len_chaine); // Non signé
 	
