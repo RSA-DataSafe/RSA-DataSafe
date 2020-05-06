@@ -438,24 +438,15 @@ int envoie_message(mail *m)
        }
        return 0;
 }
-int  stocker_message(char *email , mpz_t  messag , char *boite)
+int  stocker_message(char *email , char*  message , char *boite)
 {   
-   int res;
-    char *str=malloc(1024*sizeof(char));
-    message ms;
-   mpz_init(ms.nombre);
-   mpz_init(ms.taille);
-   mpz_set(ms.nombre,messag);
-   mpz_out_str(0,10,ms.nombre);
-   size_t taille=  mpz_sizeinbase(ms.nombre,2);
-   mpz_set_ui(ms.taille,taille);
-   strcpy(str,conversion_mpz_char(&ms));
+    int res;
     char dossier[300];
     strcpy(dossier,"../../RSA-DataSafe/rsa/");
     strcat(dossier,email);
     strcat(dossier,"/");
     strcat(dossier,boite);
-    res=ecrire_fichier(dossier,str);
+    res=ecrire_fichier(dossier,message);
     if(res!=0)
     {
       return ERR_ERCI;
