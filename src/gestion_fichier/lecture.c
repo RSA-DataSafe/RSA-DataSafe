@@ -86,7 +86,7 @@ int recupere_cle_publique(char * email, char * mdp, cle_publique * publique) {
 			e[i] = c;
 			i++;
 		}
-		mpz_init_set_str(publique->e,e,16);
+		mpz_init_set_str(publique->e,e,10);
 		free(e);
 		fseek(fichier,2,SEEK_CUR);
 		i=0;
@@ -94,7 +94,7 @@ int recupere_cle_publique(char * email, char * mdp, cle_publique * publique) {
 			n[i] = c;
 			i++;
 		}
-		mpz_init_set_str(publique->n,n,16);
+		mpz_init_set_str(publique->n,n,10);
 		free(n);
 		
 		free(chemin);
@@ -144,7 +144,7 @@ int recupere_cle_privee(char * email, char * mdp, cle_prive * prive) {
 			i++;
 		}
 		i = 0;
-		mpz_init_set_str(prive->d,d,16);
+		mpz_init_set_str(prive->d,d,10);
 		free(d);
 		getline(NULL,NULL,fichier);
 		fseek(fichier,2,SEEK_CUR);
@@ -152,7 +152,7 @@ int recupere_cle_privee(char * email, char * mdp, cle_prive * prive) {
 			n[i] = c;
 			i++;
 		}
-		mpz_init_set_str(prive->n,d,16);
+		mpz_init_set_str(prive->n,d,10);
 		free(n);
 		
 		free(chemin);
