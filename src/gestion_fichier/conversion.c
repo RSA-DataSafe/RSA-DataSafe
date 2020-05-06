@@ -26,7 +26,7 @@ message * conversion_char_mpz( char * chaine ) {
 			byte[j] = 48 + (c & 1); // On le met sous forme ascii
 			c = c >> 1;
 		} 	
-		strcat(res,byte); // Concatene un Byte dans la chaine de caractères	
+		strcpy(res,byte); // Concatene un Byte dans la chaine de caractères	
 	}
 	
 	mpz_init_set_str(m->nombre,res,2); // Le nombre en base de deux sera en ascii
