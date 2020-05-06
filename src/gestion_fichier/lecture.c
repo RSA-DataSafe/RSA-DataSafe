@@ -58,6 +58,14 @@ int chercher_utilisateur(char *email, char *mdp) {
 }
 
 int recupere_cle_publique(char * email, char * mdp, cle_publique * publique) {
+	if(publique == NULL) {
+		publique = malloc(sizeof(cle_publique));
+		if(publique == NULL) {
+			fprintf(stderr,"Erreur d'allocation mémoire");
+			exit(0);
+		}
+	}
+	
 	if(!chercher_utilisateur(email,mdp) == 0) {
 		char * chemin = malloc(sizeof(char)*MAX_CARACT + sizeof("rsa/") + sizeof("/Cles"));
 		char * e = malloc(sizeof(char) *2048);
@@ -97,6 +105,13 @@ int recupere_cle_publique(char * email, char * mdp, cle_publique * publique) {
 }
 
 int recupere_cle_privee(char * email, char * mdp, cle_prive * prive) {
+	if(prive==NULL) {
+		prive = malloc(sizeof(cle_prive));
+		if(prive == NULL) {
+			fprintf(stderr,"Erreur d'allocation mémoire");
+			exit(0);
+		}
+	}
 	if(!chercher_utilisateur(email,mdp) == 0) {
 		
 		char * chemin = malloc(sizeof(char) * MAX_CARACT + sizeof("rsa/") + sizeof("/Cles"));
