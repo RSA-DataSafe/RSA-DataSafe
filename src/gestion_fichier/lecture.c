@@ -206,7 +206,7 @@ int lire_boite(char *email, boite * b) {
 						a++;
 					} while(c != '\n');
 					alternateur = 0;
-					strcpy(b->m[nbr_mail_traiter].dest_email,buff1);
+					strcpy(b->m[nbr_mail_traiter].exp_email,buff1);
 					free(buff1);
 					donnee_structurelle++;
 					goto debut;
