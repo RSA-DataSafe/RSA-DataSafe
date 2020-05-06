@@ -57,11 +57,12 @@ int chercher_utilisateur(char *email, char *mdp) {
 	return est_present;
 }
 
-
 int recupere_cle_publique(char * email, char * mdp, cle_publique * publique) {
 	if(!chercher_utilisateur(email,mdp) == 0) {
 		char * chemin = malloc(sizeof(char)*MAX_CARACT + sizeof("rsa/") + sizeof("cle_privee"));
-		if(chemin == NULL) {
+		char * e = malloc(sizeof(char) *2048);
+		char * n = malloc(sizeof(char)* 2048);
+		if(chemin == NULL || e == NULL || n == NULL) {
 			fprintf(stderr,"Erreur d'allocation Mémoire");
 			exit(1);
 		}
@@ -69,14 +70,30 @@ int recupere_cle_publique(char * email, char * mdp, cle_publique * publique) {
 		strcat(chemin,email);
 		strcat(chemin,"/cle_privee");
 
-		char * res = lire_fichier(chemin);
-		
-		if(res[0] == -1) {
+		FILE fichier = fopen(chemin,"r");
+		if(fichier == NULL) {
+			free(chemin);
+			free(e);
+			free(n);
+			fprintf(stderr,"Fichier Introuvable");
 			return ERR_LECT;
 		}
-		// init cle publique avec res
+		
+		getline(NULL,NULL,fichier);
+
+		while((c=fgetc(fichier)) =! '\n') {
+			e[i] = c;
+		}
+		free(e);
+		fseek(fichier,2,SEEK_CUR);
+
+		while((c=fgetc(fichier)) =! '\n') {
+			n[i] = c;
+		}
+		mpz_init_set_str(cle_prive->n,d,16);
+		free(n);
+		
 		free(chemin);
-		free(res);
 		return 0;	
 	}
 	return ERR_LECT;
@@ -84,23 +101,51 @@ int recupere_cle_publique(char * email, char * mdp, cle_publique * publique) {
 
 int recupere_cle_privee(char * email, char * mdp, cle_prive * prive) {
 	if(!chercher_utilisateur(email,mdp) == 0) {
-		char * chemin = malloc(sizeof(char) * MAX_CARACT + sizeof("rsa/") + sizeof("/cle_pub"));
-		if(chemin == NULL) {
+		
+		char * chemin = malloc(sizeof(char) * MAX_CARACT + sizeof("rsa/") + sizeof("/Clés"));
+		char * d = malloc(sizeof(char) * 2048);
+		char * n = malloc(sizeof(char)* 2048);
+		
+		if(chemin == NULL || d == NULL || n == NULL) {
 			fprintf(stderr,"Erreur d'allocation Mémoire");
 			exit(1);
 		}
-		char * res = lire_fichier(chemin);
 		
 		strcat(chemin,"rsa/");
 		strcat(chemin,email);
-		strcat(chemin,"cle_pub");
-
-		if(res[0] == -1) {
-					return ERR_LECT;
+		strcat(chemin,"/Clés");
+		
+		FILE fichier = fopen(chemin,"r");
+		
+		if(fichier == NULL) {
+			free(chemin);
+			free(d);
+			free(n);
+			fprintf(stderr,"Fichier Introuvable");
+			return ERR_LECT;
 		}
-		//init cle privée avec res
+		
+		fseek(fichier,3,SEEK_SET);
+		
+		if(d == NULL) {
+			fprintf(stderr,"Erreur d'allocation Mémoire");
+			exit(0);
+		}
+		
+		while((c=fgetc(fichier)) =! '\n') {
+			d[i] = c;
+		}
+		mpz_init_set_str(cle_prive->d,d,16);
+		free(d);
+		getline(NULL,NULL,fichier);
+		fseek(fichier,2,SEEK_CUR);
+		while((c=fgetc(fichier)) =! '\n') {
+			n[i] = c;
+		}
+		mpz_init_set_str(cle_prive->n,d,16);
+		free(n);
+		
 		free(chemin);
-		free(res);
 		return 0;
 	}
 	return ERR_LECT;
