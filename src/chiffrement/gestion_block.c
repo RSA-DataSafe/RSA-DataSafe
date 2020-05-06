@@ -98,21 +98,23 @@ message *recupere_message_oaep(block *b){
     //taille du message 
     mpz_t message_lenght;
     mpz_init(message_lenght);
-    mpz_add(message_lenght,message_lenght,b->nb_block*2048);
     
-    message m: 
-    mpz_init(m.taille);
-    mpz_set(m.taille,message_lenght);
+    int taille_m =b->nb_block * 2048 ;
+    mpz_add_ui(message_lenght,message_lenght,taille_m );
+    
+    message *m;
+    mpz_init(m->taille);
+    mpz_set(m->taille,message_lenght);
     
     int i_taille = mpz_get_ui(message_lenght);
-    mpz_init(m.nombre);
+    mpz_init(m->nombre);
     
-    mpz_set(m.nombre,b->tab[0]);
+    mpz_set(m->nombre,b->tab[0]);
     
     for(int i = 1; i < i_taille; i++){
 		
-        mpz_mul_2exp(m.nombre,m.nombre,2048);
-        mpz_and(m.nombre,m.nombre,b->tab[i]);   
+        mpz_mul_2exp(m->nombre,m->nombre,2048);
+        mpz_and(m->nombre,m->nombre,b->tab[i]);   
     } 
 
     
