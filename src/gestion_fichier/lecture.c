@@ -58,44 +58,42 @@ int chercher_utilisateur(char *email, char *mdp) {
 }
 
 int recupere_cle_publique(char * email, char * mdp, cle_publique * publique) {
-	if(chercher_utilisateur(email,mdp) != ERR_LECT) {
-		char * chemin = calloc(sizeof(char)*MAX_CARACT + sizeof("rsa/") + sizeof("/Cles.txt"),sizeof(char));
-		char * e = calloc(sizeof(char) *2048,sizeof(char));
-		char * d = calloc(sizeof(char) *2048,sizeof(char));
-		char * n = calloc(sizeof(char) *2048,sizeof(char));
-		
-		if(chemin == NULL || e == NULL || n == NULL) {
-			fprintf(stderr,"Erreur d'allocation Mémoire");
-			exit(1);
-		}
-		
-		strcat(chemin,"rsa/");
-		strcat(chemin,email);
-		strcat(chemin,"/Cles.txt");
-
-		FILE * fichier = fopen(chemin,"r");		
-		if(fichier == NULL) {
-			free(chemin);
-			free(e);
-			free(n);
-			fprintf(stderr,"Fichier Introuvable");
-			return ERR_LECT;
-		}
-		size_t bufsize = 32;
-		
-		if(getline(&d,&bufsize,fichier) == -1) return ERR_LECT;
-		free(d);
-		if(getline(&e,&bufsize,fichier) == -1) return ERR_LECT;
-		mpz_init_set_str(publique->e,e,10);
-		free(e);
-		if(getline(&n,&bufsize,fichier) == -1) return ERR_LECT;
-		mpz_init_set_str(publique->n,n,10);
-		free(n);
-		fclose(fichier);
-		free(chemin);
-		return 0;	
+	
+	char * chemin = calloc(sizeof(char)*MAX_CARACT + sizeof("rsa/") + sizeof("/Cles.txt"),sizeof(char));
+	char * e = calloc(sizeof(char) *2048,sizeof(char));
+	char * d = calloc(sizeof(char) *2048,sizeof(char));
+	char * n = calloc(sizeof(char) *2048,sizeof(char));
+	
+	if(chemin == NULL || e == NULL || n == NULL) {
+		fprintf(stderr,"Erreur d'allocation Mémoire");
+		exit(1);
 	}
-	return ERR_LECT;
+	
+	strcat(chemin,"rsa/");
+	strcat(chemin,email);
+	strcat(chemin,"/Cles.txt");
+
+	FILE * fichier = fopen(chemin,"r");		
+	if(fichier == NULL) {
+		free(chemin);
+		free(e);
+		free(n);
+		fprintf(stderr,"Fichier Introuvable");
+		return ERR_LECT;
+	}
+	size_t bufsize = 32;
+	
+	if(getline(&d,&bufsize,fichier) == -1) return ERR_LECT;
+	free(d);
+	if(getline(&e,&bufsize,fichier) == -1) return ERR_LECT;
+	mpz_init_set_str(publique->e,e,10);
+	free(e);
+	if(getline(&n,&bufsize,fichier) == -1) return ERR_LECT;
+	mpz_init_set_str(publique->n,n,10);
+	free(n);
+	fclose(fichier);
+	free(chemin);
+	return 0;	
 }
 
 int recupere_cle_privee(char * email, char * mdp, cle_prive * prive) {
