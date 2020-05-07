@@ -34,7 +34,7 @@ message *sha3(message *m, int taille) {
         matrice[i] = malloc (sizeof (mpz_t) * 5);
     }
     for (int i=0; i<5; i++) {
-        for (int j=0; i<5; i++) {
+        for (int j=0; j<5; j++) {
             mpz_init (matrice[i][j]);
         }
     }
@@ -77,7 +77,7 @@ message *sha3(message *m, int taille) {
     mpz_tdiv_q_2exp (res->nombre, res->nombre, tmp);        // on 'tronque' la sortie
     // on libère la mémoire
     for (int i=0; i<5; i++) {
-        for (int j=0; i<5; i++) {
+        for (int j=0; j<5; j++) {
             mpz_clear (matrice[i][j]);
         }
     }
