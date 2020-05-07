@@ -26,7 +26,10 @@ void extraction(mpz_t x, mpz_t y, mpz_t b) {
     mpz_clear(tmp);
 }
 
-block *creer_block_oaep(message *m,message *encodage , mpz_t donnee_alea) {
+  
+       
+    	
+   block *creer_block_oaep(message *m,message *encodage, mpz_t donnee_alea) {
     //block's number 
     mpz_t nb_block;
     mpz_init(nb_block);
@@ -41,10 +44,13 @@ block *creer_block_oaep(message *m,message *encodage , mpz_t donnee_alea) {
         int i_rest = mpz_get_ui(rest);
         int zero_adding = 1536- i_rest;
         mpz_mul_2exp(m->nombre,m->nombre,zero_adding);
+        mpz_add_ui(m->taille, m->taille,zero_adding);
+       
+
     } 
 
     int i_block = mpz_get_ui(nb_block);
-    
+    int i_taille = mpz_get_ui(m->taille);
 
     block *b = malloc(sizeof(block));
     b->nb_block = i_block;
@@ -53,43 +59,40 @@ block *creer_block_oaep(message *m,message *encodage , mpz_t donnee_alea) {
     mpz_init(tmp);
 
     b->tab = malloc(sizeof(mpz_t) * i_block);
-    for(int i = 0; i < i_block; i++) {
+   for(int i = 1; i < i_block+1; i++) {
         mpz_init(b->tab[i]);
-        mpz_tdiv_q_2exp(tmp,m->nombre, (i_block-i)*1536);
+        mpz_tdiv_q_2exp(b->tab[i],m->nombre,i_taille-(i*1536));
+         
         // Calcul 2^1536-1
         mpz_t base;
       	mpz_init(base);   
         mpz_add_ui(base,base, 2);
         mpz_pow_ui(base,base,1536);  
         mpz_sub_ui(base,base, 1);  
-        mpz_add(b->tab[i],base,tmp);        
-    }
+        mpz_and(b->tab[i],base,b->tab[i]); 
+        
+   }
+  
        
-        //Reverse the table
-        mpz_t array[i_block];
-        int y=i_block-1;  
-    for(int z=0; z<i_block; z++){
-    	mpz_init_set(array[z],b->tab[y]);
-    	y--;
-    	}
-    	
+       
     	
     	//encodage+donne_alea
-     for (int k = 0; k<i_block; k++) {
-        mpz_mul_2exp(b->tab[k],array[k],256);
-		mpz_and(b->tab[k],array[k],encodage->nombre);
-        mpz_mul_2exp(b->tab[k],array[k],256);
-        mpz_and(b->tab[k],array[k],donnee_alea);
+    for (int k = 0; k<i_block; k++) {
+        mpz_mul_2exp(b->tab[k],b->tab[k],256);
+		mpz_and(b->tab[k],b->tab[k],encodage->nombre);
+        mpz_mul_2exp(b->tab[k],b->tab[k],256);
+        mpz_and(b->tab[k],b->tab[k],donnee_alea);
   }    
        
-    	
+    	*/
    
     // Clear
-    mpz_clears(nb_block,rest,array,NULL);
+    mpz_clears(nb_block,rest,tmp,NULL);
     
     return b;
     
 }
+
 
 
 
