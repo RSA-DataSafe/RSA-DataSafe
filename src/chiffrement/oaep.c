@@ -46,13 +46,14 @@ void mgf(mpz_t res, message *graine, mpz_t taille) {
     // Code
     mpz_div_ui(nb, taille, TAILLE_SHA3_256);
 
-    mpz_add_ui(tmp_i2osp->taille, graine->taille, TAILLE_INT);
+    mpz_set(tmp_i2osp->taille, graine->taille);
+    shift_gauche(tmp_i2osp->taille, TAILLE_INT);
 
     for(mpz_set_ui(i, 0); mpz_cmp(i, nb) < 0; mpz_add_ui(i, i, 1)) {
         i2osp(tmp_i2osp->nombre, graine->nombre, i);
         tmp_sha3 = sha3(tmp_i2osp, TAILLE_SHA3_256);
-        mpz_add(res, res, tmp_sha3->nombre);
         shift_gauche(res, TAILLE_SHA3_256);
+        mpz_add(res, res, tmp_sha3->nombre);
 
         mpz_clear(tmp_sha3->nombre);
         mpz_clear(tmp_sha3->taille);
