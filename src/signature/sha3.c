@@ -117,7 +117,7 @@ message *padding_sha3(message *m, int taille) {
 block *decoupage_block(message* m, int taille) {
     block *res = malloc (sizeof (res));                 // on réserve de l'espace mémoire pour res
     res->tab = malloc (sizeof (mpz_t));                 // on réserve de l'espace mémoire pour res
-    int j,cnt = 0;                                      // cnt comptera le nombre de blocs, j sert d'indice au parcours du bloc en cours
+    int j = 0,cnt = 0;                                      // cnt comptera le nombre de blocs, j sert d'indice au parcours du bloc en cours
     int m_size = mpz_get_ui (m->taille);                // on récupère la taille de m
     for (int i=0; i+j<m_size; cnt++) {                  // tant que la lecture de m n'est pas terminée, i sert à marquer l'endroit du début d'un bloc sur m
         res->tab = realloc (res->tab, sizeof (res) * cnt+1); // on réserve une nouvelle "case mémoire" pour le nouveau bloc à ajouter
@@ -279,7 +279,7 @@ void invert (mpz_t x) {
     free (str);
 };
 
-/* TEST & DEBUG
+
 
 int main(){
 	
@@ -304,4 +304,4 @@ int main(){
 	
 	return 0;
 }
-*/
+
