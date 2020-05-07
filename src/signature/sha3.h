@@ -1,6 +1,14 @@
 #ifndef _sha3_h
 #define _sha3_h
 
+/* Utilisation :
+ * Appel => "message *res = sha3 (m, 256);".
+ * Ne pas faire de malloc, sha3 le fait pour vous.
+ * Ne pas oublier de free res quand vous n'en avez plus besoin => "mpz_clears (res->nombre, res->taille, NULL); free (res);".
+ * Ne pas utiliser le même message en argument et en retour.
+ * Ne pas appeller sha3 sur le même res plusieurs fois.
+ */
+
 /**
  * SHA-3
  * @param m : le message à hacher
