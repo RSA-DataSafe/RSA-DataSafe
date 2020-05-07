@@ -58,8 +58,8 @@ message *sha3(message *m, int taille) {
     // on met le résultat final dans res
     mpz_t output;
     mpz_init (output);
-    for (int i=0; i<5; i++) {
-        for (int j=0; j<5; j++) {
+    for (int i=4; i>=0; i--) {
+        for (int j=4; j>=0; j--) {
             mpz_mul_2exp (output, output, 64);
             mpz_add (output, output, matrice[i][j]);
         }
@@ -74,6 +74,7 @@ message *sha3(message *m, int taille) {
     mpz_sub_ui (cut, nbr, taille);                          // cut = la taille de la partie "en trop"
     int tmp = mpz_get_ui (cut);
     mpz_tdiv_q_2exp (res->nombre, res->nombre, tmp);        // on 'tronque' la sortie
+
     // on libère la mémoire
     for (int i=0; i<5; i++) {
         for (int j=0; j<5; j++) {
@@ -171,12 +172,9 @@ void keccak_f(mpz_t **matrice, mpz_t RC) {
     //init tmp variables
     mpz_t tmp[5][5], tmp2[5][5], A[5], B[5], C[5];
     for (int i = 0; i<5; i++) {
-        mpz_init (A[i]);
-        mpz_init (B[i]);
-        mpz_init (C[i]);
+        mpz_inits (A[i], B[i], C[i], NULL);
         for (int j = 0; j<5; j++) {
-            mpz_init (tmp[i][j]);
-            mpz_init (tmp2[i][j]);
+            mpz_inits (tmp[i][j], tmp2[i][j], NULL);
         }
     }
 
@@ -188,17 +186,19 @@ void keccak_f(mpz_t **matrice, mpz_t RC) {
         {28,55,25,21,56},   //r[3]
         {27,20,39,8,14}     //r[4]
     };
-	
+
     //teta step
     for (int i = 0; i<5; i++) {
         for (int j = 0; j<5; j++) {
-            mpz_xor (A[i], A[i], matrice[i][j]);
+            mpz_xor (A[i], A[i], matrice[(i+4)%5][j]);
         }
     }
     for (int i = 0; i<5; i++) {
-        mpz_set (C[i], A[i]);
+        for (int j = 0; j<5; j++) {
+            mpz_xor (C[i], C[i], matrice[(i+1)%5][j]);
+        }
         rot (C[i], 1);
-        mpz_xor (B[i], A[(i+1)%5], C[(i+1)%5]);
+        mpz_xor (B[i], A[i], C[i]);
     }
     for (int i = 0; i<5; i++) {
         for (int j = 0; j<5; j++) {
@@ -239,18 +239,14 @@ void keccak_f(mpz_t **matrice, mpz_t RC) {
         }
     }
 
-
     //iota step
-    mpz_add (matrice[0][0], matrice[0][0], RC);
+    mpz_xor (matrice[0][0], matrice[0][0], RC);
 
     //free tmp variables
     for (int i = 0; i<5; i++) {
-        mpz_clear (A[i]);
-        mpz_clear (B[i]);
-        mpz_clear (C[i]);
+        mpz_clears (A[i], B[i], C[i], NULL);
         for (int j = 0; j<5; j++) {
-            mpz_clear (tmp[i][j]);
-            mpz_clear (tmp2[i][j]);
+            mpz_clears (tmp[i][j], tmp2[i][j], NULL);
         }
     }
 };
@@ -292,12 +288,12 @@ int main(){
 	mpz_init_set_str(m1->nombre,"1010100100100101010010010101010101011010111010010010100100100101101010101001001010010101010101010100001001111010101110101010101010101010010100101010010010100100100100101010010100101010101010100101010101011010010101010101010101010101010101010010101010111101010101010000000101000010001101011011101110010010010010001010101001001010010101",2);
 	mpz_set_ui(m1->taille,mpz_sizeinbase(m1->nombre,2));
     gmp_printf("Nombre initial = %Zd",m1->nombre);
-	printf(" / taille = %d \n\n", mpz_sizeinbase (m1->nombre,2));
+	printf(" / taille = %ld \n\n", mpz_sizeinbase (m1->nombre,2));
 
 	for (int i = 0; i < 5; i++)
 	{
 		message *m = sha3(m1,256);
-		int t=mpz_sizeinbase(m->nombre,2);
+		int t = mpz_get_ui (m->taille);
 		gmp_printf("Résultat Sha-3 = %Zd",m->nombre);
 		printf(" / taille = %d \n\n",t);
 		mpz_clears(m->nombre,m->taille,NULL);
