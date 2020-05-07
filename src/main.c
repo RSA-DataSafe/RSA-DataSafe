@@ -11,16 +11,18 @@ int main(void) {
 
 	mpz_set_ui(a->taille, 4096);
 	mpz_set_ui(a->nombre, 1);
-	mpz_mul_2exp(a->nombre, a->nombre, 2048);
+	mpz_mul_2exp(a->nombre, a->nombre, 4096);
+	mpz_sub_ui(a->nombre, a->nombre, 1);
 
 	block *b = creer_block_oaep_1(a);
-	for (int i = 0; i < b->nb_block; i++)
-    {
-		printf("block %d = ", i);
-        mpz_out_str(0, 10, b->tab[i]);
-		printf("\n");
-    }
-	printf("nb block = %d\n", b->nb_block);
+
+	message *m =recupere_message_oaep_1(b);
+	printf("message = ");
+    mpz_out_str(0, 2, m->nombre);
+	printf("\n");
+	printf("taille = ");
+    mpz_out_str(0, 10, m->taille);
+	printf("\n");
 
 	for (int i = 0; i < b->nb_block; i++)
     {

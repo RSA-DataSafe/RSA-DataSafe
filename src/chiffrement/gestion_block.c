@@ -150,3 +150,20 @@ message *recupere_message_oaep(block *b){
     
 }
     
+message *recupere_message_oaep_1(block *b) {
+ 
+    message *m  = malloc(sizeof(message));
+    mpz_init(m->nombre);
+    mpz_init(m->taille);
+    mpz_set_ui(m->taille, 1536);
+    mpz_mul_ui(m->taille, m->taille, b->nb_block);
+
+    for (int i = 0; i < b->nb_block; i++)
+    {
+        shift_gauche(m->nombre, 1536);
+        shift_droite(b->tab[i], 512);
+        mpz_add(m->nombre, m->nombre, b->tab[i]);
+    }
+
+    return m;
+}
