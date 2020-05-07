@@ -62,7 +62,7 @@ block *creer_block_oaep(message *m,message *encodage , mpz_t donnee_alea) {
         mpz_add_ui(base,base, 2);
         mpz_pow_ui(base,base,1536);  
         mpz_sub_ui(base,base, 1);  
-        mpz_and(b->tab[i],base,tmp);        
+        mpz_add(b->tab[i],base,tmp);        
     }
        
         //Reverse the table
