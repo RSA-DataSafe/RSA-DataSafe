@@ -84,7 +84,7 @@ void extraction(mpz_t x, mpz_t y, mpz_t b) {
         mpz_and(b->tab[k],b->tab[k],donnee_alea);
   }    
        
-    	*/
+    	
    
     // Clear
     mpz_clears(nb_block,rest,tmp,NULL);
