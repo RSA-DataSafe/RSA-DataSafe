@@ -279,7 +279,7 @@ void invert (mpz_t x) {
     free (str);
 };
 
-
+/* TEST DEBUG
 
 int main(){
 	
@@ -304,4 +304,4 @@ int main(){
 	
 	return 0;
 }
-
+*/
