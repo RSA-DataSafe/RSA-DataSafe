@@ -3,33 +3,32 @@
 #include <stdlib.h>
 
 #include "structure/structure.h"
-#include "chiffrement/oaep.h"
-#include "signature/sha3.h"
+#include "chiffrement/gestion_block.h"
 
 int main(void) {
-	
-	block *b = malloc(sizeof(block));
-	b->nb_block = 1;
-	b->tab = malloc(sizeof(mpz_t) * b->nb_block);
+	message *a = malloc(sizeof(message));
+	mpz_inits(a->taille, a->nombre, NULL);
 
-	mpz_init(b->tab[0]);
-	mpz_realloc2(b->tab[0], 2500);
-	mpz_set_str(b->tab[0], "9999999999999999999999999999999999999999946704128743738963096489578566409360644647499990647496488", 10);
-	printf("taille = %ld\n", mpz_sizeinbase(b->tab[0], 2));
-	mpz_t tmp;
-	mpz_init(tmp);
+	mpz_set_ui(a->taille, 4096);
+	mpz_set_ui(a->nombre, 1);
+	mpz_mul_2exp(a->nombre, a->nombre, 2048);
 
-	b = oaep(b, tmp);
+	block *b = creer_block_oaep_1(a);
+	for (int i = 0; i < b->nb_block; i++)
+    {
+		printf("block %d = ", i);
+        mpz_out_str(0, 10, b->tab[i]);
+		printf("\n");
+    }
+	printf("nb block = %d\n", b->nb_block);
 
-	mpz_out_str(0, 16, b->tab[0]);
-	printf("\n");
-	printf("taille = %ld\n", mpz_sizeinbase(b->tab[0], 2));
-
-	mpz_clear(tmp);
-	mpz_clear(b->tab[0]);
-	free(b->tab);
+	for (int i = 0; i < b->nb_block; i++)
+    {
+        mpz_clear(b->tab[i]);
+    }
 	free(b);
-	
+	mpz_clears(a->taille, a->nombre, NULL);
+	free(a);
 	
 	return 0;
 }

@@ -2,7 +2,8 @@
 
 #include "../structure/structure.h"
 #include "../calcul/calcul.h"
-#include "oeap_1.h"
+#include "../chiffrement/gestion_block.h"
+#include "oaep_1.h"
 #include "dechiffrement.h"
 
 
@@ -16,7 +17,7 @@ message* dechiffrement(message *c, cle_prive *prive) {
 	// Code
 	// RSA
 	for (int i = 0; i < b->nb_block; i++) {
-		expo_mod(b->tab[i], b->tab[i], prive->e, prive->n);
+		expo_mod(b->tab[i], b->tab[i], prive->d, prive->n);
 	}
 
 	// OAEP^(-1)

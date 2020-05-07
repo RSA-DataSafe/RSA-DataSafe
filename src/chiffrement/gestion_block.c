@@ -1,5 +1,6 @@
 #include <gmp.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "../structure/structure.h"
 #include "../calcul/calcul.h"
@@ -29,7 +30,7 @@ void extraction(mpz_t x, mpz_t y, mpz_t b) {
   
        
     	
-   block *creer_block_oaep(message *m,message *encodage, mpz_t donnee_alea) {
+block *creer_block_oaep(message *m,message *encodage, mpz_t donnee_alea) {
     //block's number 
     mpz_t nb_block;
     mpz_init(nb_block);
@@ -93,8 +94,33 @@ void extraction(mpz_t x, mpz_t y, mpz_t b) {
     
 }
 
+block *creer_block_oaep_1(message *m) {
+    mpz_t nb_block;
+    mpz_init(nb_block);
+    mpz_div_ui(nb_block, m->taille, 2048);
 
+    block *b = malloc(sizeof(block));
+    
+    int int_nb_block = mpz_get_ui(nb_block);
+    b->nb_block = int_nb_block;
+    b->tab = malloc(sizeof(mpz_t) * int_nb_block);
 
+    mpz_t AND;
+    mpz_init(AND);
+    mpz_set_ui(AND, 1);
+    shift_gauche(AND, 2048);
+    mpz_sub_ui(AND, AND, 1);
+
+    for (int i = 0; i < int_nb_block; i++)
+    {
+        mpz_init(b->tab[i]);
+        mpz_set(b->tab[i], m->nombre);
+        shift_droite(b->tab[i], 2048 * ( int_nb_block - (i + 1) ) );
+        mpz_and(b->tab[i], b->tab[i], AND);
+    }
+    
+    return b;
+}
 
 message *recupere_message_oaep(block *b){
     
