@@ -29,7 +29,7 @@ void extraction(mpz_t x, mpz_t y, mpz_t b) {
   
        
     	
-   block *creer_block_oaep(message *m,message *encodage, mpz_t donnee_alea) {
+block *creer_block_oaep(message *m,message *encodage, mpz_t donnee_alea) {
     //block's number 
     mpz_t nb_block;
     mpz_init(nb_block);
@@ -93,8 +93,25 @@ void extraction(mpz_t x, mpz_t y, mpz_t b) {
     
 }
 
+block *creer_block_oaep_1(message *m) {
+    mpz_t nb_block;
+    mpz_init(nb_block);
+    mpz_div_ui(nb_block, m->taille, 2048);
 
+    block *b = malloc(sizeof(block));
+    mpz_init(b->nb_block);
+    mpz_set(b->nb_block, nb_block);
+    
+    int int_nb_block = mpz_get_ui(nb_block);
+    b->tab = malloc(sizeof(mpz_t) * int_nb_block);
 
+    for (int i = 0; i < int_nb_block; i++)
+    {
+        mpz_init(b->tab[i]);
+    }
+    
+    return b;
+}
 
 message *recupere_message_oaep(block *b){
     
