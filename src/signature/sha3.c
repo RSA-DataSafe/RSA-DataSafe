@@ -62,7 +62,6 @@ message *sha3(message *m, int taille) {
         for (int j=0; j<5; j++) {
             mpz_mul_2exp (output, output, 64);
             mpz_add (output, output, matrice[i][j]);
-            printf("i = %d, j = %d\n", i, j);
         }
     }
     mpz_set (res->nombre, output);
@@ -278,3 +277,30 @@ void invert (mpz_t x) {
     mpz_set_str (x, str, 2);                            // on remplace x par sa nouvelle valeur
     free (str);
 };
+
+/* TEST & DEBUG
+
+int main(){
+	
+    message *m1 = malloc (sizeof (message));
+	mpz_init(m1->taille);
+	mpz_init_set_str(m1->nombre,"10",10);
+	mpz_set_ui(m1->taille,mpz_sizeinbase(m1->nombre,2));
+
+
+	for (int i = 0; i < 5; i++)
+	{
+		message *m = sha3(m1,256);
+		int t=mpz_sizeinbase(m->nombre,2);
+		gmp_printf("Résultat Sha-3 = %Zd",m->nombre);
+		printf(" / taille = %d \n",t);
+		mpz_clears(m->nombre,m->taille,NULL);
+		free(m);
+		mpz_add_ui(m1->nombre,m1->nombre,256);
+		mpz_set_ui(m1->taille,mpz_sizeinbase(m1->nombre,2));
+	}
+	
+	return 0;
+}
+
+*/
