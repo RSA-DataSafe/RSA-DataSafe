@@ -105,7 +105,7 @@ message *padding_sha3(message *m, int taille) {
     mpz_add_ui (tmp, tmp, 1);                           // on ajoute 1 à tmp (padding : 10*1)
     mpz_add (res->nombre, res->nombre, tmp);            // on ajoute tmp à res
 
-    mpz_clears (pad, tmp);
+    mpz_clears (pad, tmp, NULL);
     return res;
 };
 
