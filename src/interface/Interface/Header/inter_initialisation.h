@@ -10,6 +10,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <gmp.h>
+#include "../Src/gestion_fichier/lecture.h"
+#include "../Src/gestion_fichier/ecriture.h"
+#include "../Src/structure/structure.h"
+#include "../Src/generation/generation_cle.h"
+#include"../Src/generation/bbs.h"
+#include"../Src/generation/euclide.h"
+#include"../Src/generation/primalite.h"
+#include "../Src/calcul/calcul.h"
+
+
 
 
 
@@ -26,14 +37,9 @@
 
     *lbmessagerieinde , *lbchiffrer , *lbdechiffrer, *lbparametre , *lbsecurite , *lbcompte; 
 
-
-//..
-   const char * id;; 
-   const char * mdp;
    
 
-
-
+   informations utilisateur; 
 
 
 void CSS();

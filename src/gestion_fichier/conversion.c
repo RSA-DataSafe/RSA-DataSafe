@@ -4,7 +4,7 @@
 #include <string.h>
 
 message * conversion_char_mpz( char * chaine ) {
-	char byte[8]; 	// Un élément de 8 bits
+	char byte[8]; 	
 	int len_chaine = strlen(chaine);
 	char * res = malloc((sizeof(char) * 7) * len_chaine); // Non signé
 	
@@ -26,7 +26,7 @@ message * conversion_char_mpz( char * chaine ) {
 			byte[j] = 48 + (c & 1); // On le met sous forme ascii
 			c = c >> 1;
 		} 	
-		strcat(res,byte); // Concatene un Byte dans la chaine de caractères	
+		strcpy(res,byte); // Concatene un Byte dans la chaine de caractères	
 	}
 	
 	mpz_init_set_str(m->nombre,res,2); // Le nombre en base de deux sera en ascii

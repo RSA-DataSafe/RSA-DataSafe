@@ -10,7 +10,7 @@ void  Page_de_connection ()
 
 	for (int i =0 ; i<3 ; i++) entree[i] = gtk_entry_new();
 
-	label[0] = gtk_label_new ("Identifiant");
+	label[0] = gtk_label_new ("E-mail");
 	label[1] = gtk_label_new ("Mot de passe");
 	
 
@@ -82,8 +82,8 @@ if ( PEM == sender && !data )
 	    etat=0 ; 
 	}
 	
-	  id  =  gtk_entry_get_text (GTK_ENTRY(entree[0]));
-	 mdp = gtk_entry_get_text (GTK_ENTRY(entree[1]));
+	  utilisateur.email  =  (char *)gtk_entry_get_text (GTK_ENTRY(entree[0]));
+	  utilisateur.mdp = (char *)gtk_entry_get_text (GTK_ENTRY(entree[1]));
 	 //sinon button de connexion 
     if (button[0] ==sender && !data )
 { 
@@ -119,11 +119,11 @@ if ( PEM == sender && !data )
 else{	         
                   
                
-                      if (!strcmp( id , "moussa") &&!strcmp( mdp , "moussa"))
+                      if (!chercher_utilisateur( utilisateur.email, utilisateur.mdp))
                       {	
 	 	           	    gtk_widget_hide(GTK_WIDGET(label[2]));
 	 	           	    gtk_widget_hide(GTK_WIDGET(label[3]));
-	 	           	    gchar * nom= g_strdup_printf("%s  %s", "Bienvenue", id);
+	 	           	    gchar * nom= g_strdup_printf("%s  %s", "Bienvenue", utilisateur.email);
                         gtk_label_set_text(GTK_LABEL(lbmenu),nom);
                         free(nom);
                        
@@ -146,10 +146,7 @@ else{
                       gtk_widget_show_all(GTK_WIDGET(MAIN));
                       gtk_widget_hide(GTK_WIDGET(label[2]));
                       etat= 1; 
-	 	              } 
-
-	 	              
-	 	      
+	 	              } 	 	      
 	 	        	  
     }
 

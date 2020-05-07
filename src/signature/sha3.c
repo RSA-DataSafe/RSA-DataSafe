@@ -62,6 +62,7 @@ message *sha3(message *m, int taille) {
         for (int j=0; j<5; j++) {
             mpz_mul_2exp (output, output, 64);
             mpz_add (output, output, matrice[i][j]);
+            printf("i = %d, j = %d\n", i, j);
         }
     }
     mpz_set (res->nombre, output);

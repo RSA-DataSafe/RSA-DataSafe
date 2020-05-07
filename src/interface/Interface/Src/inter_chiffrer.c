@@ -37,7 +37,7 @@ void page_chiffrer()
        gtk_widget_set_name (GTK_WIDGET(Frame),"miniT");
 		GtkWidget *scrolled_window = gtk_scrolled_window_new (NULL , NULL);
 	 	bufferC= gtk_text_buffer_new (NULL);
-		gtk_text_buffer_set_text (bufferC, "", -1);
+		gtk_text_buffer_set_text (bufferC, "",-1);
 		text_viewC= gtk_text_view_new_with_buffer (bufferC);
 	   gtk_container_set_border_width (GTK_CONTAINER (scrolled_window), 10);
 	   gtk_container_add (GTK_CONTAINER (scrolled_window), text_viewC);
@@ -83,8 +83,8 @@ void page_chiffrer()
     gtk_box_pack_start (GTK_BOX(Chiffrer),GTK_WIDGET(MAIN),TRUE,TRUE,0);
     g_signal_connect(G_OBJECT(buttonC[4]), "clicked",G_CALLBACK(page_chargementC), NULL);
     for (int i = 0 ; i < 2 ; ++i) 
-	 
-	 	g_signal_connect(G_OBJECT(buttonC[i]),"clicked",G_CALLBACK(Slots_Chiffrer),NULL);
+	  g_signal_connect(G_OBJECT(buttonC[i]),"clicked",G_CALLBACK(Slots_Chiffrer),NULL);
+	  g_signal_connect (G_OBJECT (buttonC[3]), "selection-changed", G_CALLBACK (file_selected), NULL);
 	
   }
 
@@ -99,12 +99,34 @@ void Slots_Chiffrer(GtkWidget * sender , gpointer *data)
 
 }
 
+void file_selected (GtkFileChooser *chooser, gpointer user_data)
+{
+  gchar *filename = gtk_file_chooser_get_filename (chooser);
+  if (!filename) return;
+  g_print ("Path du fichier qui sera lu  : %s\n", filename);
+  g_free (filename);
+}
+
 void page_chargementC()
 {
+
+    
+    GtkTextIter start;
+    GtkTextIter end;
+    
+
+    gtk_text_buffer_get_start_iter(bufferC,&start);
+  
+    gtk_text_buffer_get_end_iter(bufferC,&end);
+    chaine=gtk_text_buffer_get_text(bufferC,&start, &end,FALSE);
+    
+
+
+
   window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   gtk_window_set_transient_for (GTK_WINDOW(window),GTK_WINDOW(MainWindow));
   gtk_window_set_position (GTK_WINDOW(window), GTK_WIN_POS_CENTER);
-  gtk_window_set_title (GTK_WINDOW(window),"          Data Safe");
+  gtk_window_set_title (GTK_WINDOW(window),"Data Safe");
   gtk_widget_set_size_request(GTK_WIDGET(window) ,500,500);
   vboxCC = gtk_box_new (GTK_ORIENTATION_VERTICAL,50); 
 
@@ -130,7 +152,7 @@ void page_chargementC()
 }
 
 
-int page_resultatC()
+int page_resultatC(gpointer * data)
 {
       
       gtk_spinner_stop (GTK_SPINNER(spinner));
@@ -143,15 +165,15 @@ int page_resultatC()
 
 	   GtkWidget * Frame ; 
 	   Frame  =gtk_frame_new ("Votre texte chiffré");
-        gtk_widget_set_name (GTK_WIDGET(Frame),"miniT");	
-		GtkWidget *scrolled_window = gtk_scrolled_window_new (NULL , NULL);
-	 	bufferCC= gtk_text_buffer_new (NULL);
-		gtk_text_buffer_set_text (bufferCC, "ceci est  un exemple", -1);
-		text_viewCC= gtk_text_view_new_with_buffer (bufferCC);
-	   gtk_text_view_set_editable (GTK_TEXT_VIEW(text_viewCC), FALSE);
-	   gtk_container_set_border_width (GTK_CONTAINER (scrolled_window), 10);
-	   
-	   gtk_container_add (GTK_CONTAINER (scrolled_window), text_viewCC);
+       gtk_widget_set_name (GTK_WIDGET(Frame),"miniT");	
+      
+	GtkWidget *scrolled_window = gtk_scrolled_window_new (NULL , NULL);
+	bufferCC= gtk_text_buffer_new (NULL);
+	gtk_text_buffer_set_text (bufferCC,chaine, -1);
+	text_viewCC= gtk_text_view_new_with_buffer (bufferCC);
+	gtk_text_view_set_editable (GTK_TEXT_VIEW(text_viewCC), FALSE);
+	gtk_container_set_border_width (GTK_CONTAINER (scrolled_window), 10);
+	gtk_container_add (GTK_CONTAINER (scrolled_window), text_viewCC);
     
 	   gtk_container_add (GTK_CONTAINER (Frame), GTK_WIDGET(scrolled_window));
 	   gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW(text_viewCC),FALSE);
@@ -161,7 +183,7 @@ int page_resultatC()
       g_signal_connect(G_OBJECT(buttonOK), "clicked",G_CALLBACK(detuire_mini_f_resultat),NULL);
       
       gtk_widget_show_all(GTK_WIDGET(vboxCC));
-      
+     
       return 0;
 }
 

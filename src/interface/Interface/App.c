@@ -23,21 +23,10 @@ int Lancement()
     gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (Connexion)); return 0;
 }
 
-void file_selected (GtkFileChooser *chooser, gpointer user_data)
-{
-  gchar *filename = gtk_file_chooser_get_filename (chooser);
-  if (!filename) return;
-  g_print ("Path du fichier qui sera lu  : %s\n", filename);
-  g_free (filename);
-}
+
 
 // on fera un for ici plus tard 
-void Signaux()
-{
-	 //sert a rien c juste pour moi 
-	 g_signal_connect (G_OBJECT (buttonC[3]), "selection-changed", G_CALLBACK (file_selected), NULL);
 
-}
 
 int main(int argc , char ** argv)
 {
@@ -67,8 +56,7 @@ int main(int argc , char ** argv)
    g_timeout_add (2500,(GSourceFunc)Lancement, NULL);
 	
   gtk_widget_show_all(MainWindow);
-  
-  Signaux();
+ 
 	gtk_main();
     
     return EXIT_SUCCESS;

@@ -27,16 +27,17 @@ void page_messagerie()
 
 
 
-	 GtkWidget *horiz1 =gtk_box_new (GTK_ORIENTATION_HORIZONTAL,300);
-	 GtkWidget*horiz =gtk_box_new (GTK_ORIENTATION_HORIZONTAL,100);
-	 GtkWidget *horiz0 =gtk_box_new (GTK_ORIENTATION_HORIZONTAL,100);
-	  GtkWidget *h =gtk_box_new (GTK_ORIENTATION_HORIZONTAL,100);
+	 GtkWidget *horiz1 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL,300);
+	 GtkWidget *horiz  = gtk_box_new (GTK_ORIENTATION_HORIZONTAL,100);
+	 GtkWidget *horiz0 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL,100);
+	 GtkWidget *h      = gtk_box_new (GTK_ORIENTATION_HORIZONTAL,100);
 	 
-	 GtkWidget*vert =gtk_box_new (GTK_ORIENTATION_VERTICAL,100);
-	 GtkWidget*vert2 =gtk_box_new (GTK_ORIENTATION_VERTICAL,100);
+	 GtkWidget *vert   =  gtk_box_new (GTK_ORIENTATION_VERTICAL,100);
+	 GtkWidget *vert2  =  gtk_box_new (GTK_ORIENTATION_VERTICAL,100);
  
 
-     GtkWidget *Vbtn =gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
+     GtkWidget *Vbtn   = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
+	 
 	 gtk_button_box_set_layout ( GTK_BUTTON_BOX(Vbtn), GTK_BUTTONBOX_START);
      gtk_box_pack_start (GTK_BOX(Vbtn),GTK_WIDGET (buttonMessagerie[0]),FALSE,FALSE,0);
 	 gtk_box_pack_start (GTK_BOX(Vbtn),GTK_WIDGET (buttonMessagerie[1]),FALSE,FALSE,0);
@@ -78,28 +79,28 @@ void page_messagerie()
 
  if (GTK_WIDGET(buttonMessagerie[2]) == sender && !data )
       {  
-   	                             gchar * nom= g_strdup_printf("%s  %s", "Bienvenue", id);
+   	                             gchar * nom= g_strdup_printf("%s  %s", "Bienvenue", utilisateur.email);
                                  gtk_label_set_text(GTK_LABEL(lbmessagerierecu),nom);
                                  free(nom);                           
    	                             gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (MessagerieRecu));
       }
  if (GTK_WIDGET(buttonMessagerie[4]) == sender && !data ) 
       { 
-                                 gchar * nom= g_strdup_printf("%s  %s", "Bienvenue", id);
+                                 gchar * nom= g_strdup_printf("%s  %s", "Bienvenue", utilisateur.email);
                                  gtk_label_set_text(GTK_LABEL(lbmessagerieecri),nom);
                                  free(nom); 
    	                             gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (MessagerieEcr));
    	  }
  if (GTK_WIDGET(buttonMessagerie[3]) == sender && !data )
  {
- 								gchar * nom= g_strdup_printf("%s  %s", "Bienvenue", id);
+ 								gchar * nom= g_strdup_printf("%s  %s", "Bienvenue", utilisateur.email);
                                  gtk_label_set_text(GTK_LABEL(lbenvoyeemessagerie),nom);
                                  free(nom);
    	                             gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (EnvoyeeMessagerie));
   }
  if (GTK_WIDGET(buttonMessagerie[5]) == sender && !data ) 
  {
- 								 gchar * nom= g_strdup_printf("%s  %s", "Bienvenue", id);
+ 								 gchar * nom= g_strdup_printf("%s  %s", "Bienvenue", utilisateur.email);
                                  gtk_label_set_text(GTK_LABEL(lbmessagerieinde),nom);
                                  free(nom);
                                  gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (MessagerieInde));

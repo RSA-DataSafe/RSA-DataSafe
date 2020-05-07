@@ -5,11 +5,11 @@
 #include "../structure/structure.h"
 #include "../signature/sha3.h"
 #include "../calcul/calcul.h"
+#include "gestion_block.h"
 #include "oaep.h"
 
 #define TAILLE_INT 32
 #define TAILLE_SHA3_256 256
-#define TAILLE_BLOCK_GAUCHE 1792
 
 void i2osp(mpz_t res, mpz_t graine, mpz_t nombre) {
     // Init
@@ -46,14 +46,14 @@ void mgf(mpz_t res, message *graine, mpz_t taille) {
     // Code
     mpz_div_ui(nb, taille, TAILLE_SHA3_256);
 
-    mpz_add_ui(tmp_i2osp->taille, graine->taille, TAILLE_INT);
+    mpz_set(tmp_i2osp->taille, graine->taille);
+    shift_gauche(tmp_i2osp->taille, TAILLE_INT);
 
     for(mpz_set_ui(i, 0); mpz_cmp(i, nb) < 0; mpz_add_ui(i, i, 1)) {
         i2osp(tmp_i2osp->nombre, graine->nombre, i);
         tmp_sha3 = sha3(tmp_i2osp, TAILLE_SHA3_256);
-
-        mpz_add(res, res, tmp_sha3->nombre);
         shift_gauche(res, TAILLE_SHA3_256);
+        mpz_add(res, res, tmp_sha3->nombre);
 
         mpz_clear(tmp_sha3->nombre);
         mpz_clear(tmp_sha3->taille);
@@ -70,25 +70,36 @@ void mgf(mpz_t res, message *graine, mpz_t taille) {
 
 void oaep_block(mpz_t premiere_entree, mpz_t deuxieme_entree, mpz_t premiere_sortie, mpz_t deuxieme_sortie) {
     // Init
+    mpz_t TAILLE_BLOCK_GAUCHE;
+    mpz_init(TAILLE_BLOCK_GAUCHE);
+    mpz_set_ui(TAILLE_BLOCK_GAUCHE, 1792);
+
+    mpz_t TAILLE_BLOCK_DROITE;
+    mpz_init(TAILLE_BLOCK_DROITE);
+    mpz_set_ui(TAILLE_BLOCK_DROITE, 256);
+
     message *tmp_message = malloc(sizeof(message));
     mpz_init(tmp_message->nombre);
     mpz_init(tmp_message->taille);
 
     // Code
     mpz_set(tmp_message->nombre, deuxieme_entree);
-    mpz_set_ui(tmp_message->taille, TAILLE_SHA3_256);
+    mpz_set(tmp_message->taille, TAILLE_BLOCK_DROITE);
     mgf(premiere_sortie, tmp_message, TAILLE_BLOCK_GAUCHE);
     mpz_xor(premiere_sortie, premiere_entree, premiere_sortie);
 
     mpz_set(tmp_message->nombre, premiere_sortie);
-    mpz_set_ui(tmp_message->taille, TAILLE_BLOCK_GAUCHE);
-    mgf(deuxieme_sortie, tmp_message, TAILLE_SHA3_256);
+    mpz_set(tmp_message->taille, TAILLE_BLOCK_GAUCHE);
+    mgf(deuxieme_sortie, tmp_message, TAILLE_BLOCK_DROITE);
     mpz_xor(deuxieme_sortie, deuxieme_sortie, deuxieme_entree);
 
     // Clear
     mpz_clear(tmp_message->nombre);
     mpz_clear(tmp_message->taille);
     free(tmp_message);
+
+    mpz_clear(TAILLE_BLOCK_GAUCHE);
+    mpz_clear(TAILLE_BLOCK_DROITE);
 }
 
 block *oaep(block *b, mpz_t donnee_alea) {
@@ -110,7 +121,7 @@ block *oaep(block *b, mpz_t donnee_alea) {
     mpz_init(tmp);
 
     // Code
-    for(int i = 0; mpz_cmp_ui(b->nb_block, i) < 0; i++) {
+    for(int i = 0; i < b->nb_block; i++) {
         extraction(m, r, b->tab[i]);
         oaep_block(m, r, x, y);
         shift_gauche(x, TAILLE_SHA3_256);
