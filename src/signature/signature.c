@@ -2,33 +2,26 @@
 #include "sha3.h"
 #include "../calcul/calcul.h"
 
-void signer(mpz_t signature, message *message, cle_prive *prive) {
-	mpz_t hache;
+void signer(mpz_t signature, message *mes, cle_prive *prive) {
+	sha3(mes,512);
+	expo_mod(signature, mes->nombre, prive->d, prive->n);
 	
-	mpz_init_set(hache, message);
-	mpz_init(signature);
-
-	hacher(hache,512);
-	
-	expo_mod(signature, hache, cle_prive.d, cle_prive.n);
-	
-	mpz_clear(hache);
 }
 
 int verifie_signature(mpz_t chiffre, mpz_t signature, cle_publique *publique) {
-	mzp_t hache;
+	
 	mpz_t signature_prime;
 	int res = 0;
-
-	mpz_init_set(hache, chiffre);
-	
-	hacher(hache,512);
-
-	expo_mod(signature_prime, hache, cle_publique.e, cle-publique.n);
+	message m;
+	mpz_init(m.nombre);
+	mpz_init(m.taille);
+	mpz_set(m.nombre,chiffre);
+       int taille=mpz_sizeinbase(chiffre,10);
+	mpz_set_ui(m.taille,taille);
+	sha3(&m,512);
+	expo_mod(signature_prime, m.nombre, publique->e, publique->n);
 	res = mpz_cmp(signature_prime,signature);
-	
 	mpz_clear(signature_prime);
-	mpz_clear(hache);
 
 	return res;
 }
