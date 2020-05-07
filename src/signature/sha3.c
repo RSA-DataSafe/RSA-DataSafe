@@ -22,13 +22,8 @@ message *sha3(message *m, int taille) {
             exit(107);
     }
 
-    // on alloue la mémoire et on initialise (res = m)
-    message *res = malloc (sizeof (message));
-    mpz_init_set (res->nombre, m->nombre);
-    mpz_init_set (res->taille, m->taille);
-
-    // on ajoute le padding à res
-    res = padding_sha3 (m, b_size);
+    // on ajoute le padding
+    message *res = padding_sha3 (m, b_size);
 
     // on découpe en blocs
     block *r = decoupage_block (res, b_size);
@@ -51,7 +46,7 @@ message *sha3(message *m, int taille) {
             mpz_t tmp;
             mpz_init (tmp);
             for (int j=0; j<64; j++) {
-                mpz_add_ui (tmp, tmp, mpz_tstbit (r->tab[cnt], i*j) * pow (2, j));
+                mpz_add_ui (tmp, tmp, mpz_tstbit (r->tab[cnt], ((i+1)*(j+1))%b_size) * pow (2, j));
             }
             mpz_xor (matrice[i%5][i%2], matrice[i%5][i%2], tmp);
             mpz_clear (tmp);
@@ -65,7 +60,7 @@ message *sha3(message *m, int taille) {
     mpz_init (output);
     for (int i=0; i<5; i++) {
         for (int j=0; j<5; j++) {
-            mpz_mul_2exp (output, output, mpz_sizeinbase (matrice[i][j], 2));
+            mpz_mul_2exp (output, output, 64);
             mpz_add (output, output, matrice[i][j]);
         }
     }
@@ -100,14 +95,16 @@ message *padding_sha3(message *m, int taille) {
     message *res = malloc (sizeof (message));
     mpz_init_set (res->nombre, m->nombre);
     mpz_init_set (res->taille, m->taille);              // res = m
-    mpz_t pad;
+    mpz_t pad, tmp;
+    mpz_init_set_ui (tmp, 1);
     mpz_init_set (pad, res->taille);                    // pad = taille du message
     mpz_mod_ui (pad, pad, taille);                      // pad = taille du padding à ajouter
     mpz_mul_2exp (res->nombre, res->nombre, mpz_get_ui (pad));       // message agrandit de pad ( padding : 0*)
-    mpz_ui_pow_ui (pad, 2, mpz_get_ui (pad));           // pad = un 1 suivi de 0s jusqu'à la bonne taille de padding
-    mpz_add (res->nombre, res->nombre, pad);            // on ajoute le padding au message (padding : 10*)
-    mpz_add_ui (res->nombre, res->nombre, 1);           // on ajoute le 1 final (padding : 10*1)
+    mpz_ui_pow_ui (tmp, 2, mpz_get_ui (pad));           // tmp = un 1 suivi de 0s jusqu'à la bonne taille de padding
+    mpz_add_ui (tmp, tmp, 1);                           // on ajoute 1 à tmp (padding : 10*1)
+    mpz_add (res->nombre, res->nombre, tmp);            // on ajoute tmp à res
 
+    mpz_clears (pad, tmp);
     return res;
 };
 
