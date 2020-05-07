@@ -1,5 +1,6 @@
 #include <gmp.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "../structure/structure.h"
 #include "../calcul/calcul.h"
@@ -99,15 +100,23 @@ block *creer_block_oaep_1(message *m) {
     mpz_div_ui(nb_block, m->taille, 2048);
 
     block *b = malloc(sizeof(block));
-    mpz_init(b->nb_block);
-    mpz_set(b->nb_block, nb_block);
     
     int int_nb_block = mpz_get_ui(nb_block);
+    b->nb_block = int_nb_block;
     b->tab = malloc(sizeof(mpz_t) * int_nb_block);
+
+    mpz_t AND;
+    mpz_init(AND);
+    mpz_set_ui(AND, 1);
+    shift_gauche(AND, 2048);
+    mpz_sub_ui(AND, AND, 1);
 
     for (int i = 0; i < int_nb_block; i++)
     {
         mpz_init(b->tab[i]);
+        mpz_set(b->tab[i], m->nombre);
+        shift_droite(b->tab[i], 2048 * ( int_nb_block - (i + 1) ) );
+        mpz_and(b->tab[i], b->tab[i], AND);
     }
     
     return b;
