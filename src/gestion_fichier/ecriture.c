@@ -138,10 +138,7 @@ int  Change_Email(char *email , char *mdp , char *newemail)
       }
       else
       {
-          int taille=strlen(line_buf)-1;
-          if(line_buf[taille]=='\n') line_buf[taille]='\0';
-          taille=strlen(line_buf1)-1;
-          if(line_buf1[taille]=='\n') line_buf1[taille]='\0';
+         
           fputs(line_buf,fichier);
           fputs(line_buf1,fichier);     
       }
@@ -203,10 +200,7 @@ int  Change_MotDePasse (char*email , char *mdp , char* newmdp)
       }
       else
       { 
-           int taille=strlen(line_buf)-1;
-          if(line_buf[taille]=='\n') line_buf[taille]='\0';
-          taille=strlen(line_buf1)-1;
-          if(line_buf1[taille]=='\n') line_buf1[taille]='\0';
+          
           fputs(line_buf,fichier);
           fputs(line_buf1,fichier);       
       }
