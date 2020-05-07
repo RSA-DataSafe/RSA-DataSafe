@@ -19,9 +19,6 @@ int verifie_signature(mpz_t chiffre, mpz_t signature, cle_publique *publique) {
 	//mpz_t hache;
 	mpz_t signature_prime;
 	int res = 0;
-
-	//mpz_init_set(hache, chiffre);
-	//mpz_init(chiffre);
 	message m;
 	mpz_init(m.nombre);
 	mpz_init(m.taille);
