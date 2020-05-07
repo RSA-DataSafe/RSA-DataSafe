@@ -96,15 +96,20 @@ message *padding_sha3(message *m, int taille) {
     mpz_init_set (res->nombre, m->nombre);
     mpz_init_set (res->taille, m->taille);              // res = m
     mpz_t pad, tmp;
-    mpz_init_set_ui (tmp, 1);
+    mpz_init_set_ui (tmp, 1);                           // tmp = 1 (padding 1)
     mpz_init_set (pad, res->taille);                    // pad = taille du message
-    mpz_mod_ui (pad, pad, taille);                      // pad = taille du padding à ajouter
+    mpz_mod_ui (pad, pad, taille);                      // pad = taille du dépassement du message par rapport à la taille d'un bloc
+    mpz_ui_sub (pad, taille, pad);                      // pad = taille - pad -> = taille du padding à ajouter
+    mpz_add (res->taille, res->taille, pad);            // on ajoute la taille du padding à la taille de res
     mpz_mul_2exp (res->nombre, res->nombre, mpz_get_ui (pad));       // message agrandit de pad ( padding : 0*)
-    mpz_ui_pow_ui (tmp, 2, mpz_get_ui (pad));           // tmp = un 1 suivi de 0s jusqu'à la bonne taille de padding
+    mpz_ui_pow_ui (tmp, 2, mpz_get_ui (pad));           // tmp = un 1 suivi de 0s jusqu'à la bonne taille de padding (padding : 10*)
     mpz_add_ui (tmp, tmp, 1);                           // on ajoute 1 à tmp (padding : 10*1)
     mpz_add (res->nombre, res->nombre, tmp);            // on ajoute tmp à res
 
     mpz_clears (pad, tmp, NULL);
+    /* TEST & DEBUG
+    printf ("Padding = "); mpz_out_str (stdout, 2, res->nombre); printf (" / taille = %d (réelle) / ", mpz_sizeinbase (res->nombre, 2)); mpz_out_str (stdout, 10, res->taille); printf (" (dans le struct)\n");
+    */
     return res;
 };
 
@@ -284,23 +289,23 @@ int main(){
 	
     message *m1 = malloc (sizeof (message));
 	mpz_init(m1->taille);
-	mpz_init_set_str(m1->nombre,"10",10);
+	mpz_init_set_str(m1->nombre,"1010100100100101010010010101010101011010111010010010100100100101101010101001001010010101010101010100001001111010101110101010101010101010010100101010010010100100100100101010010100101010101010100101010101011010010101010101010101010101010101010010101010111101010101010000000101000010001101011011101110010010010010001010101001001010010101",2);
 	mpz_set_ui(m1->taille,mpz_sizeinbase(m1->nombre,2));
-
+    gmp_printf("Nombre initial = %Zd",m1->nombre);
+	printf(" / taille = %d \n\n", mpz_sizeinbase (m1->nombre,2));
 
 	for (int i = 0; i < 5; i++)
 	{
 		message *m = sha3(m1,256);
 		int t=mpz_sizeinbase(m->nombre,2);
 		gmp_printf("Résultat Sha-3 = %Zd",m->nombre);
-		printf(" / taille = %d \n",t);
+		printf(" / taille = %d \n\n",t);
 		mpz_clears(m->nombre,m->taille,NULL);
 		free(m);
-		mpz_add_ui(m1->nombre,m1->nombre,256);
+		mpz_add_ui(m1->nombre,m1->nombre,1);
 		mpz_set_ui(m1->taille,mpz_sizeinbase(m1->nombre,2));
 	}
 	
 	return 0;
 }
-
 */
