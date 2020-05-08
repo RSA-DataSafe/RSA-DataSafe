@@ -8,7 +8,7 @@
 #include "gestion_block.h"
 message *chiffrement(message *m, cle_publique *publique, message *encodage) {
     
-		// alea
+		
     mpz_t alea;
     mpz_init(alea);
 
