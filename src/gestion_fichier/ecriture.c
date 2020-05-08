@@ -134,7 +134,7 @@ int  Change_Email(char *email , char *mdp , char *newemail)
             fputs(newemail,fichier);
             fputs("\n",fichier);
             fputs(line_buf1,fichier);  
-            break;    
+              
       }
       else
       {
@@ -196,7 +196,7 @@ int  Change_MotDePasse (char*email , char *mdp , char* newmdp)
           fputs(line_buf,fichier);
           fputs(newmdp,fichier);
           fputs("\n",fichier);  
-          break;         
+                 
       }
       else
       { 
@@ -250,6 +250,7 @@ int  change_cle(informations * InfoUser,cle_publique * pub ,cle_prive * priv)
     while(getline(&line_buf, &line_buf_size, fichier)>=0 && getline(&line_buf1, &line_buf_size, fichier)>=0 && 
       getline(&line_buf2,&line_buf_size,fichier)>=0)
        {
+       
         int test=0;
         for(int i=0;i<strlen(line_buf)-1;i++)
         {
@@ -283,7 +284,7 @@ int  change_cle(informations * InfoUser,cle_publique * pub ,cle_prive * priv)
               {
                 return ERR_ERCI;
               }
-              break;
+            
           } 
           else
           { 
