@@ -27,9 +27,6 @@ void extraction(mpz_t x, mpz_t y, mpz_t b) {
     mpz_clear(tmp);
 }
 
-  
-       
-    	
 block *creer_block_oaep(message *m,message *encodage, mpz_t donnee_alea) {
     //block's number 
     mpz_t nb_block;
@@ -60,9 +57,9 @@ block *creer_block_oaep(message *m,message *encodage, mpz_t donnee_alea) {
     mpz_init(tmp);
 
     b->tab = malloc(sizeof(mpz_t) * i_block);
-   for(int i = 1; i < i_block+1; i++) {
+   for(int i = 0; i < i_block; i++) {
         mpz_init(b->tab[i]);
-        mpz_tdiv_q_2exp(b->tab[i],m->nombre,i_taille-(i*1536));
+        mpz_tdiv_q_2exp(b->tab[i],m->nombre,i_taille-((i+1)*1536));
          
         // Calcul 2^1536-1
         mpz_t base;
@@ -80,9 +77,9 @@ block *creer_block_oaep(message *m,message *encodage, mpz_t donnee_alea) {
     	//encodage+donne_alea
     for (int k = 0; k<i_block; k++) {
         mpz_mul_2exp(b->tab[k],b->tab[k],256);
-		mpz_and(b->tab[k],b->tab[k],encodage->nombre);
+	mpz_add(b->tab[k],b->tab[k],encodage->nombre);
         mpz_mul_2exp(b->tab[k],b->tab[k],256);
-        mpz_and(b->tab[k],b->tab[k],donnee_alea);
+        mpz_add(b->tab[k],b->tab[k],donnee_alea);
   }    
        
     	
@@ -93,6 +90,9 @@ block *creer_block_oaep(message *m,message *encodage, mpz_t donnee_alea) {
     return b;
     
 }
+  
+       
+    	
 
 block *creer_block_oaep_1(message *m) {
     mpz_t nb_block;
