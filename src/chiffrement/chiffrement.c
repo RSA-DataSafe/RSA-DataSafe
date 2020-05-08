@@ -34,8 +34,7 @@ message *chiffrement(message *m, cle_publique *publique, message *encodage) {
     message *k = recupere_message_oaep(b);
 
     // Clear
-    mpz_clear(tmp);
-    mpz_clear(alea);
+    mpz_clears(tmp,alea,NULL);
     for(int i = 0;i< (b->nb_block); i++) {
         mpz_clear(b->tab[i]);
     }
