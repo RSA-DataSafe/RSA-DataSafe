@@ -69,6 +69,8 @@ void page_messagerie()
   }
 
 
+
+
  void Slots_Messagerie(GtkWidget * sender , gpointer * data)
  {
 
@@ -77,35 +79,114 @@ void page_messagerie()
  if (GTK_WIDGET(buttonMessagerie[1]) == sender && !data )  
    	                             gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (Connexion));
 
- if (GTK_WIDGET(buttonMessagerie[2]) == sender && !data )
-      {  
-   	                             gchar * nom= g_strdup_printf("%s  %s", "Bienvenue", utilisateur.email);
+ if (GTK_WIDGET(buttonMessagerie[2]) == sender && !data ){  
+   	                             
+   	                            gchar * nom= g_strdup_printf("%s  %s", "Bienvenue", utilisateur.email);
                                  gtk_label_set_text(GTK_LABEL(lbmessagerierecu),nom);
                                  free(nom);                           
-   	                             gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (MessagerieRecu));
+   	                             
+   	                             b.nom_boite = malloc(sizeof(char)*(strlen("MessageRecu.txt")+1));  
+   	                              strcpy (b.nom_boite , "MessageRecu.txt");
+   	                              utilisateur.email= remove_n(utilisateur.email);
+   	                         if(!lire_boite(utilisateur.email, &b))
+   	                         {
+                                   
+   	                              	if (!b.nb_mail) {printf("nombre_de message recu= 0\n ");}
+                                    else{
+                                    	int nb = 0 ;  nb = b.nb_mail;  if (nb >29) nb = 29;
+                                           for (int i  = 0 ; i <nb ; ++i){
+										       		gchar * nom1 ;
+										    		nom1= g_strdup_printf("%s%s", " ",b.m[i].titre);
+										    		B[i]=gtk_button_new_with_label(nom1);
+										    	 	gtk_widget_set_name (GTK_WIDGET(B[i]),"titremail");
+										    	 	g_signal_connect(G_OBJECT(B[i]), "clicked",G_CALLBACK(afficher_contenu_message), NULL);
+										    		gtk_box_pack_start (GTK_BOX(event_box),GTK_WIDGET(B[i]),FALSE,FALSE,0);
+										    		free(nom1); 
+										    		
+										    }
+										    gtk_widget_show_all(event_box);
+							  }} 
+	                               gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (MessagerieRecu));
+
       }
- if (GTK_WIDGET(buttonMessagerie[4]) == sender && !data ) 
-      { 
+ 
+ if (GTK_WIDGET(buttonMessagerie[4]) == sender && !data )
+ { 
                                  gchar * nom= g_strdup_printf("%s  %s", "Bienvenue", utilisateur.email);
                                  gtk_label_set_text(GTK_LABEL(lbmessagerieecri),nom);
                                  free(nom); 
    	                             gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (MessagerieEcr));
-   	  }
- if (GTK_WIDGET(buttonMessagerie[3]) == sender && !data )
+  }
+ 
+ if (GTK_WIDGET(buttonMessagerie[3]) == sender && !data)
  {
  								gchar * nom= g_strdup_printf("%s  %s", "Bienvenue", utilisateur.email);
-                                 gtk_label_set_text(GTK_LABEL(lbenvoyeemessagerie),nom);
-                                 free(nom);
-   	                             gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (EnvoyeeMessagerie));
-  }
- if (GTK_WIDGET(buttonMessagerie[5]) == sender && !data ) 
- {
+                                gtk_label_set_text(GTK_LABEL(lbenvoyeemessagerie),nom);
+                                free(nom);                            
+   	                           
+   	                             boiteE.nom_boite = malloc(sizeof(char)*(strlen("MessageEnvoyer.txt")+1));
+   	                             strcpy (boiteE.nom_boite , "MessageEnvoyer.txt");
+   	                             utilisateur.email= remove_n(utilisateur.email);             
+                                  
+                                  if(!lire_boite(utilisateur.email, &boiteE)){ 
+   	                             	if (!boiteE.nb_mail) {printf("nombre_de message recu= 0\n ");}
+                                    else{
+                                    		int nb = 0 ; nb = boiteE.nb_mail;
+                                    	   if (nb >29) nb = 29;
+                                           for (int i  = 0 ; i <nb ; ++i)
+                                           {
+                                           	printf("ok boucle\n");
+										       		 gchar * nom1 ;
+								    				 nom1= g_strdup_printf("%s%s", "", boiteE.m[i].titre);
+								   					 BEM[i]=gtk_button_new_with_label(nom1);
+								   					 gtk_widget_set_name (GTK_WIDGET(BEM[i]),"titremail");
+								   					 g_signal_connect(G_OBJECT(BEM[i]), "clicked",G_CALLBACK(afficher_contenu_message_envoyee), NULL);
+								   					 gtk_box_pack_start (GTK_BOX(boxEM),GTK_WIDGET(BEM[i]),FALSE,FALSE,0);
+								  					 free(nom1);
+										    }
+										    gtk_widget_show_all(boxEM);
+								        }
+								       gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (EnvoyeeMessagerie));	    
+	                         }
+	                     }
+     	                            
+  
+ if (GTK_WIDGET(buttonMessagerie[5]) == sender && !data ) {
  								 gchar * nom= g_strdup_printf("%s  %s", "Bienvenue", utilisateur.email);
                                  gtk_label_set_text(GTK_LABEL(lbmessagerieinde),nom);
                                  free(nom);
+
+                               BoiteInde.nom_boite = malloc(sizeof(char)*(strlen("MessageIndesirable.txt")+1));
+   	                              strcpy (BoiteInde.nom_boite , "MessageIndesirable.txt");
+   	                              utilisateur.email= remove_n(utilisateur.email);
+
+   	                              if(!lire_boite(utilisateur.email, &BoiteInde)){
+                                         int nb = 0 ; 
+                                         nb = BoiteInde.nb_mail;
+                                         	
+                                         	printf ("%s        ",BoiteInde.m[0].titre);
+                                         	 printf ("%s       ",BoiteInde.m[0].env_email);
+                                            printf ("%s        ",BoiteInde.m[0].message);
+                                    	     if (nb >29) nb = 29;
+                                   
+                                           for (int i  = 0 ; i <nb ; ++i){
+                                           			printf("hhhhhhhhhhhhhhhhhhhh%d\n",nb);
+											        gchar * nom1 ;
+											    	nom1= g_strdup_printf("%s%s", "Titre ",BoiteInde.m[i].titre);
+											    	BMI[i]=gtk_button_new_with_label(nom1);
+											    	gtk_widget_set_name (GTK_WIDGET(BMI[i]),"titremail");
+											    	g_signal_connect(G_OBJECT(BMI[i]), "clicked",G_CALLBACK(afficher_proposition_supp_afficher),(gpointer)BMI[i]);
+											    	gtk_box_pack_start (GTK_BOX(boxMI),GTK_WIDGET(BMI[i]),FALSE,FALSE,0);
+											    	free(nom1); 
+											    
+											    }
+											    gtk_widget_show_all(boxMI);
+                                     
+											  
+							}
                                  gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (MessagerieInde));
- }
-}
+  
+}}
 
 
 void page_MessageRecu()
@@ -164,26 +245,14 @@ void page_MessageRecu()
     event_box = gtk_box_new (GTK_ORIENTATION_VERTICAL,0);
     
     //sa sert a rien pourl nstant mais bn 
-    for (int i  = 0 ; i <10; ++i)
-    {
-    	
-        gchar * nom1 ;
-    	nom1= g_strdup_printf("%s%s", "Titre ", "");
-    	B[i]=gtk_button_new_with_label(nom1);
-    	 gtk_widget_set_name (GTK_WIDGET(B[i]),"titremail");
-    	  g_signal_connect(G_OBJECT(B[i]), "clicked",G_CALLBACK(afficher_contenu_message), NULL);
-    	gtk_box_pack_start (GTK_BOX(event_box),GTK_WIDGET(B[i]),FALSE,FALSE,0);
-    	free(nom1); 
-    }
-    
 
-         GtkWidget *Framenom; 		
-         Framenom =gtk_frame_new ("Reçu");
-         gtk_widget_set_name (GTK_WIDGET(Framenom),"miniT");
-		 GtkWidget *scrolled_windowm = gtk_scrolled_window_new (NULL , NULL);
-	     gtk_container_set_border_width (GTK_CONTAINER (scrolled_windowm), 10);
-	     gtk_container_add (GTK_CONTAINER (scrolled_windowm),event_box);
-	     gtk_container_add (GTK_CONTAINER (Framenom), GTK_WIDGET(scrolled_windowm));
+      	
+         Framemessagerecu =gtk_frame_new ("Reçu");
+         gtk_widget_set_name (GTK_WIDGET(Framemessagerecu),"miniT");
+		 scrolled_windowmessagerecu= gtk_scrolled_window_new (NULL , NULL);
+	     gtk_container_set_border_width (GTK_CONTAINER (scrolled_windowmessagerecu), 10);
+	     gtk_container_add (GTK_CONTAINER (scrolled_windowmessagerecu),event_box);
+	     gtk_container_add (GTK_CONTAINER (Framemessagerecu), GTK_WIDGET(scrolled_windowmessagerecu));
 
    		GtkWidget *horiz =gtk_box_new (GTK_ORIENTATION_HORIZONTAL,100);
 		GtkWidget *horiz0 =gtk_box_new (GTK_ORIENTATION_HORIZONTAL,100);
@@ -208,8 +277,8 @@ void page_MessageRecu()
 
 	 gtk_box_pack_start (GTK_BOX(h),GTK_WIDGET(lbmessagerierecu),TRUE,TRUE,0);
 	 
-	 gtk_widget_set_size_request(GTK_WIDGET(Framenom),200,400);
-	 gtk_box_pack_start (GTK_BOX(vert1),GTK_WIDGET(Framenom),FALSE,FALSE,0);
+	 gtk_widget_set_size_request(GTK_WIDGET(Framemessagerecu),200,400);
+	 gtk_box_pack_start (GTK_BOX(vert1),GTK_WIDGET(Framemessagerecu),FALSE,FALSE,0);
 	 gtk_box_pack_start (GTK_BOX(horiz1),GTK_WIDGET(vert1),TRUE,FALSE,0);
 	 gtk_box_pack_start (GTK_BOX(horiz1),GTK_WIDGET(vert),TRUE,FALSE,0);
 	
@@ -224,10 +293,9 @@ void page_MessageRecu()
 
 
     g_signal_connect((G_OBJECT(buttonMR[0])),"clicked",G_CALLBACK(afficher_contenu_message),NULL);
-    g_signal_connect((G_OBJECT(buttonMR[1])),"clicked",G_CALLBACK(afficher_contenu_message),NULL);
-
-	
+    g_signal_connect((G_OBJECT(buttonMR[1])),"clicked",G_CALLBACK(afficher_contenu_message),NULL);	
 }
+
 //POUR AFFICHER LE CONTENU DY MESSAGE GERE AUSSI LES SIGNAUX POUR QUITTER
 void afficher_contenu_message(GtkWidget * sender , gpointer *data)
 {
@@ -235,6 +303,15 @@ void afficher_contenu_message(GtkWidget * sender , gpointer *data)
 	 if (GTK_WIDGET(buttonMR[0]) == sender && !data )
 	 {  
    	                             
+   	                              GList *children = gtk_container_get_children(GTK_CONTAINER(event_box));
+                                    	
+				                            while (children != NULL)
+				                            {
+							                        GtkWidget *w = children -> data; 
+							                        gtk_container_remove (GTK_CONTAINER(event_box),GTK_WIDGET(w));
+							                        children = g_list_next(children);
+
+							                    }
    	                             gtk_label_set_label (GTK_LABEL(labelMR[3]),"");
 								 gtk_label_set_label (GTK_LABEL(labelMR[4]),"");
 								 gtk_text_buffer_set_text (bufferMR, "", -1);
@@ -246,11 +323,19 @@ void afficher_contenu_message(GtkWidget * sender , gpointer *data)
 								 gtk_label_set_label (GTK_LABEL(labelMR[4]),"");
 								 gtk_text_buffer_set_text (bufferMR, "", -1);
    	                             gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (Connexion));}
-   	 else {
-
-	gtk_label_set_label (GTK_LABEL(labelMR[3]),"blalalalallalal");
-	gtk_label_set_label (GTK_LABEL(labelMR[4]),"blalalal@hotmail.fr");
-	gtk_text_buffer_set_text (bufferMR, "balalalallal\n blalalalal\n etc ...", -1);}
+   	 else 
+   	 {
+           for (int i = 0 ; i< 29 ; ++i )
+           {
+			 if (sender == B[i] && !data)
+			 {	
+				gtk_label_set_label (GTK_LABEL(labelMR[3]),b.m[i].env_email);
+				gtk_label_set_label (GTK_LABEL(labelMR[4]),b.m[i].titre);
+				gtk_text_buffer_set_text (bufferMR, b.m[i].message, -1);
+			 }
+			}
+			 	
+	 }
 }
 
 
@@ -258,6 +343,9 @@ void afficher_contenu_message(GtkWidget * sender , gpointer *data)
 //page pour envoyer un message 
 void page_envoyer_unmsg()
 {
+
+
+
    imageE =gtk_image_new_from_file("Icon/logo.png"); 
    labelE[0]= gtk_label_new ("Envoyer un message");
    lbmessagerieecri = gtk_label_new ("");
@@ -277,17 +365,16 @@ void page_envoyer_unmsg()
 
 
 
-         GtkWidget *Frame =gtk_frame_new ("Corps de l'email");
-           gtk_widget_set_name (GTK_WIDGET(Frame),"miniT");
+        GtkWidget *Frame =gtk_frame_new ("Corps de l'email");
+        gtk_widget_set_name (GTK_WIDGET(Frame),"miniT");
 		GtkWidget *scrolled_window = gtk_scrolled_window_new (NULL , NULL);
 	 	bufferE = gtk_text_buffer_new (NULL);
 		gtk_text_buffer_set_text (bufferE, "", -1);
 		text_viewE = gtk_text_view_new_with_buffer (bufferE);
-	   gtk_container_set_border_width (GTK_CONTAINER (scrolled_window), 10);
-	   gtk_container_add (GTK_CONTAINER (scrolled_window), text_viewE);
-    
-	   gtk_container_add (GTK_CONTAINER (Frame), GTK_WIDGET(scrolled_window));
-	   gtk_widget_set_size_request(GTK_WIDGET(Frame) , 600,300);
+	    gtk_container_set_border_width (GTK_CONTAINER (scrolled_window), 10);
+	    gtk_container_add (GTK_CONTAINER (scrolled_window), text_viewE);
+	    gtk_container_add (GTK_CONTAINER (Frame), GTK_WIDGET(scrolled_window));
+	    gtk_widget_set_size_request(GTK_WIDGET(Frame) , 600,300);
 
 
 
@@ -366,6 +453,8 @@ void afficher_message_etat(GtkWidget * sender , gpointer *data)
    	                             gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (Connexion));}
    	 else
    	 {
+
+   	 	//traitement pour lecriture dans le bon fichier 
          page_chargement_envoi_msg();
    	 }
 }
@@ -379,9 +468,7 @@ void page_chargement_envoi_msg()
   gtk_window_set_title (GTK_WINDOW(windowEM),"          Data Safe");
   gtk_widget_set_size_request(GTK_WIDGET(windowEM) ,300,300);
   vboxEM = gtk_box_new (GTK_ORIENTATION_VERTICAL,50); 
-
   spinnerEM = gtk_spinner_new ();
-
    gtk_spinner_start (GTK_SPINNER(spinnerEM));
    labelcharenvoie = gtk_label_new("Envoie en cours..!\n");
    gtk_widget_set_name (GTK_WIDGET(labelcharenvoie),"miniT");
@@ -421,7 +508,7 @@ void detuire_mini_f_resultat_envoie()
 {
 	gtk_entry_set_text (GTK_ENTRY(entreeE[0]),""); 
 	gtk_entry_set_text (GTK_ENTRY(entreeE[1]),"");
-	gtk_text_buffer_set_text (bufferE, "", -1);
+	gtk_text_buffer_set_text (bufferE,"", -1);
 	  gtk_widget_destroy(GTK_WIDGET(windowEM));
 }
 //exxutre un code fonction de la reponse de lutilisateur 
@@ -432,13 +519,34 @@ void detuire_mini_f_resultat_envoie()
  switch (response_id)
   {
     case GTK_RESPONSE_ACCEPT:
-    			afficher_message_etat(NULL,NULL);
-         					printf("OUI pour la signature \n");break;
+    			
+    			m.signature =malloc(sizeof(char)*(strlen("message signé on stockera le hash de sha3")+1));
+                strcpy(m.signature,"message signé on stockera le hash de sha3");
+                m.signer =1; 
+               if ( !envoie_message(&m)) printf ("message envoyé !\n"); 
+               else printf ("problème d'écriture ou de boite");
+                afficher_message_etat(NULL,NULL);
+         	    printf("OUI pour la signature \n");
+         	    break;
+
     case GTK_RESPONSE_REJECT:
-    						printf("NON pour la signature \n");break;
+    			m.signature =malloc (sizeof(char)*3);
+                strcpy(m.signature,"message non signer");
+                m.signer =0;
+                if ( !envoie_message(&m)) printf ("message envoyé !\n"); 
+                else printf ("problème d'écriture ou de boite");
+                afficher_message_etat(NULL,NULL);
+    	        printf("NON pour la signature \n");
+    	        break;
     default:
-    		printf(" par defaut  NON pour la signature \n");break;
-       break;
+    		    m.signature =malloc (sizeof(char)*(strlen("message signé on stockera le hash de sha3")+1));
+                strcpy(m.signature,"message signé on stockera le hash de sha3");
+                m.signer =1; 
+                if ( !envoie_message(&m)) printf ("message envoyé !\n"); 
+                else printf ("problème d'écriture ou de boite");
+                afficher_message_etat(NULL,NULL);
+    		    printf(" par defaut  NON pour la signature \n");
+    		    break;
   }
   gtk_widget_destroy (GTK_WIDGET (dialog));
 }
@@ -461,6 +569,25 @@ void show_dialog (GtkButton *button, gpointer   user_data)
   gtk_container_add (GTK_CONTAINER (content_area), label);
 
   gtk_widget_show_all (dialog);
+
+    GtkTextIter start;
+    GtkTextIter end;
+    gtk_text_buffer_get_start_iter(bufferE,&start);
+    gtk_text_buffer_get_end_iter(bufferE,&end);
+   
+
+    char *  str =gtk_text_buffer_get_text(bufferE,&start, &end,FALSE);
+    //snprintf (&utilisateur.email[strlen(utilisateur.email)-1] ,strlen("\0")+1,'\0');
+    //supprimer_antislashn(char * chaine)
+    m.env_email = remove_n(utilisateur.email);
+   // printf("mafonction%smafonction\n",m.env_email);
+    strcpy(m.env_email,utilisateur.email);
+    m.dest_email = remove_n((char *)gtk_entry_get_text(GTK_ENTRY(entreeE[0])));
+     //printf("mafonction%smafonction\n",m.dest_email);
+    m.titre =(char *)gtk_entry_get_text(GTK_ENTRY(entreeE[1]));
+    m.message = gtk_text_buffer_get_text(bufferE,&start, &end,FALSE);
+   
+   // printf ( "%s  %s   %s " , gtk_entry_get_text(GTK_ENTRY(entreeE[0])) ,gtk_entry_get_text(GTK_ENTRY(entreeE[1])) , str);
   g_signal_connect (GTK_DIALOG (dialog), "response", G_CALLBACK (on_response), NULL);
 }
 
@@ -508,7 +635,6 @@ void page_message_envoyes()
     
 	   gtk_container_add (GTK_CONTAINER (Frame[0]), GTK_WIDGET(scrolled_window));
 	   gtk_widget_set_size_request(GTK_WIDGET(Frame[0]) , 500,300);
-
 	   gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW(text_viewEM),FALSE);
 
 	   gtk_text_view_set_editable (GTK_TEXT_VIEW(text_viewEM), FALSE);
@@ -519,69 +645,55 @@ void page_message_envoyes()
     gtk_container_add (GTK_CONTAINER (Frame[2]), GTK_WIDGET(labelEM[2]));
     gtk_widget_set_size_request(GTK_WIDGET(Frame[2]) , 450,30);
 
-
-
      boxEM = gtk_box_new (GTK_ORIENTATION_VERTICAL,0);
-    for (int i  = 0 ; i < 10; ++i)
-    {
-    	
-        gchar * nom1 ;
-    	nom1= g_strdup_printf("%s%s", "Titre ", "");
-    	BEM[i]=gtk_button_new_with_label(nom1);
-    	 gtk_widget_set_name (GTK_WIDGET(BEM[i]),"titremail");
-    	  g_signal_connect(G_OBJECT(BEM[i]), "clicked",G_CALLBACK(afficher_contenu_message_envoyee), NULL);
-    	gtk_box_pack_start (GTK_BOX(boxEM),GTK_WIDGET(BEM[i]),FALSE,FALSE,0);
-    	free(nom1); 
-    }
-    
+ 
+         	
+         Framemessageenvoyee =gtk_frame_new ("Envoyés");
+         gtk_widget_set_name (GTK_WIDGET(Framemessageenvoyee),"miniT");
 
-         GtkWidget *Framenom; 		
-         Framenom =gtk_frame_new ("Envoyés");
-         gtk_widget_set_name (GTK_WIDGET(Framenom),"miniT");
-
-		GtkWidget *scrolled_windowm = gtk_scrolled_window_new (NULL , NULL);
-	    gtk_container_set_border_width (GTK_CONTAINER (scrolled_windowm), 10);
-       	gtk_container_add (GTK_CONTAINER (scrolled_windowm),boxEM);
-	   gtk_container_add (GTK_CONTAINER (Framenom), GTK_WIDGET(scrolled_windowm));
-	   gtk_widget_set_size_request(GTK_WIDGET(Framenom) , 250,400);
+		 scrolled_windowmessageenvoye = gtk_scrolled_window_new (NULL , NULL);
+	     gtk_container_set_border_width (GTK_CONTAINER (scrolled_windowmessageenvoye), 10);
+       	 gtk_container_add (GTK_CONTAINER (scrolled_windowmessageenvoye),boxEM);
+	     gtk_container_add (GTK_CONTAINER (Framemessageenvoyee), GTK_WIDGET(scrolled_windowmessageenvoye));
+	     gtk_widget_set_size_request(GTK_WIDGET(Framemessageenvoyee) , 250,400);
 
 	  
-	   GtkWidget *horiz =gtk_box_new (GTK_ORIENTATION_HORIZONTAL,100);
-	   GtkWidget *h=gtk_box_new (GTK_ORIENTATION_HORIZONTAL,100);
+	    GtkWidget *horiz =gtk_box_new (GTK_ORIENTATION_HORIZONTAL,100);
+	    GtkWidget *h=gtk_box_new (GTK_ORIENTATION_HORIZONTAL,100);
 		GtkWidget *horiz0 =gtk_box_new (GTK_ORIENTATION_HORIZONTAL,100);
 		GtkWidget *vert =gtk_box_new (GTK_ORIENTATION_VERTICAL,20);
 		GtkWidget *vert1 =gtk_box_new (GTK_ORIENTATION_VERTICAL,100);
 		GtkWidget *horiz1=gtk_box_new (GTK_ORIENTATION_HORIZONTAL,0);
 
      //BUttons
-     GtkWidget *Vbtn =gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
-	 gtk_button_box_set_layout ( GTK_BUTTON_BOX(Vbtn), GTK_BUTTONBOX_START);
-     gtk_box_pack_start (GTK_BOX(Vbtn),GTK_WIDGET (buttonEM[0]),FALSE,FALSE,0);
-	 gtk_box_pack_start (GTK_BOX(Vbtn),GTK_WIDGET (buttonEM[1]),FALSE,FALSE,0);
+     	GtkWidget *Vbtn =gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
+	 	gtk_button_box_set_layout ( GTK_BUTTON_BOX(Vbtn), GTK_BUTTONBOX_START);
+     	gtk_box_pack_start (GTK_BOX(Vbtn),GTK_WIDGET (buttonEM[0]),FALSE,FALSE,0);
+	 	gtk_box_pack_start (GTK_BOX(Vbtn),GTK_WIDGET (buttonEM[1]),FALSE,FALSE,0);
 	    
      
-     gtk_box_pack_start (GTK_BOX(horiz),GTK_WIDGET(imageEM),TRUE,TRUE,0);
-	 gtk_box_pack_start (GTK_BOX(horiz0),GTK_WIDGET(labelEM[0]),TRUE,TRUE,0);
+     	gtk_box_pack_start (GTK_BOX(horiz),GTK_WIDGET(imageEM),TRUE,TRUE,0);
+	 	gtk_box_pack_start (GTK_BOX(horiz0),GTK_WIDGET(labelEM[0]),TRUE,TRUE,0);
 
-	 gtk_box_pack_start (GTK_BOX(vert),GTK_WIDGET(Frame[1]),FALSE,FALSE,0);
-	 gtk_box_pack_start (GTK_BOX(vert),GTK_WIDGET(Frame[2]),FALSE,FALSE,0);
-	 gtk_box_pack_start (GTK_BOX(vert),GTK_WIDGET(Frame[0]),FALSE,FALSE,0);
+		gtk_box_pack_start (GTK_BOX(vert),GTK_WIDGET(Frame[1]),FALSE,FALSE,0);
+	 	gtk_box_pack_start (GTK_BOX(vert),GTK_WIDGET(Frame[2]),FALSE,FALSE,0);
+	 	gtk_box_pack_start (GTK_BOX(vert),GTK_WIDGET(Frame[0]),FALSE,FALSE,0);
 	 
-	 gtk_widget_set_size_request(GTK_WIDGET(Framenom),200,400);
-	 gtk_box_pack_start (GTK_BOX(vert1),GTK_WIDGET(Framenom),FALSE,FALSE,0);
-	 gtk_box_pack_start (GTK_BOX(horiz1),GTK_WIDGET(vert1),TRUE,FALSE,0);
-	 gtk_box_pack_start (GTK_BOX(horiz1),GTK_WIDGET(vert),TRUE,FALSE,0);
+	 	gtk_widget_set_size_request(GTK_WIDGET(Framemessageenvoyee),200,400);
+		gtk_box_pack_start (GTK_BOX(vert1),GTK_WIDGET(Framemessageenvoyee),FALSE,FALSE,0);
+	 	gtk_box_pack_start (GTK_BOX(horiz1),GTK_WIDGET(vert1),TRUE,FALSE,0);
+	 	gtk_box_pack_start (GTK_BOX(horiz1),GTK_WIDGET(vert),TRUE,FALSE,0);
 	
-	 gtk_box_pack_start (GTK_BOX(h),GTK_WIDGET(lbenvoyeemessagerie),TRUE,FALSE,0);
+		gtk_box_pack_start (GTK_BOX(h),GTK_WIDGET(lbenvoyeemessagerie),TRUE,FALSE,0);
      
-	 GtkWidget *MAIN =gtk_box_new (GTK_ORIENTATION_VERTICAL,0);
-	 gtk_box_pack_start (GTK_BOX(MAIN),GTK_WIDGET(Vbtn),FALSE,FALSE,0);
-	 gtk_box_pack_start (GTK_BOX(MAIN),GTK_WIDGET(h),TRUE,TRUE,0);
-	 gtk_box_pack_start (GTK_BOX(MAIN),GTK_WIDGET(horiz),FALSE,FALSE,0);
-	 gtk_box_pack_start (GTK_BOX(MAIN),GTK_WIDGET(horiz0),TRUE,TRUE,0);
-	 gtk_box_pack_start (GTK_BOX(MAIN),GTK_WIDGET(horiz1),TRUE,TRUE,0);
+		GtkWidget *MAIN =gtk_box_new (GTK_ORIENTATION_VERTICAL,0);
+		gtk_box_pack_start (GTK_BOX(MAIN),GTK_WIDGET(Vbtn),FALSE,FALSE,0);
+		gtk_box_pack_start (GTK_BOX(MAIN),GTK_WIDGET(h),TRUE,TRUE,0);
+		gtk_box_pack_start (GTK_BOX(MAIN),GTK_WIDGET(horiz),FALSE,FALSE,0);
+		gtk_box_pack_start (GTK_BOX(MAIN),GTK_WIDGET(horiz0),TRUE,TRUE,0);
+		gtk_box_pack_start (GTK_BOX(MAIN),GTK_WIDGET(horiz1),TRUE,TRUE,0);
 
-	 gtk_box_pack_start (GTK_BOX(EnvoyeeMessagerie),GTK_WIDGET(MAIN),TRUE,TRUE,0);
+	 	gtk_box_pack_start (GTK_BOX(EnvoyeeMessagerie),GTK_WIDGET(MAIN),TRUE,TRUE,0);
  
   g_signal_connect((G_OBJECT(buttonEM[0])),"clicked",G_CALLBACK(afficher_contenu_message_envoyee),NULL);
   g_signal_connect((G_OBJECT(buttonEM[1])),"clicked",G_CALLBACK(afficher_contenu_message_envoyee),NULL);
@@ -595,7 +707,13 @@ void afficher_contenu_message_envoyee(GtkWidget * sender , gpointer *data)
 
 	 if (GTK_WIDGET(buttonEM[0]) == sender && !data )
 	 {  
-   	                             
+   	                               GList *children = gtk_container_get_children(GTK_CONTAINER(boxEM));
+				                            while (children != NULL)
+				                            {
+							                        GtkWidget *w = children -> data; 
+							                        gtk_container_remove (GTK_CONTAINER(boxEM),GTK_WIDGET(w));
+							                        children = g_list_next(children);
+							                 }                         
    	                             gtk_label_set_label (GTK_LABEL(labelEM[1]),"");
 								 gtk_label_set_label (GTK_LABEL(labelEM[2]),"");
 								 gtk_text_buffer_set_text (bufferEM, "", -1);
@@ -609,9 +727,19 @@ void afficher_contenu_message_envoyee(GtkWidget * sender , gpointer *data)
    	                             gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (Connexion));}
    	 else {
 
-	gtk_label_set_label (GTK_LABEL(labelEM[1]),"blalalalallalal");
-	gtk_label_set_label (GTK_LABEL(labelEM[2]),"blalalal@hotmail.fr");
-	gtk_text_buffer_set_text (bufferEM, "balalalallal\n blalalalal\n etc ...", -1);}
+      
+           for (int i = 0 ; i< 29 ; ++i )
+           {
+			 if (sender == BEM[i] && !data)
+			 {	
+
+				gtk_label_set_label (GTK_LABEL(labelEM[1]),boiteE.m[i].env_email);
+				gtk_label_set_label (GTK_LABEL(labelEM[2]),boiteE.m[i].titre);
+				printf("%s         \n" ,boiteE.m[i].titre);
+				gtk_text_buffer_set_text (bufferEM, boiteE.m[i].message, -1);
+			
+			 } }
+}
 }
 
 
@@ -671,65 +799,55 @@ void page_message_indesirable()
     gtk_widget_set_size_request(GTK_WIDGET(Frame[2]) , 450,30);
     
     boxMI = gtk_box_new (GTK_ORIENTATION_VERTICAL,0);
-    for (int i  = 0 ; i <10; ++i)
-    {
-    	
-        gchar * nom1 ;
-    	nom1= g_strdup_printf("%s%s", "Titre ", "");
-    	BMI[i]=gtk_button_new_with_label(nom1);
-    	gtk_widget_set_name (GTK_WIDGET(BMI[i]),"titremail");
-    	g_signal_connect(G_OBJECT(BMI[i]), "clicked",G_CALLBACK(afficher_proposition_supp_afficher),(gpointer)BMI[i]);
-    	gtk_box_pack_start (GTK_BOX(boxMI),GTK_WIDGET(BMI[i]),FALSE,FALSE,0);
-    	free(nom1); 
-    }
+  
     
 
-         GtkWidget *Framenom; 		
-         Framenom =gtk_frame_new ("Reçu");
-         gtk_widget_set_name (GTK_WIDGET(Framenom),"miniT");
-		 GtkWidget *scrolled_windowm = gtk_scrolled_window_new (NULL , NULL);
-	     gtk_container_set_border_width (GTK_CONTAINER (scrolled_windowm), 10);
-         gtk_container_add (GTK_CONTAINER (scrolled_windowm),boxMI);
-	     gtk_container_add (GTK_CONTAINER (Framenom), GTK_WIDGET(scrolled_windowm));
-	     gtk_widget_set_size_request(GTK_WIDGET(Framenom) , 250,400);
+        		
+         Frameindesirables=gtk_frame_new ("Reçu");
+         gtk_widget_set_name (GTK_WIDGET(Frameindesirables),"miniT");
+		 scrolled_windowmessageinde = gtk_scrolled_window_new (NULL , NULL);
+	     gtk_container_set_border_width (GTK_CONTAINER (scrolled_windowmessageinde), 10);
+         gtk_container_add (GTK_CONTAINER (scrolled_windowmessageinde),boxMI);
+	     gtk_container_add (GTK_CONTAINER (Frameindesirables), GTK_WIDGET(scrolled_windowmessageinde));
+	     gtk_widget_set_size_request(GTK_WIDGET(Frameindesirables) , 250,400);
 
 
-	   GtkWidget *horiz =gtk_box_new (GTK_ORIENTATION_HORIZONTAL,100);
-	   GtkWidget *h  = gtk_box_new (GTK_ORIENTATION_HORIZONTAL,100);
+	  	GtkWidget *horiz =gtk_box_new (GTK_ORIENTATION_HORIZONTAL,100);
+	   	GtkWidget *h  = gtk_box_new (GTK_ORIENTATION_HORIZONTAL,100);
 		GtkWidget *horiz0 =gtk_box_new (GTK_ORIENTATION_HORIZONTAL,100);
 		GtkWidget *vert =gtk_box_new (GTK_ORIENTATION_VERTICAL,20);
 		GtkWidget *vert1 =gtk_box_new (GTK_ORIENTATION_VERTICAL,100);
 		GtkWidget *horiz1=gtk_box_new (GTK_ORIENTATION_HORIZONTAL,0);
 
-     //BUttons
-     GtkWidget *Vbtn =gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
-	 gtk_button_box_set_layout ( GTK_BUTTON_BOX(Vbtn), GTK_BUTTONBOX_START);
-     gtk_box_pack_start (GTK_BOX(Vbtn),GTK_WIDGET (buttonMI[0]),FALSE,FALSE,0);
-	 gtk_box_pack_start (GTK_BOX(Vbtn),GTK_WIDGET (buttonMI[1]),FALSE,FALSE,0);
-	    
-     
-     gtk_box_pack_start (GTK_BOX(horiz),GTK_WIDGET(imageMI),TRUE,TRUE,0);
-	 gtk_box_pack_start (GTK_BOX(horiz0),GTK_WIDGET(labelMI[0]),TRUE,TRUE,0);
+	     //BUttons
+	     GtkWidget *Vbtn =gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
+		 gtk_button_box_set_layout ( GTK_BUTTON_BOX(Vbtn), GTK_BUTTONBOX_START);
+	     gtk_box_pack_start (GTK_BOX(Vbtn),GTK_WIDGET (buttonMI[0]),FALSE,FALSE,0);
+		 gtk_box_pack_start (GTK_BOX(Vbtn),GTK_WIDGET (buttonMI[1]),FALSE,FALSE,0);
+		    
+	     
+	     gtk_box_pack_start (GTK_BOX(horiz),GTK_WIDGET(imageMI),TRUE,TRUE,0);
+		 gtk_box_pack_start (GTK_BOX(horiz0),GTK_WIDGET(labelMI[0]),TRUE,TRUE,0);
 
-	 gtk_box_pack_start (GTK_BOX(vert),GTK_WIDGET(Frame[1]),FALSE,FALSE,0);
-	 gtk_box_pack_start (GTK_BOX(vert),GTK_WIDGET(Frame[2]),FALSE,FALSE,0);
-	 gtk_box_pack_start (GTK_BOX(vert),GTK_WIDGET(Frame[0]),FALSE,FALSE,0);
-	 
-	 gtk_widget_set_size_request(GTK_WIDGET(Framenom),200,400);
-	 gtk_box_pack_start (GTK_BOX(vert1),GTK_WIDGET(Framenom),FALSE,FALSE,0);
-	 gtk_box_pack_start (GTK_BOX(horiz1),GTK_WIDGET(vert1),TRUE,FALSE,0);
-	 gtk_box_pack_start (GTK_BOX(horiz1),GTK_WIDGET(vert),TRUE,FALSE,0);
+		 gtk_box_pack_start (GTK_BOX(vert),GTK_WIDGET(Frame[1]),FALSE,FALSE,0);
+		 gtk_box_pack_start (GTK_BOX(vert),GTK_WIDGET(Frame[2]),FALSE,FALSE,0);
+		 gtk_box_pack_start (GTK_BOX(vert),GTK_WIDGET(Frame[0]),FALSE,FALSE,0);
+		 
+		 gtk_widget_set_size_request(GTK_WIDGET(Frameindesirables),200,400);
+		 gtk_box_pack_start (GTK_BOX(vert1),GTK_WIDGET(Frameindesirables),FALSE,FALSE,0);
+		 gtk_box_pack_start (GTK_BOX(horiz1),GTK_WIDGET(vert1),TRUE,FALSE,0);
+		 gtk_box_pack_start (GTK_BOX(horiz1),GTK_WIDGET(vert),TRUE,FALSE,0);
 
-	 gtk_box_pack_start (GTK_BOX(h),GTK_WIDGET(lbmessagerieinde),TRUE,TRUE,0);
-	
-	 GtkWidget *MAIN =gtk_box_new (GTK_ORIENTATION_VERTICAL,0);
-	 gtk_box_pack_start (GTK_BOX(MAIN),GTK_WIDGET(Vbtn),FALSE,FALSE,0);
-	  gtk_box_pack_start (GTK_BOX(MAIN),GTK_WIDGET(h),TRUE,TRUE,0);
-	 gtk_box_pack_start (GTK_BOX(MAIN),GTK_WIDGET(horiz),FALSE,FALSE,0);
-	 gtk_box_pack_start (GTK_BOX(MAIN),GTK_WIDGET(horiz0),TRUE,TRUE,0);
-	 gtk_box_pack_start (GTK_BOX(MAIN),GTK_WIDGET(horiz1),TRUE,TRUE,0);
+		 gtk_box_pack_start (GTK_BOX(h),GTK_WIDGET(lbmessagerieinde),TRUE,TRUE,0);
+		
+		 GtkWidget *MAIN =gtk_box_new (GTK_ORIENTATION_VERTICAL,0);
+		 gtk_box_pack_start (GTK_BOX(MAIN),GTK_WIDGET(Vbtn),FALSE,FALSE,0);
+		  gtk_box_pack_start (GTK_BOX(MAIN),GTK_WIDGET(h),TRUE,TRUE,0);
+		 gtk_box_pack_start (GTK_BOX(MAIN),GTK_WIDGET(horiz),FALSE,FALSE,0);
+		 gtk_box_pack_start (GTK_BOX(MAIN),GTK_WIDGET(horiz0),TRUE,TRUE,0);
+		 gtk_box_pack_start (GTK_BOX(MAIN),GTK_WIDGET(horiz1),TRUE,TRUE,0);
 
-	 gtk_box_pack_start (GTK_BOX(MessagerieInde),GTK_WIDGET(MAIN),TRUE,TRUE,0);
+		 gtk_box_pack_start (GTK_BOX(MessagerieInde),GTK_WIDGET(MAIN),TRUE,TRUE,0);
 	
  
 
@@ -744,11 +862,16 @@ void afficher_proposition_supp_afficher(GtkWidget * sender , gpointer *data)
 
 	 if (GTK_WIDGET(buttonMI[0]) == sender && !data )
 	 {  
+   	                             GList *children = gtk_container_get_children(GTK_CONTAINER(boxMI));
+				                            while (children != NULL){
+							                        GtkWidget *w = children -> data; 
+							                        gtk_container_remove (GTK_CONTAINER(boxMI),GTK_WIDGET(w));
+							                        children = g_list_next(children);}       
    	                             
    	                             gtk_label_set_label (GTK_LABEL(labelMI[1]),"");
 								 gtk_label_set_label (GTK_LABEL(labelMI[2]),"");
 								 gtk_text_buffer_set_text (bufferMI, "", -1);
-						gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (Menu));
+								 gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (Menu));
    	  }
      else if (GTK_WIDGET(buttonMI[1]) == sender && !data )
      { 
@@ -757,7 +880,10 @@ void afficher_proposition_supp_afficher(GtkWidget * sender , gpointer *data)
 								 gtk_text_buffer_set_text (bufferMI, "", -1);
    	                 gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (Connexion));
    	 }
-   	 else {  afficher_supprimer_msg ((gpointer)sender);}
+   	 else {  
+                   
+			 afficher_supprimer_msg ((gpointer)sender);
+		  }
 }
 
 void afficher_supprimer_msg(gpointer * sender )
@@ -774,6 +900,7 @@ void afficher_supprimer_msg(gpointer * sender )
   btn_afficher_supp[0] = gtk_button_new_with_label("Afficher");
   btn_afficher_supp[1] = gtk_button_new_with_label("Supprimer");
   
+
   for (int i =0 ; i< 2; ++i)
   {
   	g_signal_connect(G_OBJECT(btn_afficher_supp[i]),"clicked",G_CALLBACK(reponse_a_utilisateur_supp_affiche),sender);
@@ -801,13 +928,21 @@ void reponse_a_utilisateur_supp_affiche(GtkWidget * sender , gpointer * data)
 	//
 	if (sender == btn_afficher_supp [0] && data)
 	{
-				gtk_label_set_label (GTK_LABEL(labelMI[1]),"covid");
-				gtk_label_set_label (GTK_LABEL(labelMI[2]),"blalalal@hotmail.fr");
-				gtk_text_buffer_set_text (bufferMI, "inchalah le 10 mai c fini par ce que jpp de ce confinement ", -1);
+
+		  for (int i = 0 ; i< 29 ; ++i )
+           {
+			 if (GTK_WIDGET(data) == BMI[i])
+			 {	
+				gtk_label_set_label (GTK_LABEL(labelMI[1]),BoiteInde.m[i].env_email);
+				gtk_label_set_label (GTK_LABEL(labelMI[2]),BoiteInde.m[i].titre);
+				gtk_text_buffer_set_text (bufferMI, BoiteInde.m[i].message, -1);
+			 }
+			
+			}
 	}
 	else if(sender == btn_afficher_supp [1] && data)
 	{
-		for (int i = 0 ; i< 10 ; ++i){
+		for (int i = 0 ; i< 29 ; ++i){
 		if (BMI[i] == GTK_WIDGET(data))
 		{
          //gtk_container_remove (GTK_CONTAINER(boxMI),GTK_WIDGET(BMI[i]));

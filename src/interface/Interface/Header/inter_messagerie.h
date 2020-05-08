@@ -18,7 +18,8 @@
 //MessagesRecu
 	GtkWidget   *imageMR , *imageBMR[2] ,*buttonMR[4] , *entreeMR[2] , *labelMR[5] , *text_viewMR;
 	GtkTextBuffer *bufferMR;
-	GtkWidget *event_box,*B[10];
+	GtkWidget *event_box,*B[30];
+	GtkWidget *Framemessagerecu , *scrolled_windowmessagerecu;
 //Page envoyer un msg 
 	GtkWidget   *imageE , *imageBE[2] ,*buttonE[4] , *entreeE[2] , *labelE[4] , *text_viewE;
 	GtkTextBuffer *bufferE;
@@ -26,19 +27,32 @@
 //EM = ENVOYEEMESSAGE
 //Messageenvoyee
 	GtkWidget   *imageEM , *imageBEM[2] ,*buttonEM[4] , *labelEM[5] , *text_viewEM;
+	GtkWidget *Framemessageenvoyee ,*scrolled_windowmessageenvoye; 
 	GtkTextBuffer *bufferEM;
-	GtkWidget *boxEM,*BEM[10], *windowEM ,  *spinnerEM, *vboxEM , *labelcharenvoie; 
+	GtkWidget *boxEM,*BEM[30], *windowEM ,  *spinnerEM, *vboxEM , *labelcharenvoie; 
 //Messageinde
-	GtkWidget   *imageMI , *imageBMI[2] ,*buttonMI[4] , *labelMI[5] , *text_viewMI;
+	GtkWidget     *imageMI , *imageBMI[2] ,*buttonMI[4] , *labelMI[5] , *text_viewMI;
 	GtkTextBuffer *bufferMI;
-	GtkWidget *boxMI,*BMI[10], *windowMI , *vboxMI , *labelsuppinde , *btn_afficher_supp[2]; 
-    
-    
+	GtkWidget     *boxMI,*BMI[30], *windowMI , *vboxMI , *labelsuppinde , *btn_afficher_supp[2]; 
+	GtkWidget *Frameindesirables , *scrolled_windowmessageinde ;
+   
+  
+     mail m ;
+     //recu  
+     boite b ;
+     //envoye 
+     boite boiteE;
+     //indesirable
+     boite BoiteInde ;
+
+
+
+ 
 
     //page global messagerie
 	void page_messagerie();
-	 void Slots_Messagerie(GtkWidget * sender , gpointer * data);
-	//recu
+	void Slots_Messagerie(GtkWidget * sender , gpointer * data);
+	
 	void page_MessageRecu();
 	//ecrire un smg
 	void page_envoyer_unmsg();

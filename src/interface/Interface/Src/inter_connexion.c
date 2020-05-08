@@ -68,7 +68,7 @@ void  Page_de_connection ()
 	g_signal_connect(G_OBJECT(button[0]),"clicked",G_CALLBACK(Verification_connexion),NULL);
 }
  
-  int  etat =0 ;
+int  etat =0 ;
 void Verification_connexion(GtkWidget * sender , gpointer * data)
 {    
 // redirection vers la page dinscription
@@ -81,12 +81,16 @@ if ( PEM == sender && !data )
 	    gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (Inscription));
 	    etat=0 ; 
 	}
+	  char * email = (char *)gtk_entry_get_text (GTK_ENTRY(entree[0]));
+	  char * mdp = (char *)gtk_entry_get_text (GTK_ENTRY(entree[1]));
+	  utilisateur.email  =  malloc(sizeof(char)*strlen(email)); 
+	  utilisateur.mdp = malloc(sizeof(char)*strlen(mdp)); 
+	  strcpy(utilisateur.email,email);
+	  strcpy(utilisateur.mdp,mdp);
+
 	
-	  utilisateur.email  =  (char *)gtk_entry_get_text (GTK_ENTRY(entree[0]));
-	  utilisateur.mdp = (char *)gtk_entry_get_text (GTK_ENTRY(entree[1]));
 	 //sinon button de connexion 
-    if (button[0] ==sender && !data )
-{ 
+    if (button[0] ==sender && !data ){ 
 	int trouver = 0 ;
         if(!gtk_entry_get_text_length(GTK_ENTRY(entree[0])) || !gtk_entry_get_text_length(GTK_ENTRY(entree[1])))
         {          
@@ -99,7 +103,6 @@ if ( PEM == sender && !data )
                        	GtkWidget * w= children->data;
                         if (w ==label[2]){trouver =1 ;break; }
                     }
-                    //si il enest pas present je lajouter 
                    if (!trouver)
                    { 
                    	 gtk_box_pack_start(GTK_BOX(MAIN),GTK_WIDGET (label[2]),TRUE,FALSE,0);
@@ -113,9 +116,10 @@ if ( PEM == sender && !data )
                 else{
                 	  gtk_widget_show_all(GTK_WIDGET(MAIN));
                 	  gtk_widget_hide(GTK_WIDGET(label[3]));
+                	  etat =1;
                 	}
                     
-}
+                  }
 else{	         
                   
                
@@ -126,8 +130,30 @@ else{
 	 	           	    gchar * nom= g_strdup_printf("%s  %s", "Bienvenue", utilisateur.email);
                         gtk_label_set_text(GTK_LABEL(lbmenu),nom);
                         free(nom);
-                       
+                        mpz_inits(utilisateur.prive.n , utilisateur.prive.d,NULL);
+  						mpz_inits(utilisateur.publique.e , utilisateur.publique.n,NULL);
+                         
+ 
+  							
+
+                        if (!recupere_cle_privee(utilisateur.email,utilisateur.mdp,&utilisateur.prive))
+                        {
+                        	gmp_printf ("cle  d recup :%Zd\n" , utilisateur.prive.d);
+                        	gmp_printf ("cle  n recup :%Zd\n" , utilisateur.prive.n);
+                        }
+                 		 
+                          utilisateur.email = remove_n(utilisateur.email);
+                 	   if (!recupere_cle_publique(utilisateur.email,utilisateur.mdp,&utilisateur.publique))
+                 	    {
+                 	        gmp_printf ("cle  e recup :%Zd\n" , utilisateur.publique.e);
+                        	gmp_printf ("cle  n recup :%Zd\n" , utilisateur.publique.n);
+                        }
+	 	           	  	
 	 	           	  	gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (Menu));
+	 	           	  	gtk_entry_set_text(GTK_ENTRY(entree[0]),"");
+        				gtk_entry_set_text(GTK_ENTRY(entree[1]),"");
+	 	           	  
+	 	           	
 	 	           	  	etat=0 ;
 	 	           	  }
 	 	           	  else

@@ -21,7 +21,8 @@
 	, *entreecomp[4], *labelcomp[4];
 
 //securité 
-	GtkWidget *imagesecurite , *imagebsecurite[2], *labelsecurite , *buttonsecurite[3] ; 
+	GtkWidget *imagesecurite , *imagebsecurite[2], *labelsecurite , *buttonsecurite[3] ;
+	GtkWidget * attention; 
 
 	void page_Parametre();
 	void Slots_parametre(GtkWidget * sender , gpointer * data);

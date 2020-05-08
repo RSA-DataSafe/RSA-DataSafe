@@ -30,8 +30,7 @@ typedef struct {
     char *titre;        // titre ou objet du mail
     char *message;      // le message 
     char *signature;    // la signature du message 
-    int signer;         /*  permet de savoir si le message
-                                    est signé               */
+    int signer;         /*  permet de savoir si le message est signé               */
 } mail;
 
 typedef struct {

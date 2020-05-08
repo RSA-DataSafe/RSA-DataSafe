@@ -3,6 +3,10 @@
 #include "../structure/structure.h"
 #include "lecture.h"
 #include "erreur.h"
+#include <gmp.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
 
 /**

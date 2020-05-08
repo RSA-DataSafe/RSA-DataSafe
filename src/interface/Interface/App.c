@@ -16,25 +16,19 @@
 #include "Header/inter_messagerie.h"
 #include "Header/inter_parametre.h"
 
-
-
 int Lancement()
 { 
     gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (Connexion)); return 0;
 }
 
 
-
-// on fera un for ici plus tard 
-
-
 int main(int argc , char ** argv)
 {
-
+ 
     gtk_init(&argc, &argv);
 	
 
-  initialisation();
+    initialisation();
 	page_ouverture();
 	Page_de_connection();
 	Page_d_inscription();
@@ -46,18 +40,17 @@ int main(int argc , char ** argv)
 	page_MessageRecu();
 	page_envoyer_unmsg();
 	page_message_envoyes(); 
-  page_message_indesirable();
-  page_compte();
-  page_securite();
+	page_message_indesirable();
+	page_compte();
+	page_securite();
+	
 	CSS();
 
    g_signal_connect(G_OBJECT(MainWindow), "delete-event", G_CALLBACK(gtk_main_quit), NULL);
-  
    g_timeout_add (2500,(GSourceFunc)Lancement, NULL);
-	
-  gtk_widget_show_all(MainWindow);
- 
-	gtk_main();
+   
+   gtk_widget_show_all(MainWindow);
+   gtk_main();
     
     return EXIT_SUCCESS;
 }

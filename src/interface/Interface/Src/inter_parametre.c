@@ -58,8 +58,12 @@ void page_Parametre()
 void Slots_parametre(GtkWidget * sender , gpointer * data)
 {
    
-   if (GTK_WIDGET(buttonP[0]) == sender && !data ) 
+   if (GTK_WIDGET(buttonP[0]) == sender && !data )
+   {                             gchar * nom= g_strdup_printf("%s  %s", "Bienvenue", utilisateur.email);
+   								 gtk_label_set_text(GTK_LABEL(lbmenu),nom);
    	                             gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (Menu));
+   	                             free(nom);
+   	}
    
    
    if (GTK_WIDGET(buttonP[3]) == sender && !data ) 
@@ -69,6 +73,10 @@ void Slots_parametre(GtkWidget * sender , gpointer * data)
    {					char * nom= g_strdup_printf("%s  %s", "Bienvenue", utilisateur.email);
                         gtk_label_set_text(GTK_LABEL(lbcompte),nom);
                         free(nom); 
+                        utilisateur.email = remove_n(utilisateur.email);
+                        utilisateur.mdp = remove_n(utilisateur.mdp);
+                        gtk_entry_set_placeholder_text (GTK_ENTRY(entreecomp[0]),utilisateur.email);
+	                    gtk_entry_set_placeholder_text (GTK_ENTRY(entreecomp[1]),utilisateur.mdp);
    	                    gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (Compte));
    	}
    
@@ -85,6 +93,30 @@ void Slots_parametre(GtkWidget * sender , gpointer * data)
    
    if (GTK_WIDGET(buttonsecurite[1]) == sender && !data )  
    	                             gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (Connexion));
+   if (GTK_WIDGET(buttonsecurite[2]) == sender && !data )
+   {      
+         
+          
+       mpz_inits(utilisateur.prive.n , utilisateur.prive.d,NULL);
+  	   mpz_inits(utilisateur.publique.e , utilisateur.publique.n,NULL);
+       utilisateur.email = remove_n(utilisateur.email);
+       genere_cle(&utilisateur.publique, &utilisateur.prive, 1024);
+   	      
+
+   	     if (!change_cle(&utilisateur,&utilisateur.publique,&utilisateur.prive))
+   	     {
+                printf("OKKKKKKK CHANGEMENT EFFECTUÉ \n");
+   	     }
+   	     else{
+   	     	 printf("NON CHANGEMENT  NON EFFECTUÉ \n");
+   	     }
+
+   	     gtk_widget_hide (buttonsecurite[2]);
+   	     gtk_label_set_text(GTK_LABEL(attention) , "vous avez déja vos clées 1 fois"); 
+   	     gtk_widget_set_name(attention ,"vert");
+   	     gtk_widget_show(attention); 
+
+   }
 
 }
 
@@ -116,10 +148,9 @@ void page_compte()
 		 		entreecomp[i] = gtk_entry_new();
 		 		gtk_editable_set_editable(GTK_EDITABLE(entreecomp[i]), FALSE);
     }
-	labelcomp[0] = gtk_label_new ("Identifiant");
+	labelcomp[0] = gtk_label_new ("E-mail");
 	labelcomp[1] = gtk_label_new ("Mot de passe");
-	labelcomp[2] = gtk_label_new ("Email");
-	labelcomp[3] = gtk_label_new ("Numéro de Téléphone");
+	
 	
 	
 
@@ -144,7 +175,7 @@ void page_compte()
 	 GtkWidget *vert1 =gtk_box_new (GTK_ORIENTATION_VERTICAL,30);
 	 GtkWidget *vert2 =gtk_box_new (GTK_ORIENTATION_VERTICAL,30);
     
-     for (int i = 0 ; i< 4; ++ i)
+     for (int i = 0 ; i< 2; ++ i)
      {
 	    gtk_box_pack_start (GTK_BOX(vert1),GTK_WIDGET(labelcomp[i]),TRUE,TRUE,0);
 	    gtk_box_pack_start (GTK_BOX(vert2),GTK_WIDGET(entreecomp[i]),TRUE,TRUE,0);
@@ -170,16 +201,11 @@ void page_compte()
 	
 	
     gtk_box_pack_start (GTK_BOX(Compte),GTK_WIDGET(MAIN),TRUE,TRUE,0);
-	gtk_entry_set_placeholder_text (GTK_ENTRY(entreecomp[0]),"ID");
-	gtk_entry_set_placeholder_text (GTK_ENTRY(entreecomp[1]),"MDP");
-	gtk_entry_set_icon_sensitive (GTK_ENTRY(entreecomp[1]),GTK_ENTRY_ICON_PRIMARY,FALSE);
 
-
-	gtk_entry_set_placeholder_text (GTK_ENTRY(entreecomp[2]),"EMAIL");
-
-	gtk_entry_set_placeholder_text (GTK_ENTRY(entreecomp[3]),"00000");
 	
-	gtk_box_pack_start (GTK_BOX(Vbtn1),GTK_WIDGET (buttoncomp[3]),TRUE,TRUE,0);
+	gtk_entry_set_icon_sensitive (GTK_ENTRY(entreecomp[1]),GTK_ENTRY_ICON_PRIMARY,FALSE);
+	
+	gtk_box_pack_start(GTK_BOX(Vbtn1),GTK_WIDGET (buttoncomp[3]),TRUE,TRUE,0);
 	gtk_entry_set_visibility(GTK_ENTRY( entreecomp[1]), FALSE);
 	gtk_entry_set_invisible_char (GTK_ENTRY( entreecomp[1]),'*');
     
@@ -189,8 +215,7 @@ void page_compte()
 	//pour le css 
 	gtk_widget_set_name (labelcomp[0],"Donnes");
 	gtk_widget_set_name (labelcomp[1],"Donnes");
-	gtk_widget_set_name (labelcomp[2],"Donnes");
-	gtk_widget_set_name (labelcomp[3],"Donnes");
+
 
     for (int i =0 ; i< 4 ; ++i)
 	g_signal_connect(G_OBJECT(buttoncomp[i]),"clicked",G_CALLBACK(modificattion_donnes_compte),NULL);
@@ -201,15 +226,20 @@ void page_compte()
 
 void modificattion_donnes_compte(GtkWidget * sender , gpointer data)
 {
-	if (GTK_WIDGET(buttoncomp[0]) == sender && !data )  
-								 gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (Menu));
+	 
+	if (GTK_WIDGET(buttoncomp[0]) == sender && !data ){
+										char * nom= g_strdup_printf("%s  %s", "Bienvenue", utilisateur.email);
+		                        		gtk_label_set_text(GTK_LABEL(lbmenu),nom);
+		                        		free(nom); 
+										gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (Menu));
+								}
    
    else if (GTK_WIDGET(buttoncomp[1]) == sender && !data )
    	                             gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (Connexion));
    else if (GTK_WIDGET(buttoncomp[2]) == sender && !data )
    	 {
-  
-   	 	for (int i =0 ; i<4 ; i++)
+        
+   	 	for (int i =0 ; i<2; i++)
 	        { 
 		 		gtk_editable_set_editable(GTK_EDITABLE(entreecomp[i]), TRUE);
              }
@@ -221,11 +251,30 @@ void modificattion_donnes_compte(GtkWidget * sender , gpointer data)
 
    	 else if (GTK_WIDGET(buttoncomp[3]) == sender && !data )
    	 {
-   	 	for (int i =0 ; i<4 ; i++)
-	        { 
-		 		gtk_editable_set_editable(GTK_EDITABLE(entreecomp[i]), FALSE);
+       
+       if (gtk_entry_get_text_length(GTK_ENTRY(entreecomp[0]))){
+       				if (!Change_Email(utilisateur.email , utilisateur.mdp, (char*)gtk_entry_get_text(GTK_ENTRY(entreecomp[0])))){
+ 					utilisateur.email = (char*)gtk_entry_get_text(GTK_ENTRY(entreecomp[0]));	
+ 					printf ("okkkkkkkkkk 1\n");
+ 				 	char * nom= g_strdup_printf("%s  %s", "Bienvenue", utilisateur.email);
+                 	gtk_label_set_text(GTK_LABEL(lbcompte),nom);
+                 	free(nom);
+                 }
              }
-          
+  	    if (gtk_entry_get_text_length(GTK_ENTRY(entreecomp[1]))){
+  	   					if ( !Change_MotDePasse (utilisateur.email , utilisateur.mdp , (char*)gtk_entry_get_text(GTK_ENTRY(entreecomp[1])))){
+  	   	        		utilisateur.mdp = (char*)gtk_entry_get_text(GTK_ENTRY(entreecomp[1]));
+  	   	         		printf ("okkkkkkkkkk 2\n");
+  	   	         	}   
+         }
+           utilisateur.email = remove_n(utilisateur.email);
+           utilisateur.mdp = remove_n(utilisateur.mdp);
+           gtk_entry_set_placeholder_text (GTK_ENTRY(entreecomp[0]),utilisateur.email);
+	       gtk_entry_set_placeholder_text (GTK_ENTRY(entreecomp[1]),utilisateur.mdp);
+
+	       for (int i =0 ; i<2 ; i++)
+		 		gtk_editable_set_editable(GTK_EDITABLE(entreecomp[i]), FALSE);
+        
             gtk_widget_hide(buttoncomp[3]);
             gtk_widget_show(buttoncomp[2]);
    	 }
@@ -276,8 +325,8 @@ void page_securite()
      gtk_box_pack_start (GTK_BOX(Vbtn1),GTK_WIDGET (buttonsecurite[2]),TRUE,FALSE,0);
     
  
-	  GtkWidget * attention = gtk_label_new ("Attention vous ne pouvez renouveler vos clés qu'une seule fois !");
-	  gtk_widget_set_name (attention,"warning");
+	 attention = gtk_label_new ("Attention vous ne pouvez renouveler vos clés qu'une seule fois !");
+	 gtk_widget_set_name (attention,"warning");
 	 GtkWidget *MAIN =gtk_box_new (GTK_ORIENTATION_VERTICAL,0);
 	 gtk_box_pack_start (GTK_BOX(MAIN),GTK_WIDGET(Vbtn),FALSE,FALSE,0);
 	 gtk_box_pack_start (GTK_BOX(MAIN),GTK_WIDGET(h),FALSE,FALSE,0);
@@ -288,7 +337,7 @@ void page_securite()
 
 	  gtk_box_pack_start (GTK_BOX(Securite),GTK_WIDGET(MAIN),TRUE,TRUE,0);
 
-	  for (int i = 0 ; i < 2 ; ++i) 
+	  for (int i = 0 ; i < 3 ; ++i) 
  	 	g_signal_connect(G_OBJECT(buttonsecurite[i]),"clicked",G_CALLBACK(Slots_parametre),NULL);
 
 

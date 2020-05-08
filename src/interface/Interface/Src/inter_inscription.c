@@ -111,8 +111,8 @@ void SLots_inscription(GtkWidget * sender , gpointer * data)
 				  
 				        			genere_cle(&utilisateur.publique, &utilisateur.prive, 1024);
 				        			
-				        			
-				        			 char* chemin = malloc (sizeof (char)*200);
+				        		
+				        		    char* chemin = malloc (sizeof (char)*200);
 				        			strcpy(chemin,"rsa/");
 				        			strcat(chemin,utilisateur.email);
 				        			strcat(chemin,"/Cles.txt");
@@ -122,7 +122,7 @@ void SLots_inscription(GtkWidget * sender , gpointer * data)
 				        			strcat(clees,"\n");
 				        			strcat(clees,mpz_get_str(NULL,10,utilisateur.publique.e));
 				        			strcat(clees,"\n");
-				        			strcat(clees,mpz_get_str(NULL,10,utilisateur.prive.n));
+				        			strcat(clees,mpz_get_str(NULL,10,utilisateur.publique.n));
 				        			
 				        			if (!ecrire_fichier(chemin,clees))	 printf("stockage de la clé\n");
 				        			else  printf("erreur decriture\n");

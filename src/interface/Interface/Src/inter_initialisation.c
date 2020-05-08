@@ -99,3 +99,14 @@ void page_ouverture()
  imageacc = gtk_image_new_from_file("Icon/logo.jpeg"); 
  gtk_box_pack_start (GTK_BOX(accueil),GTK_WIDGET(imageacc),TRUE,TRUE,0);
 }
+
+
+char * remove_n(char * chaine)
+{
+    if (chaine == NULL)
+        return NULL;
+    int i = 0;
+    while(chaine[i] != '\n' && chaine[i] != '\0') i++;
+    chaine[i] = '\0';
+    return chaine;
+}

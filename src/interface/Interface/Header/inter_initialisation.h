@@ -46,5 +46,6 @@ void CSS();
 GdkPixbuf *create_pixbuf(const gchar * filename);
 void initialisation();
 void page_ouverture();
+char * remove_n(char * chaine);
 
 #endif
