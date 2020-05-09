@@ -94,7 +94,7 @@ void Slots_parametre(GtkWidget * sender , gpointer * data)
    if (GTK_WIDGET(buttonsecurite[1]) == sender && !data )  
    	                             gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (Connexion));
    if (GTK_WIDGET(buttonsecurite[2]) == sender && !data )
-   { 
+   {      
           informations utilisateurtmp;     
    	      utilisateurtmp.email=malloc(sizeof(char)*(strlen(utilisateur.email)));
           utilisateurtmp.mdp=malloc(sizeof(char)*(strlen(utilisateur.mdp)));
@@ -106,7 +106,6 @@ void Slots_parametre(GtkWidget * sender , gpointer * data)
 	      mpz_set(utilisateurtmp.prive.n,utilisateur.prive.n);
 	      mpz_set(utilisateurtmp.publique.e,utilisateur.publique.e);
 	      mpz_set(utilisateurtmp.publique.n ,utilisateur.publique.n);
-         
           
        mpz_inits(utilisateur.prive.n , utilisateur.prive.d,NULL);
   	   mpz_inits(utilisateur.publique.e , utilisateur.publique.n,NULL);
@@ -116,11 +115,6 @@ void Slots_parametre(GtkWidget * sender , gpointer * data)
 
    	     if (!change_cle(&utilisateurtmp,&utilisateur.publique,&utilisateur.prive))
    	     {
-   	     mpz_set(utilisateur.prive.d,utilisateurtmp.prive.d);
-         mpz_set(utilisateur.prive.n,utilisateurtmp.prive.n);
-         mpz_set(utilisateur.publique.e,utilisateurtmp.publique.e);
-         mpz_set(utilisateur.publique.n ,utilisateurtmp.publique.n);
-    
                 printf("OKKKKKKK CHANGEMENT EFFECTUÉ \n");
    	     }
    	     else{
