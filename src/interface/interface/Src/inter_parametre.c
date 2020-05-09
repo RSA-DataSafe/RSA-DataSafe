@@ -114,7 +114,11 @@ void Slots_parametre(GtkWidget * sender , gpointer * data)
    	      
 
    	     if (!change_cle(&utilisateurtmp,&utilisateur.publique,&utilisateur.prive))
-   	     {
+   	    {
+   	     	   mpz_set(utilisateur.prive.d,utilisateurtmp.prive.d);
+         mpz_set(utilisateur.prive.n,utilisateurtmp.prive.n);
+         mpz_set(utilisateur.publique.e,utilisateurtmp.publique.e);
+         mpz_set(utilisateur.publique.n ,utilisateurtmp.publique.n);
                 printf("OKKKKKKK CHANGEMENT EFFECTUÉ \n");
    	     }
    	     else{
