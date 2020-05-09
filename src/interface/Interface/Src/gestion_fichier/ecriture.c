@@ -216,34 +216,115 @@ int  Change_MotDePasse (char*email , char *mdp , char* newmdp)
 int  change_cle(informations * InfoUser,cle_publique * pub ,cle_prive * priv)
 {
 
-    char * chemin = malloc (sizeof(char)*(strlen("rsa/")+strlen(InfoUser->email)+strlen("/Cles.txt")+3));
-    char * ligne = malloc (sizeof(char) * 2048);
+   char dossier[200];
+  strcpy(dossier,"rsa/");
+  strcat(dossier,InfoUser->email);
+  strcat(dossier,"/");
+  strcat(dossier,"Cles.txt");
+  char tmp[200];
+  strcpy(tmp,"rsa/");
+  strcat(tmp,InfoUser->email);
+  strcat(tmp,"/Cles1.txt");
+  FILE *fichier=fopen(dossier,"r");
+  FILE * clefile=fopen(tmp,"a+");  
+  char *d =malloc(2048*sizeof(char));
+  char *e =malloc(2048*sizeof(char));
+  char *n =malloc(2048*sizeof(char));
+  mpz_get_str(d,10,InfoUser->prive.d);
+  mpz_get_str(e,10,InfoUser->publique.e);
+  mpz_get_str(n,10,InfoUser->publique.n);
+  char *d1 =malloc(2048*sizeof(char));
+  char *e1 =malloc(2048*sizeof(char));
+  char *n1 =malloc(2048*sizeof(char));
+  mpz_get_str(d1,10,priv->d);
+  mpz_get_str(e1,10,pub->e);
+  mpz_get_str(n1,10,pub->n);
+  char *line_buf = NULL;
+  char *line_buf1 = NULL;
+  char *line_buf2 =NULL;
+  size_t line_buf_size = 0;
+  int res1,res2,res3;
+ 
+  if(fichier!=NULL && clefile!=NULL)
+  {
+   
+    while(getline(&line_buf, &line_buf_size, fichier)>=0 && getline(&line_buf1, &line_buf_size, fichier)>=0 && 
+      getline(&line_buf2,&line_buf_size,fichier)>=0)
+       {
+        
+        int test=0;
+        for(int i=0;i<strlen(line_buf)-1;i++)
+        {
+          if(d[i]!=line_buf[i])
+          {
+             test=1;break;
+         }
+        }
+        int test1=0;
+        for(int j=0;j<strlen(line_buf1)-1;j++)
+        {
+          if(line_buf1[j]!=e[j])
+            test1=1;break;
+        }
+        int test2=0;
+        for(int j=0;j<strlen(line_buf2)-1;j++)
+        {
+          if(line_buf2[j]!=n[j])
+            test2=1;break;
+        }
 
-    sprintf(chemin, "rsa/%s/Cles.txt", InfoUser->email);
-    printf("%s", chemin);
-    FILE * fichier = NULL;
-    fichier = fopen(chemin, "w+");
-
-    if(!fichier) 
-        return ERR_ERCI;
-
-    InfoUser->prive = *priv;
-    InfoUser->publique = *pub;
-
-    mpz_get_str(ligne, 10, InfoUser->prive.d);
-    fprintf(fichier, "%s\n", ligne);
-    mpz_get_str(ligne, 10, InfoUser->publique.e);
-    fprintf(fichier, "%s\n", ligne);
-    mpz_get_str(ligne, 10, InfoUser->publique.n);
-    fprintf(fichier, "%s\n", ligne);
-
-
-
-    free(chemin);
-    free(ligne);
-    fclose(fichier); 
-
-    return 0;
+          if(test==0 && test1==0 && test2==0)
+          { 
+           
+              res1=ecrire_fichier(tmp,d1);
+              res2=ecrire_fichier(tmp,e1);
+              res3=ecrire_fichier(tmp,n1);
+              mpz_set(InfoUser->prive.d,priv->d);
+              mpz_set(InfoUser->prive.n,priv->n);
+              mpz_set(InfoUser->publique.e,pub->e);
+              mpz_set(InfoUser->publique.n,pub->n);
+              if(res1!=0 || res2!=0 || res3!=0)
+              {
+                return ERR_ERCI;
+              }
+            
+          } 
+          else
+          { 
+            int taille=strlen(line_buf)-1;
+            if(line_buf[taille]=='\n')
+            {
+              line_buf[taille]='\0';
+            }
+            taille=strlen(line_buf1)-1;
+            if(line_buf1[taille]=='\n')
+            {
+              line_buf1[taille]='\0';
+            }
+             taille=strlen(line_buf2)-1;
+            if(line_buf2[taille]=='\n')
+            {
+              line_buf2[taille]='\0';
+            }
+             res1=ecrire_fichier(tmp,line_buf);
+             res2=ecrire_fichier(tmp,line_buf1);
+             res3=ecrire_fichier(tmp,line_buf2);
+             if(res1!=0 || res2!=0 || res3!=0)
+             {
+              return ERR_ERCI;
+             }
+          }       
+       }
+  fclose(fichier);
+  fclose(clefile);
+  remove(dossier);
+  rename(tmp,dossier); 
+   return 0;
+  }
+else
+{
+  return ERR_ERCI;
+}
 }
 
 int  ecrire_fichier(char *chemin , char *message)
