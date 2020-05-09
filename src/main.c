@@ -7,7 +7,10 @@
 #include "chiffrement/chiffrement.h"
 #include "dechiffrement/dechiffrement.h"
 
+#include "gestion_fichier/conversion.h"
+
 int main(void) {
+	/*
 	// init
 	message *a = malloc(sizeof(message));
 	mpz_inits(a->taille, a->nombre, NULL);
@@ -60,6 +63,16 @@ int main(void) {
 
 	mpz_clears(c->taille, c->nombre, NULL);
 	free(c);
+	*/
+
+	char *a = "a";
+	message *m = conversion_hexa_mpz(a);
+	mpz_out_str(0, 2, m->nombre);
+	printf("\n");
 	
+	char *b = conversion_mpz_hexa(m);
+	printf("%s\n",b);
+	free(b);
+
 	return 0;
 }

@@ -32,7 +32,7 @@ void calculPhi(mpz_t p, mpz_t q, mpz_t phi_n){
  * Calcul de la clé publique (n,e) tel que pgcd(e,phi(n)) = 1 et e < phi
  * @param publique : clé publique
  * */
-void calculerE(cle_publique *publique){
+void calculerE(cle_publique *publique, mpz_t phi){
 	//valeur aléatoire ,servira pour le choix de la valeur de e 
 	srand(time(NULL));
 	int tmp=rand()%4;
@@ -49,7 +49,7 @@ void calculerE(cle_publique *publique){
  * @param prive : clé privé
  * @param publique : clé publique
  * */
-void calculerD(cle_prive *prive, cle_publique *publique){
+void calculerD(cle_prive *prive, cle_publique *publique, mpz_t phi){
 	mpz_t u,v;
 	mpz_inits(u,v,NULL);
 	euclide_etendu(u , v, prive->n, publique->e);
@@ -91,7 +91,7 @@ void genere_cle(cle_publique *publique, cle_prive *prive, int taille){
 	//mpz_set(prive->n,phi_n);
 
 	// choix de l'exposant pulique e
-	calculerE(publique);
+	calculerE(publique, phi_n);
 
 	mpz_set(publique->n,n);
 
@@ -99,7 +99,7 @@ void genere_cle(cle_publique *publique, cle_prive *prive, int taille){
 	mpz_set(prive->n,phi_n);
 	
 
-	calculerD(prive, publique);
+	calculerD(prive, publique, phi_n);
 	mpz_set(prive->n,publique->n);
 
 	mpz_clears(p,q,n,phi_n, NULL);
