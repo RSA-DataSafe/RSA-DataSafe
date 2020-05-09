@@ -12,6 +12,7 @@
 #include "primalite.h"
 #include "../structure/structure.h"
 #include "bbs.h"
+#include "generation_cle.h"
 /**
  * Procédure qui permet de calculer phi(n) = (p -1) * (q-1)
  * @param p : p de RSA
@@ -59,18 +60,18 @@ void calculerD(cle_prive *prive, cle_publique *publique){
 
 void GenererPQRSA(mpz_t p, mpz_t q, mpz_t n, int taille){
 
-           mpz_t quar;
-           mpz_init(quar);
-           mpz_set_ui(quar,40);
+         mpz_t t; 
+         mpz_init(t);
+         mpz_set_ui(t,40);
 		do{
 			bbs(p,taille);
-			}while(mpz_cmp_ui(p,0)==0 || miller_rabbin(p,quar)!=1);
+			}while(mpz_cmp_ui(p,0)==0|| miller_rabbin(p,t)!=1);
 				mpz_set(n,p);
 
 		do{
 			bbs(q,taille);
 
-		}while(mpz_cmp_ui(q,0)==0 || miller_rabbin(q,quar)!=1|| mpz_cmp(p,q)==0);
+		}while(mpz_cmp_ui(q,0)==0 || miller_rabbin(q,t)!=1|| mpz_cmp(p,q)==0);
 			mpz_mul(n,n,q);
 	
 
