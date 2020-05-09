@@ -22,7 +22,7 @@
 void calculPhi(mpz_t p, mpz_t q, mpz_t phi_n){
 	//p-1
 	mpz_sub_ui(p,p,1);
-	//p-1
+	//q-1
 	mpz_sub_ui(q,q,1);
 	//phi(n)=(p-1)(q-1)
 	mpz_mul(phi_n,p,q);	
@@ -40,7 +40,10 @@ void calculerE(cle_publique *publique, mpz_t phi){
 	int val[5]={3,5,17,257,65537};
 
 	// valeur de e
-	mpz_set_ui(publique->e,val[tmp]);
+	do
+	{
+		mpz_set_ui(publique->e,val[tmp]);
+	}while(mpz_cmp(publique->e,phi)>0);
 		
 	}
 
@@ -52,9 +55,15 @@ void calculerE(cle_publique *publique, mpz_t phi){
 void calculerD(cle_prive *prive, cle_publique *publique, mpz_t phi){
 	mpz_t u,v;
 	mpz_inits(u,v,NULL);
-	euclide_etendu(u , v, prive->n, publique->e);
+	euclide_etendu(u , v, phi, publique->e);
+	if(mpz_cmp_ui(v,0)<0)
+	{
+         while(mpz_cmp_ui(v,0)<0)
+         {
+         	mpz_add(v,v,phi);
+         }
+	}
 	mpz_set(prive->d,v);
-	mpz_set(prive->n,publique->n);
 	mpz_clears(u,v,NULL);
 }
 
@@ -82,25 +91,12 @@ void genere_cle(cle_publique *publique, cle_prive *prive, int taille){
 
 	mpz_t p,q,n,phi_n;
 	mpz_inits(p,q,n,phi_n, NULL);
-	//génération de p et q
 	GenererPQRSA(p,q,n,taille);
 	mpz_mul(n,p,q);
-	//calcul de phi(n)
-	calculPhi(p,q,phi_n);
-
-	//mpz_set(prive->n,phi_n);
-
-	// choix de l'exposant pulique e
-	calculerE(publique, phi_n);
-
 	mpz_set(publique->n,n);
-
-	//pour avoir la valeur de phi(n) qui nous servira pour le calcul de d
-	mpz_set(prive->n,phi_n);
-	
-
+	mpz_set(prive->n,n);
+	calculPhi(p,q,phi_n);
+	calculerE(publique, phi_n);
 	calculerD(prive, publique, phi_n);
-	mpz_set(prive->n,publique->n);
-
 	mpz_clears(p,q,n,phi_n, NULL);
 }
