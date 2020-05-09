@@ -95,16 +95,35 @@ void Slots_parametre(GtkWidget * sender , gpointer * data)
    	                             gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (Connexion));
    if (GTK_WIDGET(buttonsecurite[2]) == sender && !data )
    {      
-         
-          
+          informations utilisateurtmp;
+   	      utilisateurtmp.email=malloc(sizeof(char)*(strlen(utilisateur.email)));
+          utilisateurtmp.mdp=malloc(sizeof(char)*(strlen(utilisateur.mdp)));
+		  mpz_inits(utilisateurtmp.prive.d  ,utilisateurtmp.prive.n,NULL);
+		  mpz_inits(utilisateurtmp.publique.e ,utilisateurtmp.publique.n,NULL);			   	    	  
+          strcpy(utilisateurtmp.email,utilisateur.email);
+          strcpy(utilisateurtmp.mdp,utilisateurtmp.mdp);
+          mpz_set(utilisateurtmp.prive.d,utilisateur.prive.d);
+	      mpz_set(utilisateurtmp.prive.n,utilisateur.prive.n);
+	      mpz_set(utilisateurtmp.publique.e,utilisateur.publique.e);
+	      mpz_set(utilisateurtmp.publique.n ,utilisateur.publique.n);
+	          
        mpz_inits(utilisateur.prive.n , utilisateur.prive.d,NULL);
   	   mpz_inits(utilisateur.publique.e , utilisateur.publique.n,NULL);
        utilisateur.email = remove_n(utilisateur.email);
+
+     
+
        genere_cle(&utilisateur.publique, &utilisateur.prive, 1024);
    	      
-
-   	     if (!change_cle(&utilisateur,&utilisateur.publique,&utilisateur.prive))
+    
+   	     if (!change_cle(&utilisateurtmp,&utilisateur.publique,&utilisateur.prive))
    	     {
+   	     mpz_set(utilisateur.prive.d,utilisateurtmp.prive.d);
+         mpz_set(utilisateur.prive.n,utilisateurtmp.prive.n);
+         mpz_set(utilisateur.publique.e,utilisateurtmp.publique.e);
+         mpz_set(utilisateur.publique.n ,utilisateurtmp.publique.n);
+    
+
                 printf("OKKKKKKK CHANGEMENT EFFECTUÉ \n");
    	     }
    	     else{
