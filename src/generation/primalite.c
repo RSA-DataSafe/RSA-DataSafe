@@ -1,10 +1,8 @@
 #include <gmp.h>
 #include <time.h>
-
 #include "primalite.h"
 
 int temoin_de_miller(mpz_t a, mpz_t n){
-
 	mpz_t d, t,res;
 	mpz_inits(t,d,res, NULL);
 	mpz_sub_ui(d, n, 1);
@@ -24,7 +22,6 @@ int temoin_de_miller(mpz_t a, mpz_t n){
 		else
 			i=0;
 	}
-
 	
 	expo_mod(res,a,d,n);
 	mpz_sub_ui(t, n, 1);
@@ -49,8 +46,8 @@ int temoin_de_miller(mpz_t a, mpz_t n){
 	//temoin de miller donc non premier
 	return 0;
 }
+
 int miller_rabbin(mpz_t n, mpz_t tour){
-	
 	//1 et 2 sont premier
 	if(mpz_cmp_d(n, 1) == 0 || mpz_cmp_d(n, 2) == 0)
 		return 1;
