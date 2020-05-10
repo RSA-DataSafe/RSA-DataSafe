@@ -399,23 +399,19 @@ int envoie_message(mail *m)
        }
        return 0;
 }
-int  stocker_message(char *email , mpz_t  message , char *boite)
+int  stocker_message(char *email , char*  message , char *boite)
 {   
-   int res;
-    char *str=malloc(1024*sizeof(char));
-    mpz_get_str(str,10,message);//conversion_mpz_char
+    int res;
     char dossier[300];
     strcpy(dossier,"../../RSA-DataSafe/rsa/");
     strcat(dossier,email);
     strcat(dossier,"/");
     strcat(dossier,boite);
-    res=ecrire_fichier(dossier,str);
+    res=ecrire_fichier(dossier,message);
     if(res!=0)
     {
       return ERR_ERCI;
     }
     
-      return 0;
-    
+    return 0;
 }
-
