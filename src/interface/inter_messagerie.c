@@ -2,22 +2,22 @@
 void page_messagerie()
   {
 
-  	imageMessagerie =gtk_image_new_from_file("../features/logo.png"); 
+  	imageMessagerie =gtk_image_new_from_file("Icon/logo.png"); 
 	labelMessagerie= gtk_label_new ("Messagerie");
 	lbmessagerie= gtk_label_new ("");
 	gtk_widget_set_name (lbmessagerie,"bv");
 	gtk_widget_set_name (labelMessagerie,"Titre");
 
-	imageBMessagerie[0] = gtk_image_new_from_file("../features/accjaune.png");
-	imageBMessagerie[1] = gtk_image_new_from_file("../features/Dec3.png");
+	imageBMessagerie[0] = gtk_image_new_from_file("Icon/accjaune.png");
+	imageBMessagerie[1] = gtk_image_new_from_file("Icon/Dec3.png");
 	//message recu 
-	imageBMessagerie[2] = gtk_image_new_from_file("../features/MsgRecu.png");
+	imageBMessagerie[2] = gtk_image_new_from_file("Icon/MsgRecu.png");
 	//message envoyée
-	imageBMessagerie[3] = gtk_image_new_from_file("../features/MSGENVOYER.png");
+	imageBMessagerie[3] = gtk_image_new_from_file("Icon/MSGENVOYER.png");
 	//ecrire message
-	imageBMessagerie[4] = gtk_image_new_from_file("../features/EnvoeMsg.png");
+	imageBMessagerie[4] = gtk_image_new_from_file("Icon/EnvoeMsg.png");
 	//messages indesirables
-	imageBMessagerie[5] = gtk_image_new_from_file("../features/MsgIndesirables.png");
+	imageBMessagerie[5] = gtk_image_new_from_file("Icon/MsgIndesirables.png");
 	for (int i = 0  ;i < 6; ++i )
 	{
 		buttonMessagerie[i] = gtk_toggle_button_new(); 
@@ -191,14 +191,14 @@ void page_messagerie()
 void page_MessageRecu()
 {
 
-	imageMR =gtk_image_new_from_file("../features/logo.png"); 
+	imageMR =gtk_image_new_from_file("Icon/logo.png"); 
 	labelMR[0]= gtk_label_new ("Messages Reçu");
 	lbmessagerierecu= gtk_label_new ("");
 	gtk_widget_set_name (GTK_WIDGET(lbmessagerierecu),"bv");
 	gtk_widget_set_name (GTK_WIDGET(labelMR[0]),"Titre");
 
-	imageBMR[0] = gtk_image_new_from_file("../features/accjaune.png");
-	imageBMR[1] = gtk_image_new_from_file("../features/Dec3.png");
+	imageBMR[0] = gtk_image_new_from_file("Icon/accjaune.png");
+	imageBMR[1] = gtk_image_new_from_file("Icon/Dec3.png");
 
 	for (int i = 0  ;i < 2; ++i )
 	{
@@ -345,14 +345,14 @@ void page_envoyer_unmsg()
 
 
 
-   imageE =gtk_image_new_from_file("../features/logo.png"); 
+   imageE =gtk_image_new_from_file("Icon/logo.png"); 
    labelE[0]= gtk_label_new ("Envoyer un message");
    lbmessagerieecri = gtk_label_new ("");
    gtk_widget_set_name (GTK_WIDGET(lbmessagerieecri),"bv");
    gtk_widget_set_name (GTK_WIDGET(labelE[0]),"Titre");
 
-   imageBE[0] = gtk_image_new_from_file("../features/accjaune.png");
-   imageBE[1] = gtk_image_new_from_file("../features/Dec3.png");
+   imageBE[0] = gtk_image_new_from_file("Icon/accjaune.png");
+   imageBE[1] = gtk_image_new_from_file("Icon/Dec3.png");
 
 	for (int i = 0  ;i < 2; ++i )
 	{
@@ -594,14 +594,14 @@ void show_dialog (GtkButton *button, gpointer   user_data)
 void page_message_envoyes()
 {
 
-    imageEM =gtk_image_new_from_file("../features/logo.png"); 
+    imageEM =gtk_image_new_from_file("Icon/logo.png"); 
 	labelEM[0]= gtk_label_new ("Messages Envoyés");
 	lbenvoyeemessagerie  = gtk_label_new ("");
 	gtk_widget_set_name (GTK_WIDGET(lbenvoyeemessagerie),"bv");
 	gtk_widget_set_name (GTK_WIDGET(labelEM[0]),"Titre");
 
-	imageBEM[0] = gtk_image_new_from_file("../features/accjaune.png");
-	imageBEM[1] = gtk_image_new_from_file("../features/Dec3.png");
+	imageBEM[0] = gtk_image_new_from_file("Icon/accjaune.png");
+	imageBEM[1] = gtk_image_new_from_file("Icon/Dec3.png");
 
 	for (int i = 0  ;i < 2; ++i )
 	{
@@ -748,14 +748,14 @@ void afficher_contenu_message_envoyee(GtkWidget * sender , gpointer *data)
 
 void page_message_indesirable()
 {
-	imageMI =gtk_image_new_from_file("../features/logo.png"); 
+	imageMI =gtk_image_new_from_file("Icon/logo.png"); 
 	labelMI[0]= gtk_label_new ("Messages Indésirables");
 	lbmessagerieinde = gtk_label_new ("");
 	gtk_widget_set_name (GTK_WIDGET(lbmessagerieinde),"bv");
 	gtk_widget_set_name (GTK_WIDGET(labelMI[0]),"Titre");
 
-	imageBMI[0] = gtk_image_new_from_file("../features/accjaune.png");
-	imageBMI[1] = gtk_image_new_from_file("../features/Dec3.png");
+	imageBMI[0] = gtk_image_new_from_file("Icon/accjaune.png");
+	imageBMI[1] = gtk_image_new_from_file("Icon/Dec3.png");
 
 	for (int i = 0  ;i < 2; ++i )
 	{

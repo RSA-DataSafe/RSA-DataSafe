@@ -3,7 +3,7 @@
 void page_chiffrer()
 {
 
-	imageC =gtk_image_new_from_file("../features/logo.png"); 
+	imageC =gtk_image_new_from_file("Icon/logo.png"); 
 	labelC[0]= gtk_label_new ("Chiffrement");
 	labelC[1]= gtk_label_new ("Ou");
 	lbchiffrer= gtk_label_new ("");
@@ -11,8 +11,8 @@ void page_chiffrer()
 	gtk_widget_set_name (labelC[0],"Titre");
 	gtk_widget_set_name (labelC[1],"Titre");
 
-	imageBC[0] = gtk_image_new_from_file("../features/accjaune.png");
-	imageBC[1] = gtk_image_new_from_file("../features/Dec3.png");
+	imageBC[0] = gtk_image_new_from_file("Icon/accjaune.png");
+	imageBC[1] = gtk_image_new_from_file("Icon/Dec3.png");
 	for (int i = 0  ;i < 2 ; ++i )
 	{
 		buttonC[i] = gtk_toggle_button_new(); 

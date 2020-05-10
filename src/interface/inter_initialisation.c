@@ -49,7 +49,7 @@ void initialisation()
     gtk_container_add(GTK_CONTAINER( MainWindow),GTK_WIDGET (stack));
     
     // le peyit logo en petit  en haut agauche 
-    icon = create_pixbuf("/Icon/logo.jpeg");  
+    icon = create_pixbuf("Icon/logo.jpeg");  
     //on a une pile de fenetre 
 	  // qui contenu dans la fenetre principale 
 	  // pour changer de fenetre on change juste le haut de ka stack 

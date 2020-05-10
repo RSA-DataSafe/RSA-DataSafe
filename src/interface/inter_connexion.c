@@ -2,8 +2,8 @@
 
 void  Page_de_connection ()
 {
-	imagec[0] = gtk_image_new_from_file("../features/per.png"); 
-	minilogo[0] = gtk_image_new_from_file("../features/logo.png");
+	imagec[0] = gtk_image_new_from_file("Icon/per.png"); 
+	minilogo[0] = gtk_image_new_from_file("Icon/logo.png");
 
     button[0] = gtk_button_new_with_label ("Connexion");
 	PEM = gtk_button_new_with_label ("Pas encore membre?");

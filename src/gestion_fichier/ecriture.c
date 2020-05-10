@@ -5,7 +5,7 @@ int  nouvel_utilisateur(char *email , char *mdp)
        int taille= strlen(email);
        char *userfile1=malloc((taille+20)*sizeof(char));
        strcpy(userfile1,"MessageRecu.txt");
-       char ch1[200]="../../RSA-DataSafe/rsa/";
+       char ch1[200]="rsa/";
        char dossier[300];
        strcpy(dossier,ch1);
        strcat(dossier,email);
@@ -78,7 +78,7 @@ int  nouvel_utilisateur(char *email , char *mdp)
        {
         printf("Erreur  de création du fichier\n");
        }
-       char cm[200]="../../RSA-DataSafe/rsa/";
+       char cm[200]="rsa/";
        strcat(cm,nom);
        FILE *fichier=fopen(cm,"a");
        char ligne [300]; 
@@ -102,8 +102,8 @@ int  nouvel_utilisateur(char *email , char *mdp)
 int  Change_Email(char *email , char *mdp , char *newemail)
 {
   char nomtmp[]="test1.txt";
-  char dossier[300]="../../RSA-DataSafe/rsa/";
-  char dossier1[300]="../../RSA-DataSafe/rsa/";
+  char dossier[300]="rsa/";
+  char dossier1[300]="rsa/";
   strcat(dossier,nom);
   strcat(dossier1,nomtmp);
   FILE * fichier =fopen(dossier1,"w");
@@ -147,9 +147,9 @@ int  Change_Email(char *email , char *mdp , char *newemail)
      fclose(fichier1);
      remove(dossier);
      rename(dossier1,dossier);
-     strcpy(dossier,"../../RSA-DataSafe/rsa/");
+     strcpy(dossier,"rsa/");
      strcat(dossier,email);
-     strcpy(dossier1,"../../RSA-DataSafe/rsa/");
+     strcpy(dossier1,"rsa/");
      strcat(dossier1,newemail);
      rename(dossier,dossier1);
      return 0;
@@ -162,12 +162,12 @@ int  Change_Email(char *email , char *mdp , char *newemail)
 int  Change_MotDePasse (char*email , char *mdp , char* newmdp)
 {
   char nomtmp[20]="test1.txt";
-  char dossier[100]="../../RSA-DataSafe/rsa/";
+  char dossier[100]="rsa/";
   char dossier1[100];
   strcat(dossier,nomtmp);
   FILE * fichier =fopen(dossier,"w");
   strcpy(dossier1,dossier);
-  strcpy(dossier,"../../RSA-DataSafe/rsa/");
+  strcpy(dossier,"rsa/");
   strcat(dossier,nom);
   FILE *fichier1 =fopen(dossier,"r");
   char *line_buf = NULL;
@@ -218,12 +218,12 @@ int  Change_MotDePasse (char*email , char *mdp , char* newmdp)
 int  change_cle(informations * InfoUser,cle_publique * pub ,cle_prive * priv)
 {
   char dossier[200];
-  strcpy(dossier,"../../RSA-DataSafe/rsa/");
+  strcpy(dossier,"rsa/");
   strcat(dossier,InfoUser->email);
   strcat(dossier,"/");
   strcat(dossier,"Cles.txt");
   char tmp[200];
-  strcpy(tmp,"../../RSA-DataSafe/rsa/");
+  strcpy(tmp,"rsa/");
   strcat(tmp,InfoUser->email);
   strcat(tmp,"/Cles1.txt");
   FILE *fichier=fopen(dossier,"r");
@@ -358,7 +358,7 @@ int envoie_message(mail *m)
               strcpy(signature,"Signature Message:");
               strcat(signature,m->signature);
               char *chemin=malloc(500*sizeof(char));
-              strcpy(chemin,"../../RSA-DataSafe/rsa/");
+              strcpy(chemin,"rsa/");
               strcat(chemin,m->env_email);
               strcat(chemin,"/");
               strcat(chemin,"MessageEnvoyer.txt");
@@ -370,7 +370,7 @@ int envoie_message(mail *m)
               {
                 return ERR_ERCI;
               }
-              strcpy(chemin,"../../RSA-DataSafe/rsa/");
+              strcpy(chemin,"rsa/");
               strcat(chemin,m->dest_email);
               strcat(chemin,"/");
               strcat(chemin,"MessageIndesirable.txt");
@@ -403,7 +403,7 @@ int envoie_message(mail *m)
               strcpy(message,"Message Envoyé:");
               strcat(message,m->message);
               char *chemin=malloc(500*sizeof(char));
-              strcpy(chemin,"../../RSA-DataSafe/rsa/");
+              strcpy(chemin,"rsa/");
               strcat(chemin,m->env_email);
               strcat(chemin,"/");
               strcat(chemin,"MessageEnvoyer.txt");
@@ -414,7 +414,7 @@ int envoie_message(mail *m)
               {
                 return ERR_ERCI;
               }
-              strcpy(chemin,"../../RSA-DataSafe/rsa/");
+              strcpy(chemin,"rsa/");
               strcat(chemin,m->dest_email);
               strcat(chemin,"/");
               strcat(chemin,"MessageInvisible.txt");
@@ -437,7 +437,7 @@ int  stocker_message(char *email , char*  message , char *boite)
 {   
     int res;
     char dossier[300];
-    strcpy(dossier,"../../RSA-DataSafe/rsa/");
+    strcpy(dossier,"rsa/");
     strcat(dossier,email);
     strcat(dossier,"/");
     strcat(dossier,boite);

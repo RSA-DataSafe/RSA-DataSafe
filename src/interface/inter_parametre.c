@@ -2,16 +2,16 @@
 
 void page_Parametre()
 {
-	imageP =gtk_image_new_from_file("../features/logo.png"); 
+	imageP =gtk_image_new_from_file("Icon/logo.png"); 
 	labelP= gtk_label_new ("Paramètres");
 	lbparametre= gtk_label_new ("");
 	gtk_widget_set_name (lbparametre,"bv");
 	gtk_widget_set_name (labelP,"Titre");
 
-	imageBP[0] = gtk_image_new_from_file("../features/accjaune.png");
-	imageBP[1] = gtk_image_new_from_file("../features/compte1.png");
-	imageBP[2] = gtk_image_new_from_file("../features/S.png");
-	imageBP[3] = gtk_image_new_from_file("../features/Dec3.png");
+	imageBP[0] = gtk_image_new_from_file("Icon/accjaune.png");
+	imageBP[1] = gtk_image_new_from_file("Icon/compte1.png");
+	imageBP[2] = gtk_image_new_from_file("Icon/S.png");
+	imageBP[3] = gtk_image_new_from_file("Icon/Dec3.png");
 	for (int i = 0  ;i < 4 ; ++i )
 	{
 		buttonP[i] = gtk_toggle_button_new(); 
@@ -137,15 +137,15 @@ void Slots_parametre(GtkWidget * sender , gpointer * data)
 void page_compte()
 {
 
-    imagecompte =gtk_image_new_from_file("../features/logo.png"); 
+    imagecompte =gtk_image_new_from_file("Icon/logo.png"); 
 	labelcompte= gtk_label_new ("Compte");
 	lbcompte= gtk_label_new ("");
 	gtk_widget_set_name (lbcompte,"bv");
 	gtk_widget_set_name (labelcompte,"Titre");
 
 
-	imagebtcomp[0] = gtk_image_new_from_file("../features/accjaune.png");
-	imagebtcomp[1] = gtk_image_new_from_file("../features/Dec3.png");
+	imagebtcomp[0] = gtk_image_new_from_file("Icon/accjaune.png");
+	imagebtcomp[1] = gtk_image_new_from_file("Icon/Dec3.png");
 	for (int i = 0  ;i < 2 ; ++i )
 	{
 		buttoncomp[i] = gtk_toggle_button_new(); 
@@ -299,14 +299,14 @@ void modificattion_donnes_compte(GtkWidget * sender , gpointer data)
 void page_securite()
 {
 
-	imagesecurite =gtk_image_new_from_file("../features/logo.png"); 
+	imagesecurite =gtk_image_new_from_file("Icon/logo.png"); 
 	labelsecurite= gtk_label_new ("Sécurité");
 	lbsecurite= gtk_label_new ("");
     gtk_widget_set_name (lbsecurite,"bv");
 	gtk_widget_set_name (labelsecurite,"Titre");
 
-	imagebsecurite[0] = gtk_image_new_from_file("../features/accjaune.png");
-	imagebsecurite[1] = gtk_image_new_from_file("../features/Dec3.png");
+	imagebsecurite[0] = gtk_image_new_from_file("Icon/accjaune.png");
+	imagebsecurite[1] = gtk_image_new_from_file("Icon/Dec3.png");
 	for (int i = 0  ;i < 2 ; ++i )
 	{
 		buttonsecurite[i] = gtk_toggle_button_new(); 

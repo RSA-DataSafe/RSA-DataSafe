@@ -2,8 +2,8 @@
 
 void  Page_d_inscription ()
 {
-	imagec[1] = gtk_image_new_from_file("../features/per.png"); 
-	minilogo[1] = gtk_image_new_from_file("../features/logo.png"); 
+	imagec[1] = gtk_image_new_from_file("Icon/per.png"); 
+	minilogo[1] = gtk_image_new_from_file("Icon/logo.png"); 
   	buttoni[0] = gtk_button_new_with_label ("Inscription");
 	buttoni[1] = gtk_button_new_with_label ("Connexion");
 	for (int i =0 ; i<4 ; i++) entreei[i] = gtk_entry_new();

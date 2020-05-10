@@ -2,7 +2,7 @@
 void page_dechiffrer()
 {
 
-	imageD =gtk_image_new_from_file("../features/logo.png"); 
+	imageD =gtk_image_new_from_file("Icon/logo.png"); 
 	labelD[0]= gtk_label_new ("Déchiffrement");
 	labelD[1]= gtk_label_new ("Ou");
 	lbdechiffrer= gtk_label_new ("");
@@ -10,8 +10,8 @@ void page_dechiffrer()
 	gtk_widget_set_name (labelD[0],"Titre");
 	gtk_widget_set_name (labelD[1],"Titre");
 
-	imageBD[0] = gtk_image_new_from_file("../features/accjaune.png");
-	imageBD[1] = gtk_image_new_from_file("../features/Dec3.png");
+	imageBD[0] = gtk_image_new_from_file("Icon/accjaune.png");
+	imageBD[1] = gtk_image_new_from_file("Icon/Dec3.png");
 	for (int i = 0  ;i < 2 ; ++i )
 	{
 		buttonD[i] = gtk_toggle_button_new(); 
