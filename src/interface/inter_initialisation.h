@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <gmp.h>
+#include "../structure/structure.h"
 #include "../gestion_fichier/lecture.h"
 #include "../gestion_fichier/ecriture.h"
 #include "../structure/structure.h"
@@ -26,7 +27,6 @@
 #include "../dechiffrement/dechiffrement.h"
 #include "../signature/signature.h"
 #include "../signature/sha3.h"
-#include "../structure/structure.h"
 
 
 

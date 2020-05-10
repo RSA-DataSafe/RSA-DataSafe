@@ -10,8 +10,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "inter_initialisation.h"
 #include "../structure/structure.h"
+#include "inter_initialisation.h"
 
 GtkWidget   *imageD  , *labelD[2] , *imageBD[2] , *buttonD[4] , *entreeD ,  *text_viewD; 
 GtkTextBuffer *bufferD , *bufferCD;

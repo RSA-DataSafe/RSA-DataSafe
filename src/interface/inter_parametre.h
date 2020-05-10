@@ -10,8 +10,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "inter_initialisation.h"
 #include "../structure/structure.h"
+#include "inter_initialisation.h"
 
 //parametres 
 	GtkWidget   *imageP , *labelP , *imageBP[4] ,*buttonP[4] ; 
