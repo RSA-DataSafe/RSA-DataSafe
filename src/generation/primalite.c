@@ -1,7 +1,6 @@
 #include <gmp.h>
 #include <time.h>
 #include "primalite.h"
-
 int temoin_de_miller(mpz_t a, mpz_t n){
 	mpz_t d, t,res;
 	mpz_inits(t,d,res, NULL);
