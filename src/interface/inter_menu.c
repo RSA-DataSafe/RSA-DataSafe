@@ -1,16 +1,16 @@
 #include "inter_menu.h"
 void page_Menu()
 {
-	imageM= gtk_image_new_from_file("../features/millogo.jpg"); 
+	imageM= gtk_image_new_from_file("Icon/millogo.jpg"); 
 	labelMenu = gtk_label_new ("Menu");
 	lbmenu= gtk_label_new ("");
 	gtk_widget_set_name (labelMenu,"Titre");
 	gtk_widget_set_name (lbmenu,"bv");
 
-	imageBM[0] = gtk_image_new_from_file("../features/Messagerie.png");
-	imageBM[1] = gtk_image_new_from_file("../features/Chiffrer.png");
-	imageBM[2] = gtk_image_new_from_file("../features/Parametre.png");
-	imageBM[3] = gtk_image_new_from_file("../features/Dechiffrer.png");
+	imageBM[0] = gtk_image_new_from_file("Icon/Messagerie.png");
+	imageBM[1] = gtk_image_new_from_file("Icon/Chiffrer.png");
+	imageBM[2] = gtk_image_new_from_file("Icon/Parametre.png");
+	imageBM[3] = gtk_image_new_from_file("Icon/Dechiffrer.png");
 	for (int i = 0  ;i < 4 ; ++i )
 	{
 		buttonM[i] = gtk_toggle_button_new(); 
