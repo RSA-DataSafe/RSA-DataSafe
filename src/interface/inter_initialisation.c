@@ -8,7 +8,7 @@ void CSS() {
   gtk_style_context_add_provider_for_screen(screen, GTK_STYLE_PROVIDER(provider),
   	GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
   GError *error=NULL;
-  gtk_css_provider_load_from_path(provider,"interface/style.css",&error);
+  gtk_css_provider_load_from_path(provider,"src/interface/style.css",&error);
   if (error!=NULL)
   {
     fprintf(stderr,"Probleme dans le fichier css: %s !\n",error->message);
@@ -49,7 +49,7 @@ void initialisation()
     gtk_container_add(GTK_CONTAINER( MainWindow),GTK_WIDGET (stack));
     
     // le peyit logo en petit  en haut agauche 
-    icon = create_pixbuf("../features/logo.jpeg");  
+    icon = create_pixbuf("/Icon/logo.jpeg");  
     //on a une pile de fenetre 
 	  // qui contenu dans la fenetre principale 
 	  // pour changer de fenetre on change juste le haut de ka stack 
@@ -96,7 +96,7 @@ void initialisation()
 void page_ouverture()
 {
 
- imageacc = gtk_image_new_from_file("../features/logo.jpeg"); 
+ imageacc = gtk_image_new_from_file("Icon/logo.jpeg"); 
  gtk_box_pack_start (GTK_BOX(accueil),GTK_WIDGET(imageacc),TRUE,TRUE,0);
 }
 
