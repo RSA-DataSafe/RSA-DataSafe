@@ -1,5 +1,5 @@
 #include "ecriture.h"
-char nom[]="connexion";
+char nom[]="connexion.txt";
 
 int  nouvel_utilisateur(char *email , char *mdp)
 {
