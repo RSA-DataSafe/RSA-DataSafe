@@ -30,7 +30,7 @@ block *oaep_1(block *b) {
     for(int i = 0; i < b->nb_block; i++) {
         extraction(x, y, b->tab[i]);
         oaep_block(x, y, m, r);
-        shift_gauche(x, 256);
+        shift_gauche(m, 256);
         mpz_set(b->tab[i], m);
         mpz_add(b->tab[i], b->tab[i], r);
     }
