@@ -8,6 +8,7 @@
 #include <glib/gi18n.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <glib.h>
+#include "structure/structure.h"
 #include "interface/inter_connexion.h"
 #include "interface/inter_inscription.h"
 #include "interface/inter_menu.h"
@@ -15,7 +16,6 @@
 #include "interface/inter_dechiffrer.h"
 #include "interface/inter_messagerie.h"
 #include "interface/inter_parametre.h"
-#include "structure/structure.h"
 #include "generation/generation_cle.h"
 #include "chiffrement/chiffrement.h"
 #include "dechiffrement/dechiffrement.h"

@@ -10,9 +10,9 @@
 #include <glib/gi18n.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <glib.h>
-#include "inter_initialisation.h"
 #include <string.h>
 #include "../structure/structure.h"
+#include "inter_initialisation.h"
 
 GtkWidget  *button[2] , *entree[2], *label[4] ,*PEM;
 GtkWidget  *MAIN , *horiz1; 

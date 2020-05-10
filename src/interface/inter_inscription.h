@@ -10,8 +10,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "inter_initialisation.h"
 #include "../structure/structure.h"
+#include "inter_initialisation.h"
 
 //inscroption
 	GtkWidget   *buttoni[2]  , *entreei[4], *labeli[5] ;
