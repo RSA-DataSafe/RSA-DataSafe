@@ -36,7 +36,7 @@ char * conversion_mpz_char( message * m ) {
 	for(int i = taille ; i > 0 ; i--) {
 
 		mpz_set(tmp, m->nombre);
-		mpz_tdiv_q_2exp(tmp, tmp, (taille -i)*8 );
+		mpz_div_2exp(tmp, tmp, max - (i + 1 ) * 8 );
 		mpz_and(tmp, tmp, AND);
 		ret[i] = mpz_get_ui(tmp);
 		
