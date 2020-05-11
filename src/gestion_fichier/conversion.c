@@ -23,7 +23,7 @@ char * conversion_mpz_char( message * m ) {
 	mpz_init(mpz_taille);
 	mpz_div_ui(mpz_taille, m->taille, 8);
 	int taille = mpz_get_ui(mpz_taille);
-	char * ret = malloc(sizeof(char) * ( taille + 1 ) ); // On divise par la longueur d'un byte + \0 
+	char * ret = malloc(sizeof(char) * ( taille + 1 ) );  
 
 	mpz_t tmp;
 	mpz_init(tmp);
@@ -54,6 +54,7 @@ char * conversion_mpz_char( message * m ) {
 }
 
 message *conversion_hexa_mpz ( char *chaine ) {
+	//A revoir 
 	int len_chaine = strlen(chaine);
 
 	message *m = malloc(sizeof(message));
@@ -83,6 +84,7 @@ message *conversion_hexa_mpz ( char *chaine ) {
 }
 
 char *conversion_mpz_hexa ( message *m ) {
+	//A revoir 
 	mpz_t mpz_taille;
 	mpz_init(mpz_taille);
 	mpz_div_ui(mpz_taille, m->taille, 4);
