@@ -112,7 +112,7 @@ void page_chargementD()
     mpz_init_set_str(chiff->nombre ,chaineD, 10);
     
     mpz_set_ui (chiff->taille , mpz_sizeinbase(chiff->nombre,2));
-    chiff   = conversion_char_mpz(chaineD);
+    chiff = conversion_hexa_mpz(chaineD);
     gmp_printf ("chiff %Zd",chiff -> nombre );
     printf("j ss avant dechiffrement \n");
     messageclair=dechiffrement(chiff, &utilisateur.prive);
