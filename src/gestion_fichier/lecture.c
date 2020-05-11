@@ -159,7 +159,7 @@ int lire_boite(char *email, boite * b) {
 	 }
 	 
 	 // Parser de lecture on lit caractere par caractere: 
-	 do {
+	  while(c != EOF) {
 		 debut: // etiquette qui permet de revenir au début. De '\n' à ':' se trouve des caractère non utilisé
 		  c = fgetc(fichier);
 		 if(c == ':' || c == '\n') { 
@@ -181,10 +181,11 @@ int lire_boite(char *email, boite * b) {
 						i++;
 					} while(c != '\n');
 					alternateur = 0;
+					buff0[i] = '\0';
 					if(strcmp(buff0,"sig") == 0) {
-						b->m[nbr_mail_traiter].signer = 0;
-					} else {
 						b->m[nbr_mail_traiter].signer = 1;
+					} else {
+						b->m[nbr_mail_traiter].signer = 0;
 					}
 					free(buff0);
 					donnee_structurelle++;
@@ -230,28 +231,26 @@ int lire_boite(char *email, boite * b) {
 				}
 				// Récuperer la signature
 				if(donnee_structurelle == 3) {
-					if(b->m[nbr_mail_traiter].signer != 0) {
-						char * buff3 = calloc(sizeof(char) * 2000,sizeof(char));
-						b->m[nbr_mail_traiter].signature = calloc(sizeof(char) * 2000,sizeof(char));
-						if(buff3 == NULL || b->m[nbr_mail_traiter].signature == NULL) {
-							return ERR_LECT;
-						}
-						int d = 0;
-						do {
-							c = fgetc(fichier);
-							buff3[d] = c;
-							d++;
-						} while(c!= '\n');
-						memcpy(b->m[nbr_mail_traiter].signature,buff3,strlen(buff3));
-						free(buff3);
+					char * buff3 = calloc(sizeof(char) * 2000,sizeof(char));
+					b->m[nbr_mail_traiter].signature = calloc(sizeof(char) * 2000,sizeof(char));
+					if(buff3 == NULL || b->m[nbr_mail_traiter].signature == NULL) {
+						return ERR_LECT;
 					}
+					int d = 0;
+					do {
+						c = fgetc(fichier);
+						buff3[d] = c;
+						d++;
+					} while(c!= '\n');
+					memcpy(b->m[nbr_mail_traiter].signature,buff3,strlen(buff3));
+					free(buff3);
 					alternateur = 0;
 					nbr_mail_traiter ++;
 					donnee_structurelle = 0; // remise à zéro des données 
 					goto debut;
 				}
 			}
-	 } while(c != EOF);
+	 }
 	 b->nb_mail = nbr_mail_traiter;
 	 return 0;	
 }
