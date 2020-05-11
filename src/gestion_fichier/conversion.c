@@ -44,7 +44,7 @@ char * conversion_mpz_char( message * m ) {
 	}
    char *chaine =malloc(sizeof(char)*(taille+1));
 
-	for(int i=1;i<taille;i++)
+	for(int i=1;i<=taille;i++)
 	{
 		chaine[i-1]=ret[i];
 
