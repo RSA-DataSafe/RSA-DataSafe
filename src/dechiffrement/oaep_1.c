@@ -26,10 +26,29 @@ block *oaep_1(block *b) {
     mpz_t tmp;
     mpz_init(tmp);
 
+    message *in = malloc(sizeof(message));
+    mpz_init(in->nombre);
+    mpz_init(in->taille);
+
+    mpz_t taille;
+    mpz_init(taille);
+
     // Code
     for(int i = 0; i < b->nb_block; i++) {
         extraction(x, y, b->tab[i]);
-        oaep_block(x, y, m, r);
+
+        mpz_set(in->nombre, x);
+        mpz_set_ui(in->taille, 256);
+        mpz_set_ui(taille, 256);
+        mgf(r, in, taille);
+        mpz_xor(r, r, y);
+
+        mpz_set(in->nombre, r);
+        mpz_set_ui(in->taille, 1792);
+        mpz_set_ui(taille, 1792);
+        mgf(m, in, taille);
+        mpz_xor(m, m, x);
+
         shift_gauche(m, 256);
         mpz_set(b->tab[i], m);
         mpz_add(b->tab[i], b->tab[i], r);
@@ -41,6 +60,10 @@ block *oaep_1(block *b) {
     mpz_clear(x);
     mpz_clear(m);
     mpz_clear(r);
+    mpz_clear(taille);
+    mpz_clear(in->nombre);
+    mpz_clear(in->taille);
+    free(in);
 
     // return
     return b; // sert à rien mais bon ...

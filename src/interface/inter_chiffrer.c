@@ -177,8 +177,7 @@ int page_resultatC(gpointer * data)
 	
   		
 	  //######################"""""""""""""
-		  chaine=malloc(2048*sizeof(char));
-		  mpz_get_str(chaine,10,messagechiff->nombre);
+		  chaine=conversion_mpz_hexa(messagechiff);
 		  gtk_text_buffer_set_text (bufferCC,chaine, -1);
 			
 
