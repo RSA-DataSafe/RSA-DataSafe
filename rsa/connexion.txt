@@ -1,11 +1,5 @@
 test_email@email
 mdp
-sf
-sf
-g
-g
-h
-h
 user@email.com
 user
 test@email.com

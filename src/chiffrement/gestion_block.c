@@ -40,7 +40,7 @@ block *creer_block_oaep(message *m,message *encodage, mpz_t donnee_alea) {
     if (mpz_cmp_ui(rest, 0) != 0) {
         mpz_add_ui(nb_block, nb_block, 1);
         int i_rest = mpz_get_ui(rest);
-        int zero_adding = 1536- i_rest;
+        int zero_adding = 1536 - i_rest;
         mpz_mul_2exp(m->nombre,m->nombre,zero_adding);
         mpz_add_ui(m->taille, m->taille,zero_adding);
        
@@ -138,7 +138,7 @@ message *recupere_message_oaep(block *b){
     mpz_init(m->nombre);
     mpz_set(m->nombre,b->tab[0]);
     
-    for(int i = 0; i < b->nb_block; i++){
+    for(int i = 1; i < b->nb_block; i++){
          mpz_mul_2exp(m->nombre,m->nombre,2048);
          mpz_ior(m->nombre,m->nombre,b->tab[i]);   
     } 
