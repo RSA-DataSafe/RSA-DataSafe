@@ -119,6 +119,7 @@ void page_chargementC()
   
     gtk_text_buffer_get_end_iter(bufferC,&end);
     chaine= (char*)gtk_text_buffer_get_text(bufferC,&start, &end,FALSE);
+	printf("%s\n", chaine);
     
      //  #####
     codage = malloc (sizeof (message));
