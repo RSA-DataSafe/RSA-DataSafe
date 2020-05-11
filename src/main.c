@@ -29,7 +29,7 @@ int Lancement()
 
 int main(int argc , char ** argv)
 {
-	
+	/*
     gtk_init(&argc, &argv);
 	
 
@@ -57,5 +57,52 @@ int main(int argc , char ** argv)
    gtk_widget_show_all(MainWindow);
    gtk_main();
     
-    return EXIT_SUCCESS;
+    return EXIT_SUCCESS;*/
+	message *m  = malloc(sizeof(message));
+    mpz_init(m->nombre);
+    mpz_init(m->taille);
+    mpz_set_ui(m->nombre, 92);
+    mpz_set_ui(m->taille, 8);
+
+	message *encodage  = malloc(sizeof(message));
+    mpz_init(encodage->nombre);
+    mpz_init(encodage->taille);
+
+	mpz_t alea; mpz_init(alea);
+
+	mpz_out_str(0, 2, m->nombre);
+	printf("\n");
+	char *ch = conversion_mpz_char(m);
+	printf("%s\n", ch);
+	free(ch);
+
+	block *b = creer_block_oaep(m, encodage, alea);
+	oaep(b, alea);
+	message *chiff = recupere_message_oaep(b);
+
+	block *h = creer_block_oaep_1(chiff);
+	oaep_1(h);
+	message *clair = recupere_message_oaep_1(h);
+
+	mpz_out_str(0, 2, clair->nombre);
+	printf("\n");
+
+	char *sh = conversion_mpz_char(clair);
+	printf("%s\n", sh);
+	free(sh);
+
+	for(int i = 0; i < (b->nb_block); i++) {
+        mpz_clear(b->tab[i]);
+    }
+    free(b->tab); 
+	for(int i = 0; i < (b->nb_block); i++) {
+        mpz_clear(h->tab[i]);
+    }
+    free(h->tab);
+	mpz_clears(m->nombre, m->taille, encodage->nombre, encodage->taille, alea, NULL);
+	free(m);
+	free(encodage);
+	free(clair);
+	free(b);
+	free(h);
 }
