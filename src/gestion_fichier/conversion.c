@@ -22,8 +22,10 @@ char * conversion_mpz_char( message * m ) {
 	mpz_t mpz_taille;
 	mpz_init(mpz_taille);
 	mpz_div_ui(mpz_taille, m->taille, 8);
+
 	int taille = mpz_get_ui(mpz_taille);
-	char * ret = malloc(sizeof(char) * ( taille + 1 ) );  
+	char * ret = malloc(sizeof(char) * ( taille + 1 ) ); // On divise par la longueur d'un byte + \0 
+	ret[taille] = '\0';
 
 	mpz_t tmp;
 	mpz_init(tmp);
@@ -33,24 +35,15 @@ char * conversion_mpz_char( message * m ) {
 
 	mpz_set_ui(AND, 255);
 
-	for(int i = taille ; i > 0 ; i--) {
+	int max = mpz_get_ui(m->taille);
 
+	for(int i = taille - 1 ; i >= 0 ; i--) {
 		mpz_set(tmp, m->nombre);
 		mpz_div_2exp(tmp, tmp, max - (i + 1 ) * 8 );
 		mpz_and(tmp, tmp, AND);
 		ret[i] = mpz_get_ui(tmp);
-		
-		
 	}
-   char *chaine =malloc(sizeof(char)*(taille+1));
-
-	for(int i=1;i<=taille;i++)
-	{
-		chaine[i-1]=ret[i];
-
-	}
-	
-	return chaine;
+	return ret;
 }
 
 message *conversion_hexa_mpz ( char *chaine ) {

@@ -75,6 +75,9 @@ int main(int argc , char ** argv)
 	char *ch = conversion_mpz_char(m);
 	printf("%s\n", ch);
 	free(ch);
+	ch = conversion_mpz_hexa(m);
+	printf("%s\n", ch);
+	free(ch);
 
 	block *b = creer_block_oaep(m, encodage, alea);
 	oaep(b, alea);
@@ -88,6 +91,9 @@ int main(int argc , char ** argv)
 	printf("\n");
 
 	char *sh = conversion_mpz_char(clair);
+	printf("%s\n", sh);
+	free(sh);
+	sh = conversion_mpz_hexa(clair);
 	printf("%s\n", sh);
 	free(sh);
 
