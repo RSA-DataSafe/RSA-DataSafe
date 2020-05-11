@@ -138,7 +138,7 @@ message *recupere_message_oaep(block *b){
     mpz_init(m->nombre);
     mpz_set(m->nombre,b->tab[0]);
     
-    for(int i = 1; i < b->nb_block; i++){
+    for(int i = 0; i < b->nb_block; i++){
          mpz_mul_2exp(m->nombre,m->nombre,2048);
          mpz_ior(m->nombre,m->nombre,b->tab[i]);   
     } 
