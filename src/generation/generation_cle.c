@@ -52,26 +52,23 @@ void calculerD(cle_prive *prive, cle_publique *publique){
 	mpz_set(prive->n,publique->n);
 	mpz_clears(u,v,NULL);
 }
-
 void GenererPQRSA(mpz_t p, mpz_t q, mpz_t n, int taille){
-
-         mpz_t t; 
+	 mpz_t t; 
          mpz_init(t);
          mpz_set_ui(t,40);
+			
+
 		do{
 			bbs(p,taille);
-			}while(mpz_cmp_ui(p,0)==0|| miller_rabbin(p,t)!=1);
-				mpz_set(n,p);
+		}while(mpz_cmp_ui(p,0)==0 || miller_rabbin(p,t)!=1);
 
 		do{
-			bbs(q,taille);
-
-		}while(mpz_cmp_ui(q,0)==0 || miller_rabbin(q,t)!=1|| mpz_cmp(p,q)==0);
-			mpz_mul(n,n,q);
+			bbs(q,taille-1);
+			mpz_mul(n,p,q);
 	
-
-
-   
+		}while( mpz_cmp(p,q)==0 || mpz_cmp_ui(q,0)==0 || miller_rabbin(q,t)!=1|| (mpz_sizeinbase(n,2)!=2048));
+		
+	mpz_clear(t);
 	}
 void genere_cle(cle_publique *publique, cle_prive *prive, int taille){
 
