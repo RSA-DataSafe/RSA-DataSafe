@@ -29,7 +29,7 @@ int Lancement()
 
 int main(int argc , char ** argv)
 {
-	
+	/*
     gtk_init(&argc, &argv);
 	
 
@@ -57,8 +57,14 @@ int main(int argc , char ** argv)
    gtk_widget_show_all(MainWindow);
    gtk_main();
     
-    return EXIT_SUCCESS;
-/*	message *m  = malloc(sizeof(message));
+    return EXIT_SUCCESS;*/
+	cle_publique pub;
+	cle_prive prive;
+	mpz_inits(pub.n, pub.e, prive.n, prive.d, NULL);
+	genere_cle(&pub, &prive, 1024);
+	printf("%ld\n", mpz_sizeinbase(pub.n, 2));
+
+	message *m  = malloc(sizeof(message));
     mpz_init(m->nombre);
     mpz_init(m->taille);
     mpz_set_ui(m->nombre, 92);
@@ -71,32 +77,60 @@ int main(int argc , char ** argv)
 	mpz_t alea; mpz_init(alea);
 
 	mpz_out_str(0, 2, m->nombre);
-	printf("\n");
+	printf("\n\n");
 	char *ch = conversion_mpz_char(m);
-	printf("%s\n", ch);
+	printf("%s\n\n", ch);
 	free(ch);
 	ch = conversion_mpz_hexa(m);
-	printf("%s\n", ch);
+	printf("%s\n\n", ch);
 	free(ch);
+
+	mpz_t tmp;
+	mpz_init(tmp);
+	mpz_powm(tmp, m->nombre, pub.e, pub.n);
+	mpz_powm(tmp, tmp, prive.d, prive.n);
+	printf("clair : \n");
+	mpz_out_str(0, 2, m->nombre);
+	printf("\n\n");
+	printf("clair touvé : \n");
+	mpz_out_str(0, 2, tmp);
+	printf("\n\n");
 
 	block *b = creer_block_oaep(m, encodage, alea);
 	oaep(b, alea);
+	for (int i = 0; i < b->nb_block; i++)
+	{
+		mpz_set(tmp, b->tab[i]);
+		mpz_powm(b->tab[i], tmp, pub.e, pub.n);
+	}
+	printf("oaep : \n");
+	mpz_out_str(0, 2, b->tab[0]);
+	printf("\n\n");
 	message *chiff = recupere_message_oaep(b);
 
 	block *h = creer_block_oaep_1(chiff);
+	printf("oaep-1 : \n");
+	mpz_out_str(0, 2, h->tab[0]);
+	printf("\n\n");
+	for (int i = 0; i < h->nb_block; i++)
+	{
+		mpz_set(tmp, h->tab[i]);
+		mpz_powm(h->tab[i], tmp, prive.d, prive.n);
+	}
 	oaep_1(h);
 	message *clair = recupere_message_oaep_1(h);
 
 	mpz_out_str(0, 2, clair->nombre);
-	printf("\n");
+	printf("\n\n");
 
 	char *sh = conversion_mpz_char(clair);
-	printf("%s\n", sh);
+	printf("%s\n\n", sh);
 	free(sh);
 	sh = conversion_mpz_hexa(clair);
-	printf("%s\n", sh);
+	printf("%s\n\n", sh);
 	free(sh);
 
+	mpz_clear(tmp);
 	for(int i = 0; i < (b->nb_block); i++) {
         mpz_clear(b->tab[i]);
     }
@@ -105,10 +139,11 @@ int main(int argc , char ** argv)
         mpz_clear(h->tab[i]);
     }
     free(h->tab);
+	mpz_clears(pub.n, pub.e, prive.n, prive.d, NULL);
 	mpz_clears(m->nombre, m->taille, encodage->nombre, encodage->taille, alea, NULL);
 	free(m);
 	free(encodage);
 	free(clair);
 	free(b);
-	free(h);*/
+	free(h);
 }
