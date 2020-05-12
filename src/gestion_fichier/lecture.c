@@ -54,50 +54,55 @@ int chercher_utilisateur(char *email, char *mdp) {
 	return est_present;
 }
 
-int recupere_cle_publique(char * email, char * mdp, cle_publique * publique) {
-	
+int recupere_cle_publique(char * email, char * mdp, cle_publique * publique) {	
 	char * chemin = calloc(sizeof(char)*MAX_CARACT + sizeof("rsa/") + sizeof("/Cles.txt"),sizeof(char));
-	char * e = NULL;
-	char * d = NULL;
-	char * n = NULL;
+	/* Buffer temporaire */
+	char * e = calloc(sizeof(char)*2048,sizeof(char));
+	char * n = calloc(sizeof(char)*2048,sizeof(char));
+	/* ----------------- */
 	
-	if(chemin == NULL) {
+	if(chemin == NULL || e == NULL || n == NULL) {
 		return ERR_LECT;
 	}
 	
 	strcat(chemin,"rsa/");
 	strcat(chemin,email);
 	strcat(chemin,"/Cles.txt");
-
-	FILE * fichier = fopen(chemin,"r");		
-	free(chemin);
 	
-	if(fichier == NULL) {
+	char * res = lire_fichier(chemin);	// Ouverture et lecture du fichier 
+	free(chemin);	
+		
+	if(strcmp(res,"erreur lecture") == 0) {
 		return ERR_LECT;
 	}
-	
-	size_t bufsize = 0;
-	
-	if(getline(&d,&bufsize,fichier) == -1) return ERR_LECT;
-	free(d);
-	if(getline(&e,&bufsize,fichier) == -1) return ERR_LECT;
+	int head = 0;	
+	while(res[head] != '\n') head++;
+	head++;
+	while(res[head] != '\n') {
+		e[head] = res[head];
+		head++;
+	}
 	mpz_init_set_str(publique->e,e,10);
 	free(e);
-	if(getline(&n,&bufsize,fichier) == -1) return ERR_LECT;
+	head++;
+	while(res[head] != '\0' && res[head] != '\n') { // Ca depend si on ouvre un fichier avec un ide qui ajoute un retour chariot à la fin
+		n[head] = res[head];
+		head++;
+	}
 	mpz_init_set_str(publique->n,n,10);
 	free(n);
-	fclose(fichier);
 	return 0;	
 }
 
 int recupere_cle_privee(char * email, char * mdp, cle_prive * prive) {
 	if(chercher_utilisateur(email,mdp) != ERR_LECT) {
 		char * chemin = calloc(sizeof(char)*MAX_CARACT + sizeof("rsa/") + sizeof("/Cles.txt"),sizeof(char));
-		char * e = NULL;
-		char * d = NULL;
-		char * n = NULL;
+		/* Buffer temporaire */
+		char * d = calloc(sizeof(char)*2048,sizeof(char));
+		char * n = calloc(sizeof(char)*2048,sizeof(char));
+		/* ----------------- */
 		
-		if(chemin == NULL) {
+		if(chemin == NULL || d == NULL || n == NULL) {
 			return ERR_LECT;
 		}
 		
@@ -105,27 +110,28 @@ int recupere_cle_privee(char * email, char * mdp, cle_prive * prive) {
 		strcat(chemin,email);
 		strcat(chemin,"/Cles.txt");
 		
-		FILE * fichier = fopen(chemin,"r");	
+		char * res = lire_fichier(chemin);	// Ouverture et lecture du fichier 
 		free(chemin);	
-		
-		if(fichier == NULL) {
+			
+		if(strcmp(res,"erreur lecture") == 0) {
 			return ERR_LECT;
 		}
-		
-		size_t bufsize = 0;
-		
-		if(getline(&d,&bufsize,fichier) == -1) return ERR_LECT;
+		int head = 0;	
+		while(res[head] != '\n') {
+			d[head] = res[head];
+			head++;
+		}
 		mpz_init_set_str(prive->d,d,10);
 		free(d);
-		
-		if(getline(&e,&bufsize,fichier) == -1) return ERR_LECT;
-		free(e);
-		
-		if(getline(&n,&bufsize,fichier) == -1) return ERR_LECT;
+		head++;
+		while(res[head] != '\n') head++;
+		head++;
+		while(res[head] != '\0' && res[head] != '\n') { // Ca depend si on ouvre un fichier avec un ide qui ajoute un retour chariot à la fin
+			n[head] = res[head];
+			head++;
+		}
 		mpz_init_set_str(prive->n,n,10);
 		free(n);
-		
-		fclose(fichier);
 		return 0;
 	}
 	return ERR_LECT;
