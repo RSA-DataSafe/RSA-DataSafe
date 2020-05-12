@@ -29,7 +29,7 @@ int Lancement()
 
 int main(int argc , char ** argv)
 {
-	/*
+	
     gtk_init(&argc, &argv);
 	
 
@@ -57,8 +57,8 @@ int main(int argc , char ** argv)
    gtk_widget_show_all(MainWindow);
    gtk_main();
     
-    return EXIT_SUCCESS;*/
-	message *m  = malloc(sizeof(message));
+    return EXIT_SUCCESS;
+/*	message *m  = malloc(sizeof(message));
     mpz_init(m->nombre);
     mpz_init(m->taille);
     mpz_set_ui(m->nombre, 92);
@@ -110,5 +110,5 @@ int main(int argc , char ** argv)
 	free(encodage);
 	free(clair);
 	free(b);
-	free(h);
+	free(h);*/
 }
