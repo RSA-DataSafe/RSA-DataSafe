@@ -228,5 +228,5 @@ int miller_rabbin(mpz_t n, mpz_t tour){
 	mpz_clear(a);
 	mpz_clear(i);
 	return 1;
-
+//on rmpl mpz_powm par expo_mod (si expo_mod fonctionne)
 }
