@@ -264,12 +264,12 @@ int lire_boite(char *email, boite * b) {
 char *lire_fichier(char * chemin) {
 	char * res = calloc(sizeof(char)*5000,sizeof(char));
 	if(res == NULL) {
-		res[0] = -1;
+		res = "erreur lecture";
 		return res;
 	}
 	FILE * fichier = fopen(chemin,"r");
 	if(fichier == NULL) {
-		res[0] = -1;
+		res = "erreur lecture";
 		return res;
 	}
 	
