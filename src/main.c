@@ -29,8 +29,9 @@ int Lancement()
 
 int main(int argc , char ** argv)
 {
-	/*
-    gtk_init(&argc, &argv);
+
+	
+    /*gtk_init(&argc, &argv);
 	
 
     initialisation();
@@ -58,13 +59,7 @@ int main(int argc , char ** argv)
    gtk_main();
     
     return EXIT_SUCCESS;*/
-	cle_publique pub;
-	cle_prive prive;
-	mpz_inits(pub.n, pub.e, prive.n, prive.d, NULL);
-	genere_cle(&pub, &prive, 1024);
-	printf("%ld\n", mpz_sizeinbase(pub.n, 2));
-
-	message *m  = malloc(sizeof(message));
+	/*message *m  = malloc(sizeof(message));
     mpz_init(m->nombre);
     mpz_init(m->taille);
     mpz_set_ui(m->nombre, 92);
@@ -77,60 +72,32 @@ int main(int argc , char ** argv)
 	mpz_t alea; mpz_init(alea);
 
 	mpz_out_str(0, 2, m->nombre);
-	printf("\n\n");
+	printf("\n");
 	char *ch = conversion_mpz_char(m);
-	printf("%s\n\n", ch);
+	printf("%s\n", ch);
 	free(ch);
 	ch = conversion_mpz_hexa(m);
-	printf("%s\n\n", ch);
+	printf("%s\n", ch);
 	free(ch);
-
-	mpz_t tmp;
-	mpz_init(tmp);
-	mpz_powm(tmp, m->nombre, pub.e, pub.n);
-	mpz_powm(tmp, tmp, prive.d, prive.n);
-	printf("clair : \n");
-	mpz_out_str(0, 2, m->nombre);
-	printf("\n\n");
-	printf("clair touvé : \n");
-	mpz_out_str(0, 2, tmp);
-	printf("\n\n");
 
 	block *b = creer_block_oaep(m, encodage, alea);
 	oaep(b, alea);
-	for (int i = 0; i < b->nb_block; i++)
-	{
-		mpz_set(tmp, b->tab[i]);
-		mpz_powm(b->tab[i], tmp, pub.e, pub.n);
-	}
-	printf("oaep : \n");
-	mpz_out_str(0, 2, b->tab[0]);
-	printf("\n\n");
 	message *chiff = recupere_message_oaep(b);
 
 	block *h = creer_block_oaep_1(chiff);
-	printf("oaep-1 : \n");
-	mpz_out_str(0, 2, h->tab[0]);
-	printf("\n\n");
-	for (int i = 0; i < h->nb_block; i++)
-	{
-		mpz_set(tmp, h->tab[i]);
-		mpz_powm(h->tab[i], tmp, prive.d, prive.n);
-	}
 	oaep_1(h);
 	message *clair = recupere_message_oaep_1(h);
 
 	mpz_out_str(0, 2, clair->nombre);
-	printf("\n\n");
+	printf("\n");
 
 	char *sh = conversion_mpz_char(clair);
-	printf("%s\n\n", sh);
+	printf("%s\n", sh);
 	free(sh);
 	sh = conversion_mpz_hexa(clair);
-	printf("%s\n\n", sh);
+	printf("%s\n", sh);
 	free(sh);
 
-	mpz_clear(tmp);
 	for(int i = 0; i < (b->nb_block); i++) {
         mpz_clear(b->tab[i]);
     }
@@ -139,11 +106,77 @@ int main(int argc , char ** argv)
         mpz_clear(h->tab[i]);
     }
     free(h->tab);
-	mpz_clears(pub.n, pub.e, prive.n, prive.d, NULL);
 	mpz_clears(m->nombre, m->taille, encodage->nombre, encodage->taille, alea, NULL);
 	free(m);
 	free(encodage);
 	free(clair);
 	free(b);
-	free(h);
+	free(h);*/
+  /* mpz_t res,num,exp,mod;
+   mpz_inits(res,num,exp,mod,NULL);
+   mpz_set_ui(num,245155);
+   mpz_set_ui(exp,56);
+   mpz_set_ui(mod,98745);
+	expo_mod( res,  num,  exp,  mod);
+	mpz_out_str(0,10,res);*/
+	cle_publique pub;
+	cle_prive prive;
+	mpz_inits(pub.e,pub.n,prive.d,prive.n,NULL);
+	genere_cle(&pub,&prive, 1024);
+
+	mpz_t chiff;
+	mpz_init(chiff);
+	mpz_t mess;
+	mpz_init(mess);
+	mpz_set_ui(mess,100);
+	mpz_powm(chiff, mess, pub.e, pub.n);
+	mpz_out_str(0,10,chiff);
+	printf("\n\n");
+	mpz_t dechi;
+	mpz_init(dechi);
+	mpz_powm(dechi,chiff,prive.d,prive.n);
+
+	printf("dechiff= \n");
+	mpz_out_str(0,10,dechi);
+	printf("\n\n");
+	printf("e= ");
+	mpz_out_str(0,10,pub.e);
+	printf("\n\n");
+	printf("n= ");
+	mpz_out_str(0,10,pub.n);
+	printf("\n\n");
+   printf("d= ");
+	mpz_out_str(0,10,prive.d);
+	printf("\n\n");
+
+
+	/*message *chiffrer;
+	message m;
+	mpz_inits(m.nombre,m.taille,NULL);
+	mpz_set_ui(m.nombre,25);
+	mpz_set_ui(m.taille,mpz_sizeinbase(m.nombre,2));
+
+	message encodage;
+	mpz_inits(encodage.nombre,encodage.taille,NULL);
+	mpz_init_set_str(encodage.nombre,"ASCCI",10);
+	mpz_out_str(0,10,encodage.nombre);
+	mpz_set_ui(encodage.taille,mpz_sizeinbase(encodage.nombre,2));
+ 
+ 
+    chiffrer=chiffrement(&m,&pub,&encodage);
+     printf("le chiffrement =");
+    mpz_out_str(0,10,chiffrer->nombre);
+    printf("\n\n");
+    message *dechiff;
+    dechiff=dechiffrement(chiffrer,&prive);
+    printf("le dechiffrement =");
+    mpz_out_str(0,10,dechiff->nombre);
+    printf("\n\n");*/
+   /* mpz_t nombre,tour;
+    mpz_inits(nombre,tour,NULL);
+    mpz_set_ui(nombre,117430);
+    mpz_set_ui(tour,2);
+    printf("%d\n", miller_rabbin(nombre,tour));*/
+
+
 }
