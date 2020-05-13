@@ -104,20 +104,18 @@ void page_chargementD()
     GtkTextIter end;
     gtk_text_buffer_get_start_iter(bufferD,&start);
     gtk_text_buffer_get_end_iter(bufferD,&end);
-    
     chaineD= (char*)gtk_text_buffer_get_text(bufferD,&start, &end,FALSE);
-    chiff = malloc (sizeof (message));
-    printf ("la taille de la chaine : %d\n" ,strlen (chaineD));
-    mpz_init (chiff->taille); 
-    mpz_init_set_str(chiff->nombre ,chaineD, 10);
-    
-    mpz_set_ui (chiff->taille , mpz_sizeinbase(chiff->nombre,2));
-    chiff = conversion_hexa_mpz(chaineD);
-    gmp_printf ("chiff %Zd",chiff -> nombre );
-    printf("j ss avant dechiffrement \n");
-    messageclair=dechiffrement(chiff, &utilisateur.prive);
-    printf("apres  dechiffrement \n");
 
+    chiff = malloc (sizeof (message));
+    
+    mpz_inits (chiff->taille,chiff->nombre,NULL); 
+    mpz_set_str(chiff->nombre,chaineD,10);
+    int a=mpz_sizeinbase(chiff->nombre,2);
+    mpz_set_ui (chiff->taille ,a );
+    printf("j ss avant dechiffrement et la taille %d \n",a);
+	gmp_printf("le mess  a dech %Zd\n",chiff->nombre);
+    messageclair=dechiffrement(chiff, &utilisateur.prive);
+    gmp_printf("le mess  apres dech %Zd\n",messageclair->nombre);
   windowD = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   gtk_window_set_transient_for (GTK_WINDOW(windowD),GTK_WINDOW(MainWindow));
   gtk_window_set_position (GTK_WINDOW(windowD), GTK_WIN_POS_CENTER);
@@ -161,12 +159,19 @@ int page_resultatD()
         gtk_widget_set_name (GTK_WIDGET(Frame),"miniT");	
 		GtkWidget *scrolled_window = gtk_scrolled_window_new (NULL , NULL);
 	 	bufferCD= gtk_text_buffer_new (NULL);
-		
-		mpz_get_str(chaineD,10,messageclair);
-		chaineD=conversion_mpz_char(messageclair);
-		printf("le mess %s\n",chaineD);
-		gtk_text_buffer_set_text (bufferCD,chaineD, -1);
 
+		//mpz_get_str(chaineD,0,messageclair->nombre);
+		chaineD = conversion_mpz_char(messageclair);
+		printf("le mess %s\n",chaineD);
+
+
+		/*chaineD=conversion_mpz_char(messageclair);
+		printf("le mess %s\n",chaineD);
+			char *sh=malloc(2048*sizeof(char));
+	mpz_get_str(sh,2,messageclair->nombre);
+	printf("le res en binaire %s\n",sh);
+	free(sh);*/
+		gtk_text_buffer_set_text (bufferCD,chaineD, -1);
 		text_viewCD= gtk_text_view_new_with_buffer (bufferCD);
 	   gtk_text_view_set_editable (GTK_TEXT_VIEW(text_viewCD), FALSE);
 	   gtk_container_set_border_width (GTK_CONTAINER (scrolled_window), 10);	   
