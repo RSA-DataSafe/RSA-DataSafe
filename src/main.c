@@ -29,7 +29,7 @@ int Lancement()
 
 int main(int argc , char ** argv)
 {
-	/*
+	
     gtk_init(&argc, &argv);
 	
 
@@ -57,7 +57,8 @@ int main(int argc , char ** argv)
    gtk_widget_show_all(MainWindow);
    gtk_main();
     
-    return EXIT_SUCCESS;*/
+    return EXIT_SUCCESS;
+    /*
 	cle_publique pub;
 	cle_prive prive;
 	mpz_inits(pub.n, pub.e, prive.n, prive.d, NULL);
@@ -131,7 +132,7 @@ int main(int argc , char ** argv)
 	char *sh = conversion_mpz_char(clair);
 	printf("%s\n\n", sh);
 	free(sh);
-	
+	*/
 
 	
 }
