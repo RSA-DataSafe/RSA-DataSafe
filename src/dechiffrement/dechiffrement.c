@@ -23,6 +23,10 @@ message* dechiffrement(message *c, cle_prive *prive) {
 	// OAEP^(-1)
 	oaep_1(b);
 	m = recupere_message_oaep_1(b);
+	for(int i = 0; i < (b->nb_block); i++) {
+        mpz_clear(b->tab[i]);
+    }
+    free(b->tab);
 
 
 	return m;
