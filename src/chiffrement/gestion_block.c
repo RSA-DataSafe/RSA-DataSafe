@@ -98,7 +98,9 @@ block *creer_block_oaep_1(message *m) {
     mpz_t nb_block;
     mpz_init(nb_block);
     mpz_div_ui(nb_block, m->taille, 2048);
-
+    if(mpz_cmp_ui(nb_block,0)==0)
+    	mpz_add_ui(nb_block, nb_block, 1);
+	
     block *b = malloc(sizeof(block));
     
     int int_nb_block = mpz_get_ui(nb_block);
