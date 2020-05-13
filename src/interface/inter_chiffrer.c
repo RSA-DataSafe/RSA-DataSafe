@@ -124,14 +124,17 @@ void page_chargementC()
    messageachiff = malloc (sizeof (message));
     codage = malloc (sizeof (message));
     mpz_inits (messageachiff->taille , codage->taille , messageachiff->nombre,codage->nombre,NULL ); 
-
+    //mpz_init_set_str(messageachiff->nombre ,chaine, 10);
     messageachiff=conversion_char_mpz(chaine );
     codage=conversion_char_mpz("ASCII" );
    
     mpz_set_ui (codage->taille , mpz_sizeinbase(codage->nombre,2));
-    gmp_printf("le mess  avant ch %Zd\n",messageachiff->nombre);
+		gmp_printf("le mess  avant ch %Zd\n",messageachiff->nombre);
 	
-        
+        char *sh=malloc(2048*sizeof(char));
+	sh=conversion_mpz_char(messageachiff );
+	printf("le truc apres cnv %s\n",sh);
+	free(sh);
     messagechiff=chiffrement(messageachiff, &utilisateur.publique , codage);
 		gmp_printf("le mess  apres ch %Zd\n",messagechiff->nombre);
 
