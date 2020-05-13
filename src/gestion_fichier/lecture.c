@@ -7,8 +7,6 @@
 #include "lecture.h"
 #include "erreur.h"
 
-#define MAX_CARACT 60
-
 int chercher_utilisateur(char *email, char *mdp) {
 	
 	FILE * fichier = NULL;
@@ -18,6 +16,7 @@ int chercher_utilisateur(char *email, char *mdp) {
 	if (fichier == NULL) {
 		return ERR_LECT;
 	}
+	// Variables email_tmp et mdp_tmp pour ajouté \n à la fin quand on va comparer chaque mail en lisant ligne par ligne
 	char * user = NULL;
 	char * mot_de_passe = NULL;	
 	char * email_tmp = calloc(sizeof(email) + 2, sizeof(char));
@@ -36,6 +35,7 @@ int chercher_utilisateur(char *email, char *mdp) {
 	
 	int est_present = ERR_LECT; // si l'email et mdp sont presents 
 	
+	// Lecture ligne par ligne
 	while(getline(&user,&bufsize,fichier) != -1) {
 		getline(&mot_de_passe,&bufsize,fichier);
 		if(strcmp(email_tmp,user) == 0) {
@@ -55,7 +55,7 @@ int chercher_utilisateur(char *email, char *mdp) {
 }
 
 int recupere_cle_publique(char * email, char * mdp, cle_publique * publique) {	
-	char * chemin = calloc(sizeof(char)*MAX_CARACT + sizeof("rsa/") + sizeof("/Cles.txt"),sizeof(char));
+	char * chemin = calloc(sizeof(char)*200 + sizeof("rsa/") + sizeof("/Cles.txt"),sizeof(char));
 	/* Buffer temporaire */
 	char * e = calloc(sizeof(char)*2048,sizeof(char));
 	char * n = calloc(sizeof(char)*2048,sizeof(char));
@@ -75,9 +75,13 @@ int recupere_cle_publique(char * email, char * mdp, cle_publique * publique) {
 	if(strcmp(res,"erreur lecture") == 0) {
 		return ERR_LECT;
 	}
-	int head = 0;	
+	// Automate de lecture (voir ecriture de comment est stoké les Cles): 
+
+	int head = 0;	 // tête de lecture
+	
 	while(res[head] != '\n') head++;
 	head++;
+	
 	while(res[head] != '\n') {
 		e[head] = res[head];
 		head++;
@@ -85,18 +89,20 @@ int recupere_cle_publique(char * email, char * mdp, cle_publique * publique) {
 	mpz_init_set_str(publique->e,e,10);
 	free(e);
 	head++;
+	
 	while(res[head] != '\0' && res[head] != '\n') { // Ca depend si on ouvre un fichier avec un ide qui ajoute un retour chariot à la fin
 		n[head] = res[head];
 		head++;
 	}
 	mpz_init_set_str(publique->n,n,10);
 	free(n);
+	
 	return 0;	
 }
 
 int recupere_cle_privee(char * email, char * mdp, cle_prive * prive) {
 	if(chercher_utilisateur(email,mdp) != ERR_LECT) {
-		char * chemin = calloc(sizeof(char)*MAX_CARACT + sizeof("rsa/") + sizeof("/Cles.txt"),sizeof(char));
+		char * chemin = calloc(sizeof(char)*200 + sizeof("rsa/") + sizeof("/Cles.txt"),sizeof(char));
 		/* Buffer temporaire */
 		char * d = calloc(sizeof(char)*2048,sizeof(char));
 		char * n = calloc(sizeof(char)*2048,sizeof(char));
@@ -116,22 +122,27 @@ int recupere_cle_privee(char * email, char * mdp, cle_prive * prive) {
 		if(strcmp(res,"erreur lecture") == 0) {
 			return ERR_LECT;
 		}
+		
 		int head = 0;	
+		
 		while(res[head] != '\n') {
 			d[head] = res[head];
 			head++;
 		}
+		
 		mpz_init_set_str(prive->d,d,10);
 		free(d);
 		head++;
 		while(res[head] != '\n') head++;
 		head++;
+		
 		while(res[head] != '\0' && res[head] != '\n') { // Ca depend si on ouvre un fichier avec un ide qui ajoute un retour chariot à la fin
 			n[head] = res[head];
 			head++;
 		}
 		mpz_init_set_str(prive->n,n,10);
 		free(n);
+		
 		return 0;
 	}
 	return ERR_LECT;
@@ -164,20 +175,19 @@ int lire_boite(char *email, boite * b) {
 		 return ERR_LECT;
 	 }
 	 
-	 // Parser de lecture on lit caractere par caractere: 
+	 // Automate de lecture on lit caractere par caractere: 
 	  while(c != EOF) {
-		 debut: // etiquette qui permet de revenir au début. De '\n' à ':' se trouve des caractère non utilisé
+		 debut: // etiquette qui permet de revenir au début. De '\n' à ':' se trouve des caractères non utilisées
 		  c = fgetc(fichier);
 		 if(c == ':' || c == '\n') { 
 			 alternateur = 1 - alternateur;
 			 c = fgetc(fichier);
 		 }
 		  if(alternateur == 1) {
-			  // Vérifié si message signé
+			  // Vérifier si message signé 
 			  if(donnee_structurelle == 0) {
 					char * buff0 = calloc(sizeof(char) * 10,sizeof(char));
 					if(buff0 == NULL) {
-						//fprintf(stderr,"Erreur d'allocation Mémoire");
 						return ERR_LECT;
 					}
 					int i = 0;
@@ -262,9 +272,9 @@ int lire_boite(char *email, boite * b) {
 }
 
 char *lire_fichier(char * chemin) {
-	char * res = calloc(sizeof(char)*5000,sizeof(char));
+	char * res = calloc((sizeof(char)*2048)*3 + (sizeof(char)* 5), sizeof(char));
 	if(res == NULL) {
-		res = "erreur lecture";
+		res = "erreur lecture"; // pour lecture des clés, la lettre 'r' ne sera pas presente
 		return res;
 	}
 	FILE * fichier = fopen(chemin,"r");
