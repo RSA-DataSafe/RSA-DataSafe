@@ -81,18 +81,20 @@ int recupere_cle_publique(char * email, char * mdp, cle_publique * publique) {
 	
 	while(res[head] != '\n') head++;
 	head++;
-	
+	int cmp1 = 0;
 	while(res[head] != '\n') {
-		e[head] = res[head];
+		e[cmp1] = res[head];
 		head++;
+		cmp++;
 	}
 	mpz_init_set_str(publique->e,e,10);
 	free(e);
 	head++;
-	
+	int cmp2 = 0;
 	while(res[head] != '\0' && res[head] != '\n') { // Ca depend si on ouvre un fichier avec un ide qui ajoute un retour chariot à la fin
-		n[head] = res[head];
+		n[cmp2] = res[head];
 		head++;
+		cmp2++;
 	}
 	mpz_init_set_str(publique->n,n,10);
 	free(n);
@@ -135,10 +137,11 @@ int recupere_cle_privee(char * email, char * mdp, cle_prive * prive) {
 		head++;
 		while(res[head] != '\n') head++;
 		head++;
-		
+		int cmp = 0;
 		while(res[head] != '\0' && res[head] != '\n') { // Ca depend si on ouvre un fichier avec un ide qui ajoute un retour chariot à la fin
-			n[head] = res[head];
+			n[cmp] = res[head];
 			head++;
+			cmp++;
 		}
 		mpz_init_set_str(prive->n,n,10);
 		free(n);
