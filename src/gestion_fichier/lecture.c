@@ -80,7 +80,7 @@ int recupere_cle_publique(char * email, char * mdp, cle_publique * publique) {
 	int head = 0;	
 	while(res[head] != '\n') head++;
 	head++;
-   char * etmp=malloc(sizeof(char)*3000);
+  
    
    int i=0;
 	while(res[head] != '\n') {
