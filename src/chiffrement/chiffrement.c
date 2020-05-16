@@ -21,7 +21,7 @@ message *chiffrement(message *m, cle_publique *publique, message *encodage) {
 
     // Code
     block *b = creer_block_oaep(m, encodage, alea);
-    b = oaep(b, alea);
+     oaep(b, alea);
 
     mpz_t tmp;
     mpz_init(tmp);
