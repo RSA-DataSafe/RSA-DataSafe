@@ -179,7 +179,7 @@ int lire_boite(char *email, boite * b) {
 	 }
 	 
 	 // Parser de lecture on lit caractere par caractere: 
-	  while(c != EOF) {
+	  do {
 		 debut: // etiquette qui permet de revenir au début. De '\n' à ':' se trouve des caractère non utilisé
 		  c = fgetc(fichier);
 		 if(c == ':' || c == '\n') { 
@@ -270,7 +270,7 @@ int lire_boite(char *email, boite * b) {
 					goto debut;
 				}
 			}
-	 }
+	 } while(c != EOF);
 	 b->nb_mail = nbr_mail_traiter;
 	 return 0;	
 }
