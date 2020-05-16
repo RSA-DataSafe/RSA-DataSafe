@@ -85,7 +85,7 @@ int recupere_cle_publique(char * email, char * mdp, cle_publique * publique) {
 	while(res[head] != '\n') {
 		e[cmp1] = res[head];
 		head++;
-		cmp++;
+		cmp1++;
 	}
 	mpz_init_set_str(publique->e,e,10);
 	free(e);
