@@ -1,34 +1,47 @@
 #include <gmp.h>
-
+#include <time.h>
+#include <stdlib.h>
 #include "../structure/structure.h"
 #include "../calcul/calcul.h"
-#include "../chiffrement/gestion_block.h"
-#include "oaep_1.h"
-#include "dechiffrement.h"
-#include <stdio.h>
-#include <stdlib.h>
+#include "chiffrement.h"
+#include "oaep.h"
+#include "gestion_block.h"
+message *chiffrement(message *m, cle_publique *publique, message *encodage) {
+    
+		
+    mpz_t alea;
+    mpz_init(alea);
 
-message* dechiffrement(message *c, cle_prive *prive) {
+    time_t t; 
+    srand(time(&t));
+    gmp_randstate_t etat;
+    gmp_randinit_default(etat);
+    gmp_randseed_ui(etat, rand());
+    mpz_urandomb(alea, etat, 256);
 
-	// Initialisation
-	message * m;
-	block * b; 
-	b = creer_block_oaep_1(c);
+    // Code
+    block *b = creer_block_oaep(m, encodage, alea);
+    b = oaep(b, alea);
 
-	// Code
-	// RSA
-	for (int i = 0; i < b->nb_block; i++) {
-		mpz_powm(b->tab[i], b->tab[i], prive->d, prive->n);
-	}
+    mpz_t tmp;
+    mpz_init(tmp);
 
-	// OAEP^(-1)
-	oaep_1(b);
-	m = recupere_message_oaep_1(b);
-	for(int i = 0; i < (b->nb_block); i++) {
+    for(int i = 0;i<(b->nb_block); i++) {
+        mpz_set(tmp, b->tab[i]);
+        mpz_powm(b->tab[i], tmp, publique->e, publique->n);
+    }
+
+    message *k = recupere_message_oaep(b);
+
+    // Clear
+    mpz_clears(tmp,alea,NULL);
+    for(int i = 0;i< (b->nb_block); i++) {
         mpz_clear(b->tab[i]);
     }
-    free(b->tab);
-
-
-	return m;
+    free(b); 
+		
+    // return
+    return k;
 }
+
+
