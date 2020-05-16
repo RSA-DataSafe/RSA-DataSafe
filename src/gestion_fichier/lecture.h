@@ -12,7 +12,7 @@ int chercher_utilisateur(char *email, char *mdp);
 /**
  * Permet de récupérer la clé publique d'un utilisateur dans le fichier correspondant.
  * @param email : email d'un utilisateur quelconque  
- * @parm mdp : le mot de passe de l'utilisateur 
+ * @param mdp : le mot de passe de l'utilisateur 
  * @param publique : clé publique
  * @retourne 0 si l'utilisateur existe sinon un des signaux d'erreur 
  * */
@@ -31,14 +31,14 @@ int recupere_cle_privee(char *email, char *mdp, cle_prive *prive);
  * Permet de lire dans une boite les mails s'y trouvant.
  * @param email : email de l'utilisateur
  * @param boite : boite à lire
- * @return retourne 0 si ça fonctionne, sinon un des signaux d'erreur
+ * @retourne 0 si ça fonctionne, sinon un des signaux d'erreur
  * */
 int lire_boite(char *email, boite *b);
 
 /**
  * Permet de lire dans un fichier
  * @param chemin : chemin du fichier
- * @return chaîne de caractère contenant le texte du fichier
+ * @retourne la chaîne de caractère contenant le texte du fichier
  */
 char *lire_fichier(char *chemin);
 
