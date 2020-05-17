@@ -40,19 +40,22 @@ message *sha3(message *m, int taille) {
     }
 
     // Pour chaque bloc, on xor un bloc avec la matrice puis on la traite (round, keccak-f)
-    int cnt = 0;
-    while (cnt<r->nb_block) {
-        for (int i=0; i<9; i++) {
-            mpz_t tmp;
-            mpz_init (tmp);
-            for (int j=0; j<64; j++) {
-                mpz_add_ui (tmp, tmp, mpz_tstbit (r->tab[cnt], ((i+1)*(j+1))%b_size) * pow (2, j));
+    for (int cnt=0; cnt<r->nb_block; cnt++) {
+        int indice = 1;
+        for (int i=0; i<5; i++) {
+            for (int j=0; j<5; j++) {
+                mpz_t tmp;
+                mpz_init (tmp);
+                for (int x=0; x<64; x++) {
+                    mpz_add_ui (tmp, tmp, mpz_tstbit (r->tab[cnt], (b_size/64)*x+indice%(b_size/64)));
+                    mpz_mul_2exp (tmp, tmp, 1);
+                }
+                mpz_xor (matrice[i][j], matrice[i][j], tmp);
+                mpz_clear (tmp);
+                indice++;
             }
-            mpz_xor (matrice[i%5][i%2], matrice[i%5][i%2], tmp);
-            mpz_clear (tmp);
         }
         round_sha3 (matrice, 24);
-        cnt++;
     }
 
     // on met le résultat final dans res
@@ -115,20 +118,33 @@ message *padding_sha3(message *m, int taille) {
 };
 
 block *decoupage_block(message* m, int taille) {
-    block *res = malloc (sizeof (res));                 // on réserve de l'espace mémoire pour res
-    res->tab = malloc (sizeof (mpz_t));                 // on réserve de l'espace mémoire pour res
-    int j = 0,cnt = 0;                                      // cnt comptera le nombre de blocs, j sert d'indice au parcours du bloc en cours
-    int m_size = mpz_get_ui (m->taille);                // on récupère la taille de m
-    for (int i=0; i+j<m_size; cnt++) {                  // tant que la lecture de m n'est pas terminée, i sert à marquer l'endroit du début d'un bloc sur m
-        res->tab = realloc (res->tab, sizeof (res) * cnt+1); // on réserve une nouvelle "case mémoire" pour le nouveau bloc à ajouter
-        mpz_init (res->tab[cnt]);                       // on initialise ce nouveau bloc à 0
-        for (j=0; j<taille; j++) {                      // on parcours sur m le bloc en cours
-            int tmp = mpz_tstbit (m->nombre, i+j);      // on récupère la valeur du bit à l'endroit où on se trouve
-            mpz_add_ui (res->tab[cnt], res->tab[cnt], pow (2*tmp, j));       // on ajoute le bit lu dans le bloc courant
-        }
-        i+=j;                                           // on met le "curseur" sur m à l'endroit qui correspond à la fin du bloc qu'on vient d'ajouter
+    // Initialisation de res
+    block *res = malloc (sizeof (res));
+
+    // On compte les blocs à créer dans m
+    int m_size = mpz_get_ui (m->taille), cnt_blocs = 1;
+    for (int i=1; i<m_size; i++) {
+        if (i%taille == 0) cnt_blocs++;
     }
-    res->nb_block = cnt;                                // on stocke le nombre de blocs
+
+    // On initialise les blocs dans res
+    res->nb_block = cnt_blocs;
+    res->tab = malloc (sizeof (mpz_t) * res->nb_block);
+    for (int i=0; i<res->nb_block; i++) {
+        mpz_init (res->tab[i]);
+    }
+
+    //On remplit les blocs
+    for (int i=0; i<res->nb_block; i++) {
+        for (int j=0; j<taille; j++) {
+            mpz_t tmp;
+            mpz_init (tmp);
+            mpz_ui_pow_ui (tmp, 2, j);
+            mpz_mul_ui (tmp, tmp, mpz_tstbit(m->nombre, i*taille+j));
+            mpz_add (res->tab[i], res->tab[i], tmp);
+            mpz_clear (tmp);
+        }
+    }
     return res;
 };
 
