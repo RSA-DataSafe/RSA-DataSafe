@@ -22,14 +22,14 @@ void calculPhi(mpz_t p, mpz_t q, mpz_t phi_n);
  * Calcul de la clé publique (n,e) tel que pgcd(e,phi(n)) = 1 et e < phi
  * @param publique : clé publique
  * */
-void calculerE(cle_publique *publique,mpz_t phi);
+void calculerE(cle_publique *publique);
 
 /**
  * Calcul de l'exposant privé "d" tel que  (e*d = 1 mod phi)
  * @param prive : clé privé
  * @param publique : clé publique
  * */
-void calculerD(cle_prive *prive, cle_publique *publique,mpz_t phi);
+void calculerD(cle_prive *prive, cle_publique *publique);
 
 /**
  * Génère les clés

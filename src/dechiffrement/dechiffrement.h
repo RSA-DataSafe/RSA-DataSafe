@@ -7,6 +7,6 @@
  * @param prive : clé privée
  * @return message déchiffré
  */
-message *dechiffrement(massage *c, cle_prive *prive);
+message *dechiffrement(message *c, cle_prive *prive);
 
 #endif // !_dechiffrement_h

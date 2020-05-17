@@ -1,14 +1,14 @@
 #include <gmp.h>
 #include <time.h>
 #include <stdlib.h>
-
 #include "../structure/structure.h"
 #include "../calcul/calcul.h"
 #include "chiffrement.h"
-
+#include "oaep.h"
+#include "gestion_block.h"
 message *chiffrement(message *m, cle_publique *publique, message *encodage) {
     
-		// alea
+		
     mpz_t alea;
     mpz_init(alea);
 
@@ -21,28 +21,27 @@ message *chiffrement(message *m, cle_publique *publique, message *encodage) {
 
     // Code
     block *b = creer_block_oaep(m, encodage, alea);
-    b = oaep(b, alea);
+     oaep(b, alea);
 
     mpz_t tmp;
     mpz_init(tmp);
 
-    for(int i = 0; mpz_cmp_ui(b->nb_block, i) < 0; i++) {
+    for(int i = 0;i<(b->nb_block); i++) {
         mpz_set(tmp, b->tab[i]);
-        expo_mod(b->tab[i], tmp, publique->e, publique->n);
+        mpz_powm(b->tab[i], tmp, publique->e, publique->n);
     }
 
-    message *m = recupere_message_oaep(b);
+    message *k = recupere_message_oaep(b);
 
     // Clear
-    mpz_clear(tmp);
-    mpz_clear(alea);
-    for(int i = 0; mpz_cmp_ui(b->nb_block, i) < 0; i++) {
+    mpz_clears(tmp,alea,NULL);
+    for(int i = 0;i< (b->nb_block); i++) {
         mpz_clear(b->tab[i]);
     }
     free(b); 
 		
     // return
-    return m;
+    return k;
 }
 
 

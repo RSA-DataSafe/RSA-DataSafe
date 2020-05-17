@@ -20,16 +20,20 @@ GMP = -lgmp
 
 MATH = -lm
 
+GUI = `pkg-config --libs --cflags gtk+-3.0`
+GUIDEBUG = `pkg-config --libs gtk+-3.0`
+GUILIB = -L. lib.a
+
 # make
 
 all: config compil
 
 compil: $(OBJ)
-	@ $(CC) -o $(BINDIR)/$(EXEC) $(OBJ) $(GMP) $(MATH)
+	@ $(CC) -o $(BINDIR)/$(EXEC) $(OBJ) $(GMP) $(MATH) $(GUI) $(GUIDEBUG)
 	@ echo "Linking complete!"
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c $(DEPS)
-	@ $(CC) -c -o $@ $< $(GMP) $(MATH) $(FLAG)
+	@ $(CC) -c -o $@ $< $(GMP) $(MATH) $(FLAG) $(GUI) $(GUIDEBUG)
 	@ echo "Compiled "$@" successfully!"
 
 run:

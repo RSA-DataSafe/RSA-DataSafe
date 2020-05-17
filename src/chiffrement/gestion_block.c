@@ -1,5 +1,6 @@
 #include <gmp.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "../structure/structure.h"
 #include "../calcul/calcul.h"
@@ -26,23 +27,20 @@ void extraction(mpz_t x, mpz_t y, mpz_t b) {
     mpz_clear(tmp);
 }
 
-  
-       
-    	
-   block *creer_block_oaep(message *m,message *encodage, mpz_t donnee_alea) {
+block *creer_block_oaep(message *m,message *encodage, mpz_t donnee_alea) {
     //block's number 
     mpz_t nb_block;
     mpz_init(nb_block);
 
-    mpz_div_ui(nb_block, m->taille, 1536);
+    mpz_div_ui(nb_block, m->taille, 1528);
 
     mpz_t rest;
     mpz_init(rest);
-    mpz_mod_ui(rest, m->taille, 1536);
+    mpz_mod_ui(rest, m->taille, 1528);
     if (mpz_cmp_ui(rest, 0) != 0) {
         mpz_add_ui(nb_block, nb_block, 1);
         int i_rest = mpz_get_ui(rest);
-        int zero_adding = 1536- i_rest;
+        int zero_adding = 1528 - i_rest;
         mpz_mul_2exp(m->nombre,m->nombre,zero_adding);
         mpz_add_ui(m->taille, m->taille,zero_adding);
        
@@ -59,15 +57,15 @@ void extraction(mpz_t x, mpz_t y, mpz_t b) {
     mpz_init(tmp);
 
     b->tab = malloc(sizeof(mpz_t) * i_block);
-   for(int i = 1; i < i_block+1; i++) {
+   for(int i = 0; i < i_block; i++) {
         mpz_init(b->tab[i]);
-        mpz_tdiv_q_2exp(b->tab[i],m->nombre,i_taille-(i*1536));
+        mpz_tdiv_q_2exp(b->tab[i],m->nombre,i_taille-((i+1)*1528));
          
-        // Calcul 2^1536-1
+        // Calcul 2^1528-1
         mpz_t base;
       	mpz_init(base);   
         mpz_add_ui(base,base, 2);
-        mpz_pow_ui(base,base,1536);  
+        mpz_pow_ui(base,base,1528);  
         mpz_sub_ui(base,base, 1);  
         mpz_and(b->tab[i],base,b->tab[i]); 
         
@@ -79,9 +77,9 @@ void extraction(mpz_t x, mpz_t y, mpz_t b) {
     	//encodage+donne_alea
     for (int k = 0; k<i_block; k++) {
         mpz_mul_2exp(b->tab[k],b->tab[k],256);
-		mpz_and(b->tab[k],b->tab[k],encodage->nombre);
+	mpz_add(b->tab[k],b->tab[k],encodage->nombre);
         mpz_mul_2exp(b->tab[k],b->tab[k],256);
-        mpz_and(b->tab[k],b->tab[k],donnee_alea);
+        mpz_add(b->tab[k],b->tab[k],donnee_alea);
   }    
        
     	
@@ -92,9 +90,39 @@ void extraction(mpz_t x, mpz_t y, mpz_t b) {
     return b;
     
 }
+  
+       
+    	
 
+block *creer_block_oaep_1(message *m) {
+    mpz_t nb_block;
+    mpz_init(nb_block);
+    mpz_div_ui(nb_block, m->taille, 2048);
+    if(mpz_cmp_ui(nb_block,0)==0)
+    	mpz_add_ui(nb_block, nb_block, 1);
+	
+    block *b = malloc(sizeof(block));
+    
+    int int_nb_block = mpz_get_ui(nb_block);
+    b->nb_block = int_nb_block;
+    b->tab = malloc(sizeof(mpz_t) * int_nb_block);
 
+    mpz_t AND;
+    mpz_init(AND);
+    mpz_set_ui(AND, 1);
+    shift_gauche(AND, 2048);
+    mpz_sub_ui(AND, AND, 1);
 
+    for (int i = 0; i < int_nb_block; i++)
+    {
+        mpz_init(b->tab[i]);
+        mpz_set(b->tab[i], m->nombre);
+        shift_droite(b->tab[i], 2048 * ( int_nb_block - (i + 1) ) );
+        mpz_and(b->tab[i], b->tab[i], AND);
+    }
+    
+    return b;
+}
 
 message *recupere_message_oaep(block *b){
     
@@ -124,3 +152,20 @@ message *recupere_message_oaep(block *b){
     
 }
     
+message *recupere_message_oaep_1(block *b) {
+ 
+    message *m  = malloc(sizeof(message));
+    mpz_init(m->nombre);
+    mpz_init(m->taille);
+    mpz_set_ui(m->taille, 1528);
+    mpz_mul_ui(m->taille, m->taille, b->nb_block);
+
+    for (int i = 0; i < b->nb_block; i++)
+    {
+        shift_gauche(m->nombre, 1528);
+        shift_droite(b->tab[i], 512);
+        mpz_add(m->nombre, m->nombre, b->tab[i]);
+    }
+
+    return m;
+}

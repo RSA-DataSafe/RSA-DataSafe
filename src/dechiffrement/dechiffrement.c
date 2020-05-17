@@ -2,9 +2,11 @@
 
 #include "../structure/structure.h"
 #include "../calcul/calcul.h"
-#include "oeap_1.h"
+#include "../chiffrement/gestion_block.h"
+#include "oaep_1.h"
 #include "dechiffrement.h"
-
+#include <stdio.h>
+#include <stdlib.h>
 
 message* dechiffrement(message *c, cle_prive *prive) {
 
@@ -16,12 +18,16 @@ message* dechiffrement(message *c, cle_prive *prive) {
 	// Code
 	// RSA
 	for (int i = 0; i < b->nb_block; i++) {
-		expo_mod(b->tab[i], b->tab[i], prive->e, prive->n);
+		mpz_powm(b->tab[i], b->tab[i], prive->d, prive->n);//parce que expo_mod ca fonctionne pas 
 	}
 
 	// OAEP^(-1)
 	oaep_1(b);
 	m = recupere_message_oaep_1(b);
+	for(int i = 0; i < (b->nb_block); i++) {
+        mpz_clear(b->tab[i]);
+    }
+    free(b->tab);
 
 
 	return m;

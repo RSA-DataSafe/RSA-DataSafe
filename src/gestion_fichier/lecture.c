@@ -54,78 +54,98 @@ int chercher_utilisateur(char *email, char *mdp) {
 	return est_present;
 }
 
-int recupere_cle_publique(char * email, char * mdp, cle_publique * publique) {
-	
+int recupere_cle_publique(char * email, char * mdp, cle_publique * publique) {	
 	char * chemin = calloc(sizeof(char)*MAX_CARACT + sizeof("rsa/") + sizeof("/Cles.txt"),sizeof(char));
-	char * e = NULL;
-	char * d = NULL;
-	char * n = NULL;
+	/* Buffer temporaire */
+	char * e = calloc(sizeof(char)*2048,sizeof(char));
+	char * n = calloc(sizeof(char)*2048,sizeof(char));
+	/* ----------------- */
 	
-	if(chemin == NULL) {
+	if(chemin == NULL || e == NULL || n == NULL) {
+		printf("hello\n");
 		return ERR_LECT;
 	}
 	
-	strcat(chemin,"rsa/");
+	strcpy(chemin,"rsa/");
 	strcat(chemin,email);
 	strcat(chemin,"/Cles.txt");
 
-	FILE * fichier = fopen(chemin,"r");		
-	free(chemin);
-	
-	if(fichier == NULL) {
+	char * res = lire_fichier(chemin);	// Ouverture et lecture du fichier 
+	free(chemin);	
+		
+	if(strcmp(res,"erreur lecture") == 0) {
+		
 		return ERR_LECT;
 	}
-	
-	size_t bufsize = 0;
-	
-	if(getline(&d,&bufsize,fichier) == -1) return ERR_LECT;
-	free(d);
-	if(getline(&e,&bufsize,fichier) == -1) return ERR_LECT;
+	int head = 0;	
+	while(res[head] != '\n') head++;
+	head++;
+  
+   
+   int i=0;
+	while(res[head] != '\n') {
+       
+		e[i] = res[head];
+        i++;
+		head++;
+	}
+    
 	mpz_init_set_str(publique->e,e,10);
+
+
 	free(e);
-	if(getline(&n,&bufsize,fichier) == -1) return ERR_LECT;
+	head++;
+	int j=0;
+	while(res[head] != '\0' && res[head] != '\n') { // Ca depend si on ouvre un fichier avec un ide qui ajoute un retour chariot à la fin
+		n[j] = res[head];
+		j++;
+		head++;
+	}
 	mpz_init_set_str(publique->n,n,10);
 	free(n);
-	fclose(fichier);
 	return 0;	
 }
 
 int recupere_cle_privee(char * email, char * mdp, cle_prive * prive) {
 	if(chercher_utilisateur(email,mdp) != ERR_LECT) {
 		char * chemin = calloc(sizeof(char)*MAX_CARACT + sizeof("rsa/") + sizeof("/Cles.txt"),sizeof(char));
-		char * e = NULL;
-		char * d = NULL;
-		char * n = NULL;
+		/* Buffer temporaire */
+		char * d = calloc(sizeof(char)*2048,sizeof(char));
+		char * n = calloc(sizeof(char)*2048,sizeof(char));
+		/* ----------------- */
 		
-		if(chemin == NULL) {
+		if(chemin == NULL || d == NULL || n == NULL) {
 			return ERR_LECT;
 		}
 		
-		strcat(chemin,"rsa/");
+		strcpy(chemin,"rsa/");
 		strcat(chemin,email);
 		strcat(chemin,"/Cles.txt");
 		
-		FILE * fichier = fopen(chemin,"r");	
+		char * res = lire_fichier(chemin);	// Ouverture et lecture du fichier 
 		free(chemin);	
-		
-		if(fichier == NULL) {
+			
+		if(strcmp(res,"erreur lecture") == 0) {
 			return ERR_LECT;
 		}
-		
-		size_t bufsize = 0;
-		
-		if(getline(&d,&bufsize,fichier) == -1) return ERR_LECT;
+		int head = 0;	
+		while(res[head] != '\n') {
+			d[head] = res[head];
+			head++;
+		}
 		mpz_init_set_str(prive->d,d,10);
 		free(d);
-		
-		if(getline(&e,&bufsize,fichier) == -1) return ERR_LECT;
-		free(e);
-		
-		if(getline(&n,&bufsize,fichier) == -1) return ERR_LECT;
+		head++;
+		while(res[head] != '\n') head++;
+		head++;
+		int k=0;
+		while(res[head] != '\0' && res[head] != '\n') { // Ca depend si on ouvre un fichier avec un ide qui ajoute un retour chariot à la fin
+			n[k] = res[head];
+			k++;
+			head++;
+		}
 		mpz_init_set_str(prive->n,n,10);
 		free(n);
-		
-		fclose(fichier);
 		return 0;
 	}
 	return ERR_LECT;
@@ -136,7 +156,7 @@ int lire_boite(char *email, boite * b) {
 	 if(chemin == NULL) {
 		return ERR_LECT;
 	 }
-	 strcat(chemin,"rsa/");
+	 strcpy(chemin,"rsa/");
 	 strcat(chemin,email);	
 	 strcat(chemin,"/");
 	 strcat(chemin, b->nom_boite);
@@ -159,7 +179,7 @@ int lire_boite(char *email, boite * b) {
 	 }
 	 
 	 // Parser de lecture on lit caractere par caractere: 
-	 do {
+	  do {
 		 debut: // etiquette qui permet de revenir au début. De '\n' à ':' se trouve des caractère non utilisé
 		  c = fgetc(fichier);
 		 if(c == ':' || c == '\n') { 
@@ -181,10 +201,11 @@ int lire_boite(char *email, boite * b) {
 						i++;
 					} while(c != '\n');
 					alternateur = 0;
+					buff0[i] = '\0';
 					if(strcmp(buff0,"sig") == 0) {
-						b->m[nbr_mail_traiter].signer = 0;
-					} else {
 						b->m[nbr_mail_traiter].signer = 1;
+					} else {
+						b->m[nbr_mail_traiter].signer = 0;
 					}
 					free(buff0);
 					donnee_structurelle++;
@@ -230,21 +251,19 @@ int lire_boite(char *email, boite * b) {
 				}
 				// Récuperer la signature
 				if(donnee_structurelle == 3) {
-					if(b->m[nbr_mail_traiter].signer != 0) {
-						char * buff3 = calloc(sizeof(char) * 2000,sizeof(char));
-						b->m[nbr_mail_traiter].signature = calloc(sizeof(char) * 2000,sizeof(char));
-						if(buff3 == NULL || b->m[nbr_mail_traiter].signature == NULL) {
-							return ERR_LECT;
-						}
-						int d = 0;
-						do {
-							c = fgetc(fichier);
-							buff3[d] = c;
-							d++;
-						} while(c!= '\n');
-						memcpy(b->m[nbr_mail_traiter].signature,buff3,strlen(buff3));
-						free(buff3);
+					char * buff3 = calloc(sizeof(char) * 2000,sizeof(char));
+					b->m[nbr_mail_traiter].signature = calloc(sizeof(char) * 2000,sizeof(char));
+					if(buff3 == NULL || b->m[nbr_mail_traiter].signature == NULL) {
+						return ERR_LECT;
 					}
+					int d = 0;
+					do {
+						c = fgetc(fichier);
+						buff3[d] = c;
+						d++;
+					} while(c!= '\n');
+					memcpy(b->m[nbr_mail_traiter].signature,buff3,strlen(buff3));
+					free(buff3);
 					alternateur = 0;
 					nbr_mail_traiter ++;
 					donnee_structurelle = 0; // remise à zéro des données 
@@ -259,12 +278,12 @@ int lire_boite(char *email, boite * b) {
 char *lire_fichier(char * chemin) {
 	char * res = calloc(sizeof(char)*5000,sizeof(char));
 	if(res == NULL) {
-		res[0] = -1;
+		res = "erreur lecture";
 		return res;
 	}
 	FILE * fichier = fopen(chemin,"r");
 	if(fichier == NULL) {
-		res[0] = -1;
+		res = "erreur lecture";
 		return res;
 	}
 	
@@ -274,5 +293,6 @@ char *lire_fichier(char * chemin) {
 	}
 
 	fclose(fichier);
+
 	return res;
 }
