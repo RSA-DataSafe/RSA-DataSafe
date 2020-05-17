@@ -50,10 +50,19 @@ void calculerD(cle_prive *prive, cle_publique *publique){
 	mpz_inits(u,v,NULL);
 
 	euclide_etendu(u , v, prive->n, publique->e);
+	mpz_t phi_n;
+	mpz_init(phi_n);
+	mpz_set(phi_n, prive->n);
 
 	mpz_set(prive->d,v);
 	mpz_set(prive->n,publique->n);
 	mpz_clears(u,v,NULL);
+
+	while(mpz_cmp_ui(prive->d, 0) < 0) {
+		printf("here\n");
+		mpz_add(prive->d, prive->d, phi_n);
+	}
+	mpz_clear(phi_n);
 }
 void GenererPQRSA(mpz_t p, mpz_t q, mpz_t n, int taille){
 	 mpz_t t; 
@@ -110,8 +119,6 @@ void genere_cle(cle_publique *publique, cle_prive *prive, int taille){
 	printf("phi_n =  ");
 	mpz_out_str(0,10,phi_n);
 	printf("\n\n");
-	
-
  
 	mpz_clears(p,q,n,phi_n, NULL);
 }
