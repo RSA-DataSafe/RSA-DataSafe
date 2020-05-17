@@ -11,6 +11,7 @@ void signer(mpz_t signature, message *mes, cle_prive *prive) {
 int verifie_signature(mpz_t chiffre, mpz_t signature, cle_publique *publique) {
 	
 	mpz_t signature_prime;
+	mpz_init(signature_prime);
 	int res = 0;
 	message m;
 	mpz_init(m.nombre);
