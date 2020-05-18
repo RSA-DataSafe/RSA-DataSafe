@@ -7,6 +7,7 @@
 #include <glib/gi18n.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <glib.h>
+#include <gmp.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -46,21 +47,24 @@
      //indesirable
      boite BoiteInde ;
 
+     mpz_t sig; 
+     message * ret ;
+     message * ch ;
 
 
  
 
     //page global messagerie
-	void page_messagerie();
+	void messagerie_principale();
 	void Slots_Messagerie(GtkWidget * sender , gpointer * data);
 	
-	void page_MessageRecu();
+	void messagerie_recu();
 	//ecrire un smg
 	void page_envoyer_unmsg();
 	//tous les msg quon a envoye
-	void page_message_envoyes(); 
+	void messagerie_envoye(); 
     //page pour les messages indesirables 
-    void page_message_indesirable();
+    void messagerie_indesirable();
     
     //appel un code enfonction de la reponse de lutilisateur oui non ou x
 	void on_response(GtkDialog *dialog, gint       response_id, gpointer   user_data);

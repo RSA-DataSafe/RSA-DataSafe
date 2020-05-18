@@ -21,14 +21,14 @@ message *chiffrement(message *m, cle_publique *publique, message *encodage) {
 
     // Code
     block *b = creer_block_oaep(m, encodage, alea);
+
     b = oaep(b, alea);
 
     mpz_t tmp;
     mpz_init(tmp);
 
     for(int i = 0;i<(b->nb_block); i++) {
-        mpz_set(tmp, b->tab[i]);
-        expo_mod(b->tab[i], tmp, publique->e, publique->n);
+        mpz_powm(b->tab[i], b->tab[0], publique->e, publique->n);
     }
 
     message *k = recupere_message_oaep(b);
@@ -39,7 +39,7 @@ message *chiffrement(message *m, cle_publique *publique, message *encodage) {
         mpz_clear(b->tab[i]);
     }
     free(b); 
-		
+    
     // return
     return k;
 }

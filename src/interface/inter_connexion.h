@@ -19,7 +19,7 @@ GtkWidget  *MAIN , *horiz1;
 
 
 
-void  Page_de_connection ();
+void  page_connexion ();
 void Verification_connexion(GtkWidget * sender , gpointer * data);
 
 #endif

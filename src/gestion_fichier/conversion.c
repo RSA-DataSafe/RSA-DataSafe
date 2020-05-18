@@ -43,6 +43,7 @@ char * conversion_mpz_char( message * m ) {
 		mpz_and(tmp, tmp, AND);
 		ret[i] = mpz_get_ui(tmp);
 	}
+printf("dans conversion %s \n",ret);
 	return ret;
 }
 

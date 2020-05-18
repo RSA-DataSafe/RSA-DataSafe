@@ -1,6 +1,6 @@
 #include "inter_parametre.h"
 
-void page_Parametre()
+void page_parametre()
 {
 	imageP =gtk_image_new_from_file("Icon/logo.png"); 
 	labelP= gtk_label_new ("Paramètres");
@@ -89,10 +89,17 @@ void Slots_parametre(GtkWidget * sender , gpointer * data)
   	}
 
    if (GTK_WIDGET(buttonsecurite[0]) == sender && !data )  
+   {
+   	                             gtk_label_set_text(GTK_LABEL(attention) , ""); 
    	                             gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (Menu));
+   	}
    
-   if (GTK_WIDGET(buttonsecurite[1]) == sender && !data )  
+   if (GTK_WIDGET(buttonsecurite[1]) == sender && !data )
+   {
+   	  							 gtk_label_set_text(GTK_LABEL(attention) , "");
    	                             gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (Connexion));
+   }
+   
    if (GTK_WIDGET(buttonsecurite[2]) == sender && !data )
    {      
          
@@ -105,22 +112,27 @@ void Slots_parametre(GtkWidget * sender , gpointer * data)
 
    	     if (!change_cle(&utilisateur,&utilisateur.publique,&utilisateur.prive))
    	     {
-                printf("OKKKKKKK CHANGEMENT EFFECTUÉ \n");
+                printf("CHANGEMENT EFFECTUÉ \n");
+                gtk_label_set_text(GTK_LABEL(attention) , "vos clés ont été renouvelé avec succès"); 
+   	            gtk_widget_set_name(attention ,"vert");
    	     }
-   	     else{
-   	     	 printf("NON CHANGEMENT  NON EFFECTUÉ \n");
+   	     else
+   	     {
+	   	     	 printf("CHANGEMENT NON EFFECTUÉ \n");
+	   	     	 gtk_label_set_text(GTK_LABEL(attention) , "veuillez réessayer svp!"); 
+	   	         gtk_widget_set_name(attention ,"vert");
    	     }
+   	     
 
-   	     gtk_widget_hide (buttonsecurite[2]);
-   	     gtk_label_set_text(GTK_LABEL(attention) , "vous avez déja vos clées 1 fois"); 
-   	     gtk_widget_set_name(attention ,"vert");
+   	     //gtk_widget_hide (buttonsecurite[2]);
+   	     
    	     gtk_widget_show(attention); 
 
    }
 
 }
 
-void page_compte()
+void parametre_compte()
 {
 
     imagecompte =gtk_image_new_from_file("Icon/logo.png"); 
@@ -282,7 +294,7 @@ void modificattion_donnes_compte(GtkWidget * sender , gpointer data)
 }
 
 
-void page_securite()
+void parametre_securite()
 {
 
 	imagesecurite =gtk_image_new_from_file("Icon/logo.png"); 
@@ -325,7 +337,7 @@ void page_securite()
      gtk_box_pack_start (GTK_BOX(Vbtn1),GTK_WIDGET (buttonsecurite[2]),TRUE,FALSE,0);
     
  
-	 attention = gtk_label_new ("Attention vous ne pouvez renouveler vos clés qu'une seule fois !");
+	 attention = gtk_label_new ("");
 	 gtk_widget_set_name (attention,"warning");
 	 GtkWidget *MAIN =gtk_box_new (GTK_ORIENTATION_VERTICAL,0);
 	 gtk_box_pack_start (GTK_BOX(MAIN),GTK_WIDGET(Vbtn),FALSE,FALSE,0);

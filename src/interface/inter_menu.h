@@ -16,7 +16,7 @@
 //menu 
    extern int a ;
 	GtkWidget   *imageM , *imageBM[5] ,*buttonM[5] , *labelMenu , *labelBMenu ;
-	void page_Menu();
+	void menu_principal();
 
 	void slots_Menu(GtkWidget * sender , gpointer *data);
 

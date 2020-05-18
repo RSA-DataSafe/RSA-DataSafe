@@ -6,92 +6,6 @@
 #include "../structure/structure.h"
 #include "sha3.h"
 
-
-message *sha3(message *m, int taille) {
-
-    int b_size = 0;
-    switch (taille) {
-        case 256 :
-            b_size = 1088;
-            break;
-        case 512 :
-            b_size = 576;
-            break;
-        default :
-            fprintf (stderr, "Wrong size input for sha3\n");
-            exit(107);
-    }
-
-    // on ajoute le padding
-    message *res = padding_sha3 (m, b_size);
-
-    // on découpe en blocs
-    block *r = decoupage_block (res, b_size);
-
-    // on créé la matrice pour keccak (round)
-    mpz_t **matrice = malloc (sizeof (*matrice) * 5);
-    for (int i=0; i<5; i++) {
-        matrice[i] = malloc (sizeof (mpz_t) * 5);
-    }
-    for (int i=0; i<5; i++) {
-        for (int j=0; j<5; j++) {
-            mpz_init (matrice[i][j]);
-        }
-    }
-
-    // Pour chaque bloc, on xor un bloc avec la matrice puis on la traite (round, keccak-f)
-    int cnt = 0;
-    while (cnt<r->nb_block) {
-        for (int i=0; i<9; i++) {
-            mpz_t tmp;
-            mpz_init (tmp);
-            for (int j=0; j<64; j++) {
-                mpz_add_ui (tmp, tmp, mpz_tstbit (r->tab[cnt], ((i+1)*(j+1))%b_size) * pow (2, j));
-            }
-            mpz_xor (matrice[i%5][i%2], matrice[i%5][i%2], tmp);
-            mpz_clear (tmp);
-        }
-        round_sha3 (matrice, 24);
-        cnt++;
-    }
-
-    // on met le résultat final dans res
-    mpz_t output;
-    mpz_init (output);
-    for (int i=4; i>=0; i--) {
-        for (int j=4; j>=0; j--) {
-            mpz_mul_2exp (output, output, 64);
-            mpz_add (output, output, matrice[i][j]);
-        }
-    }
-    mpz_set (res->nombre, output);
-
-    // on génère la sortie
-    mpz_set_ui (res->taille, taille);                       // on fixe la taille de la sortie
-    mpz_t cut, nbr;
-    mpz_inits (cut, nbr, NULL);
-    mpz_set_ui (nbr, mpz_sizeinbase (res->nombre, 2));
-    mpz_sub_ui (cut, nbr, taille);                          // cut = la taille de la partie "en trop"
-    int tmp = mpz_get_ui (cut);
-    mpz_tdiv_q_2exp (res->nombre, res->nombre, tmp);        // on 'tronque' la sortie
-
-    // on libère la mémoire
-    for (int i=0; i<5; i++) {
-        for (int j=0; j<5; j++) {
-            mpz_clear (matrice[i][j]);
-        }
-    }
-
-    mpz_clears (cut, nbr, output, NULL);
-    free (r);
-    for (int i=0; i<5; i++) {
-        free (matrice[i]);
-    }
-    free (matrice);
-    
-    return res;
-};
-
 message *padding_sha3(message *m, int taille) {
     message *res = malloc (sizeof (message));
     mpz_init_set (res->nombre, m->nombre);
@@ -114,6 +28,58 @@ message *padding_sha3(message *m, int taille) {
     return res;
 };
 
+void rot (mpz_t x, int n) {
+    int size = mpz_sizeinbase (x, 2);                   // size = taille de x
+    int tmp[64];                                        // tmp permet de stocker chaque bit à l'indice correspondant
+    for (int i=0; i<64; i++) tmp[i] = 0;                // init tmp à 0
+    for (int i=0; i<size; i++)                          // on remplit tmp avec x, au bon endroit
+        tmp[64-i-1] = mpz_tstbit (x, i);
+    char *str = malloc (sizeof (char) * 64);
+    for (int i=0; i<64; i++) {                          // on transforme tmp en chaîne de caractères, en effectuant la rotation
+        str[i] =  tmp[(i+n)%64] + '0';                  
+    }
+    mpz_set_str (x, str, 2);                            // on remplace x par sa nouvelle valeur
+    free (str);
+};
+
+void invert (mpz_t x) {
+    int size = mpz_sizeinbase (x, 2);                   // size = taille de x
+    int tmp[64];                                        // tmp permet de stocker chaque bit à l'indice correspondant
+    for (int i=0; i<64; i++) tmp[i] = 1;                // init tmp à 1
+    for (int i=0; i<size; i++)                          // on remplit tmp avec l'inverse de x
+        tmp[64-i-1] = (mpz_tstbit (x, i)+1)%2;
+    char *str = malloc (sizeof (char) * 64);
+    for (int i=0; i<64; i++) {                          // on transforme tmp en chaîne de caractères
+        str[i] =  tmp[i] + '0';                  
+    }
+    mpz_set_str (x, str, 2);                            // on remplace x par sa nouvelle valeur
+    free (str);
+};
+
+block *decoupage_block(message* m, int taille) {
+    block *res = malloc (sizeof (res));                 // on réserve de l'espace mémoire pour res
+    int m_size = mpz_get_ui (m->taille) ;               // on récupère la taille de m
+    res->nb_block=  (m_size/ 1088)+1;
+    //printf("le nombre de blloc calculé %d\n",res->nb_block);
+    //gmp_printf("le nombre %Zd\n",m->nombre);
+    res->tab = malloc(sizeof(mpz_t) * res->nb_block);
+       
+    for(int i =0; i < res->nb_block; i++) {
+        mpz_init(res->tab[i]);
+        mpz_tdiv_q_2exp(res->tab[i],m->nombre,taille-(i*1088));
+         
+        mpz_t base;
+      	mpz_init(base);   
+        mpz_add_ui(base,base, 2);
+        mpz_pow_ui(base,base,1088);  
+        mpz_sub_ui(base,base, 1);  
+        mpz_and(res->tab[i],base,res->tab[i]); 
+        //gmp_printf("le nombre %Zd\n",res->tab[i]);
+   }
+    //gmp_printf("a la fin decoupage ret %Zd\n",res->tab[1]);
+    return res;
+};
+/*
 block *decoupage_block(message* m, int taille) {
     block *res = malloc (sizeof (res));                 // on réserve de l'espace mémoire pour res
     res->tab = malloc (sizeof (mpz_t));                 // on réserve de l'espace mémoire pour res
@@ -128,44 +94,11 @@ block *decoupage_block(message* m, int taille) {
         }
         i+=j;                                           // on met le "curseur" sur m à l'endroit qui correspond à la fin du bloc qu'on vient d'ajouter
     }
+    
     res->nb_block = cnt;                                // on stocke le nombre de blocs
+    gmp_printf("a la fin decoupage ret %Zd\n",res->tab[0]);
     return res;
-};
-
-void round_sha3(mpz_t **matrice,int nb_tour) {
-
-    // set RC constants
-    mpz_t RC[24];
-    mpz_init_set_str (RC[0], "0x0000000000000001", 0);
-    mpz_init_set_str (RC[1], "0x0000000000008082", 0);
-    mpz_init_set_str (RC[2], "0x800000000000808A", 0);
-    mpz_init_set_str (RC[3], "0x8000000080008000", 0);
-    mpz_init_set_str (RC[4], "0x000000000000808B", 0);
-    mpz_init_set_str (RC[5], "0x0000000080000001", 0);
-    mpz_init_set_str (RC[6], "0x8000000080008081", 0);
-    mpz_init_set_str (RC[7], "0x8000000000008009", 0);
-    mpz_init_set_str (RC[8], "0x000000000000008A", 0);
-    mpz_init_set_str (RC[9], "0x0000000000000088", 0);
-    mpz_init_set_str (RC[10],"0x0000000080008009", 0);
-    mpz_init_set_str (RC[11],"0x000000008000000A", 0);
-    mpz_init_set_str (RC[12],"0x000000008000808B", 0);
-    mpz_init_set_str (RC[13],"0x800000000000008B", 0);
-    mpz_init_set_str (RC[14],"0x8000000000008089", 0);
-    mpz_init_set_str (RC[15],"0x8000000000008003", 0);
-    mpz_init_set_str (RC[16],"0x8000000000008002", 0);
-    mpz_init_set_str (RC[17],"0x8000000000000080", 0);
-    mpz_init_set_str (RC[18],"0x000000000000800A", 0);
-    mpz_init_set_str (RC[19],"0x800000008000000A", 0);
-    mpz_init_set_str (RC[20],"0x8000000080008081", 0);
-    mpz_init_set_str (RC[21],"0x8000000000008080", 0);
-    mpz_init_set_str (RC[22],"0x0000000080000001", 0);
-    mpz_init_set_str (RC[23],"0x8000000080008008", 0);
-
-    // round
-    for (int i=0; i<nb_tour; i++) {
-        keccak_f (matrice, RC[i]);
-    }
-};
+};*/
 
 void keccak_f(mpz_t **matrice, mpz_t RC) {
 
@@ -251,57 +184,126 @@ void keccak_f(mpz_t **matrice, mpz_t RC) {
     }
 };
 
-void rot (mpz_t x, int n) {
-    int size = mpz_sizeinbase (x, 2);                   // size = taille de x
-    int tmp[64];                                        // tmp permet de stocker chaque bit à l'indice correspondant
-    for (int i=0; i<64; i++) tmp[i] = 0;                // init tmp à 0
-    for (int i=0; i<size; i++)                          // on remplit tmp avec x, au bon endroit
-        tmp[64-i-1] = mpz_tstbit (x, i);
-    char *str = malloc (sizeof (char) * 64);
-    for (int i=0; i<64; i++) {                          // on transforme tmp en chaîne de caractères, en effectuant la rotation
-        str[i] =  tmp[(i+n)%64] + '0';                  
+void round_sha3(mpz_t **matrice,int nb_tour) {
+
+    // set RC constants
+    mpz_t RC[24];
+    mpz_init_set_str (RC[0], "0x0000000000000001", 0);
+    mpz_init_set_str (RC[1], "0x0000000000008082", 0);
+    mpz_init_set_str (RC[2], "0x800000000000808A", 0);
+    mpz_init_set_str (RC[3], "0x8000000080008000", 0);
+    mpz_init_set_str (RC[4], "0x000000000000808B", 0);
+    mpz_init_set_str (RC[5], "0x0000000080000001", 0);
+    mpz_init_set_str (RC[6], "0x8000000080008081", 0);
+    mpz_init_set_str (RC[7], "0x8000000000008009", 0);
+    mpz_init_set_str (RC[8], "0x000000000000008A", 0);
+    mpz_init_set_str (RC[9], "0x0000000000000088", 0);
+    mpz_init_set_str (RC[10],"0x0000000080008009", 0);
+    mpz_init_set_str (RC[11],"0x000000008000000A", 0);
+    mpz_init_set_str (RC[12],"0x000000008000808B", 0);
+    mpz_init_set_str (RC[13],"0x800000000000008B", 0);
+    mpz_init_set_str (RC[14],"0x8000000000008089", 0);
+    mpz_init_set_str (RC[15],"0x8000000000008003", 0);
+    mpz_init_set_str (RC[16],"0x8000000000008002", 0);
+    mpz_init_set_str (RC[17],"0x8000000000000080", 0);
+    mpz_init_set_str (RC[18],"0x000000000000800A", 0);
+    mpz_init_set_str (RC[19],"0x800000008000000A", 0);
+    mpz_init_set_str (RC[20],"0x8000000080008081", 0);
+    mpz_init_set_str (RC[21],"0x8000000000008080", 0);
+    mpz_init_set_str (RC[22],"0x0000000080000001", 0);
+    mpz_init_set_str (RC[23],"0x8000000080008008", 0);
+
+    // round
+    for (int i=0; i<nb_tour; i++) {
+        keccak_f (matrice, RC[i]);
     }
-    mpz_set_str (x, str, 2);                            // on remplace x par sa nouvelle valeur
-    free (str);
 };
+message *sha3(message *m, int taille) {
 
-void invert (mpz_t x) {
-    int size = mpz_sizeinbase (x, 2);                   // size = taille de x
-    int tmp[64];                                        // tmp permet de stocker chaque bit à l'indice correspondant
-    for (int i=0; i<64; i++) tmp[i] = 1;                // init tmp à 1
-    for (int i=0; i<size; i++)                          // on remplit tmp avec l'inverse de x
-        tmp[64-i-1] = (mpz_tstbit (x, i)+1)%2;
-    char *str = malloc (sizeof (char) * 64);
-    for (int i=0; i<64; i++) {                          // on transforme tmp en chaîne de caractères
-        str[i] =  tmp[i] + '0';                  
+    int b_size = 0;
+    switch (taille) {
+        case 256 :
+            b_size = 1088;
+            break;
+        case 512 :
+            b_size = 576;
+            break;
+        default :
+            fprintf (stderr, "Wrong size input for sha3\n");
+            exit(107);
     }
-    mpz_set_str (x, str, 2);                            // on remplace x par sa nouvelle valeur
-    free (str);
+
+    // on ajoute le padding
+    message *res = padding_sha3 (m, b_size);
+	//gmp_printf("bnrjd  %Zd\n",res->nombre);
+
+    // on découpe en blocs
+    block *r = decoupage_block (res, b_size);
+	//gmp_printf("block apres decoupage  %Zd\n",r->tab[0]);
+    // on créé la matrice pour keccak (round)
+    mpz_t **matrice = malloc (sizeof (*matrice) * 5);
+    for (int i=0; i<5; i++) {
+        matrice[i] = malloc (sizeof (mpz_t) * 5);
+    }
+    for (int i=0; i<5; i++) {
+        for (int j=0; j<5; j++) {
+            mpz_init (matrice[i][j]);
+        }
+    }
+
+    // Pour chaque bloc, on xor un bloc avec la matrice puis on la traite (round, keccak-f)
+    int cnt = r->nb_block-1;
+    printf("nombre de block %d \n",cnt);
+    while (cnt > 0) {
+        for (int i=0; i<9; i++) {
+            mpz_t tmp;
+            mpz_init (tmp);
+            for (int j=0; j<64; j++) {
+                mpz_add_ui(tmp, tmp, mpz_tstbit (r->tab[cnt], ((i+1)*(j+1))%b_size) * pow (2, j));
+                
+            }
+            mpz_xor (matrice[i%5][i%2], matrice[i%5][i%2], tmp);
+            mpz_clear (tmp);
+        }
+        gmp_printf("block 1 %Zd\n",r->tab[cnt]);
+        round_sha3 (matrice, 24);
+        gmp_printf("apres round %Zd\n",r->tab[cnt]);
+
+        cnt--;
+    }
+    // on met le résultat final dans res
+    mpz_t output;
+    mpz_init (output);
+    for (int i=4; i>=0; i--) {
+        for (int j=4; j>=0; j--) {
+            mpz_mul_2exp (output, output, 64);
+            mpz_add (output, output, matrice[i][j]);
+        }
+    }
+    mpz_set (res->nombre, output);
+
+    // on génère la sortie
+    mpz_set_ui (res->taille, taille);                       // on fixe la taille de la sortie
+    mpz_t cut, nbr;
+    mpz_inits (cut, nbr, NULL);
+    mpz_set_ui (nbr, mpz_sizeinbase (res->nombre, 2));
+    mpz_sub_ui (cut, nbr, taille);                          // cut = la taille de la partie "en trop"
+    int tmp = mpz_get_ui (cut);
+    mpz_tdiv_q_2exp (res->nombre, res->nombre, tmp);        // on 'tronque' la sortie
+
+    // on libère la mémoire
+    for (int i=0; i<5; i++) {
+        for (int j=0; j<5; j++) {
+            mpz_clear (matrice[i][j]);
+        }
+    }
+
+    mpz_clears (cut, nbr, output, NULL);
+    free (r);
+    for (int i=0; i<5; i++) {
+        free (matrice[i]);
+    }
+    free (matrice);
+    
+    return res;
 };
-
-/* TEST DEBUG
-
-int main(){
-	
-    message *m1 = malloc (sizeof (message));
-	mpz_init(m1->taille);
-	mpz_init_set_str(m1->nombre,"1010100100100101010010010101010101011010111010010010100100100101101010101001001010010101010101010100001001111010101110101010101010101010010100101010010010100100100100101010010100101010101010100101010101011010010101010101010101010101010101010010101010111101010101010000000101000010001101011011101110010010010010001010101001001010010101",2);
-	mpz_set_ui(m1->taille,mpz_sizeinbase(m1->nombre,2));
-    gmp_printf("Nombre initial = %Zd",m1->nombre);
-	printf(" / taille = %ld \n\n", mpz_sizeinbase (m1->nombre,2));
-
-	for (int i = 0; i < 5; i++)
-	{
-		message *m = sha3(m1,256);
-		int t = mpz_get_ui (m->taille);
-		gmp_printf("Résultat Sha-3 = %Zd",m->nombre);
-		printf(" / taille = %d \n\n",t);
-		mpz_clears(m->nombre,m->taille,NULL);
-		free(m);
-		mpz_add_ui(m1->nombre,m1->nombre,1);
-		mpz_set_ui(m1->taille,mpz_sizeinbase(m1->nombre,2));
-	}
-	
-	return 0;
-}
-*/

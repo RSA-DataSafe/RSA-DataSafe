@@ -24,10 +24,10 @@
 	char* chaine;
     message *  messageachiff ;
     message* messagechiff; 
-
+    char* path;
     message *  codage;
 
-	void page_chiffrer();
+	void page_chiffrement();
 	void page_chargementC();
 	int  page_resultatC();
 	void detuire_mini_f_resultat();

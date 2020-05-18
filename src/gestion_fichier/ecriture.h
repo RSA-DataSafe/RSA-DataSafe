@@ -71,7 +71,7 @@ int envoie_message(mail *m);
  * @param boite : boite dans laquelle stocker le message déchiffré
  * @return 0 si ça a fonctionné, sinon un des signaux d'erreur
  * */
-int stocker_message(char *email, char* message, char *boite);
+int stocker_message(char *email, mpz_t message, char *boite);
 
 /**
  * Permet d'écrire dans un fichier

@@ -1,5 +1,13 @@
 #ifndef _lecture_h
 #define _lecture_h
+#include "../structure/structure.h"
+#include "lecture.h"
+#include "erreur.h"
+#include <gmp.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
 
 /**
  * Permet de chercher un utilisateur dans la base de donnée.
@@ -16,6 +24,8 @@ int chercher_utilisateur(char *email, char *mdp);
  * @param publique : clé publique
  * @retourne 0 si l'utilisateur existe sinon un des signaux d'erreur 
  * */
+
+
 int recupere_cle_publique(char *email, char *mdp, cle_publique *publique);
 
 /**

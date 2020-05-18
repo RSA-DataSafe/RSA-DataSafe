@@ -16,6 +16,6 @@
 //inscroption
 	GtkWidget   *buttoni[2]  , *entreei[4], *labeli[5] ;
     GtkWidget * MAINi ; 
-	void  Page_d_inscription();
+	void  page_inscription();
 	void SLots_inscription(GtkWidget * sender , gpointer * data);
 #endif

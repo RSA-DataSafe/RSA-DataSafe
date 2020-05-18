@@ -1,5 +1,5 @@
 #include "inter_menu.h"
-void page_Menu()
+void menu_principal()
 {
 	imageM= gtk_image_new_from_file("Icon/millogo.jpg"); 
 	labelMenu = gtk_label_new ("Menu");

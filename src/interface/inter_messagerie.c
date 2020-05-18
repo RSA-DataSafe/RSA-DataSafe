@@ -1,5 +1,5 @@
 #include "inter_messagerie.h"
-void page_messagerie()
+void messagerie_principale()
   {
 
   	imageMessagerie =gtk_image_new_from_file("Icon/logo.png"); 
@@ -135,7 +135,7 @@ void page_messagerie()
                                     	   if (nb >29) nb = 29;
                                            for (int i  = 0 ; i <nb ; ++i)
                                            {
-                                           	printf("ok boucle\n");
+                                           	printf("ok boucle\n"); 
 										       		 gchar * nom1 ;
 								    				 nom1= g_strdup_printf("%s%s", "", boiteE.m[i].titre);
 								   					 BEM[i]=gtk_button_new_with_label(nom1);
@@ -168,10 +168,10 @@ void page_messagerie()
                                          	 printf ("%s       ",BoiteInde.m[0].env_email);
                                             printf ("%s        ",BoiteInde.m[0].message);
                                     	     if (nb >29) nb = 29;
-                                   
+                                   				
                                            for (int i  = 0 ; i <nb ; ++i) {
 											        gchar * nom1 ;
-											    	nom1= g_strdup_printf("%s%s", "Titre ",BoiteInde.m[i].titre);
+											    	nom1= g_strdup_printf("%s%s", "",BoiteInde.m[i].titre);
 											    	BMI[i]=gtk_button_new_with_label(nom1);
 											    	gtk_widget_set_name (GTK_WIDGET(BMI[i]),"titremail");
 											    	g_signal_connect(G_OBJECT(BMI[i]), "clicked",G_CALLBACK(afficher_proposition_supp_afficher),(gpointer)BMI[i]);
@@ -188,7 +188,7 @@ void page_messagerie()
 }}
 
 
-void page_MessageRecu()
+void messagerie_recu()
 {
 
 	imageMR =gtk_image_new_from_file("Icon/logo.png"); 
@@ -330,7 +330,18 @@ void afficher_contenu_message(GtkWidget * sender , gpointer *data)
 			 {	
 				gtk_label_set_label (GTK_LABEL(labelMR[3]),b.m[i].env_email);
 				gtk_label_set_label (GTK_LABEL(labelMR[4]),b.m[i].titre);
+				
+				message * msgcoder = malloc (sizeof (message));
+    
+    			mpz_inits (msgcoder->taille,msgcoder->nombre,NULL); 
+    			mpz_set_str(msgcoder->nombre,b.m[i].message,10);
+    			mpz_set_ui (msgcoder->taille ,mpz_sizeinbase(msgcoder->nombre,2) );
+				message * msgnoncoder=dechiffrement(msgcoder, &utilisateur.prive);
+				b.m[i].message= malloc(sizeof(char*)*2048);
+				b.m[i].message=conversion_mpz_char(msgnoncoder);
 				gtk_text_buffer_set_text (bufferMR, b.m[i].message, -1);
+
+				 free(msgcoder);
 			 }
 			}
 			 	
@@ -342,8 +353,6 @@ void afficher_contenu_message(GtkWidget * sender , gpointer *data)
 //page pour envoyer un message 
 void page_envoyer_unmsg()
 {
-
-
 
    imageE =gtk_image_new_from_file("Icon/logo.png"); 
    labelE[0]= gtk_label_new ("Envoyer un message");
@@ -514,40 +523,49 @@ void detuire_mini_f_resultat_envoie()
  
  void on_response (GtkDialog *dialog, gint       response_id, gpointer   user_data)
 {
- 
+
  switch (response_id)
   {
     case GTK_RESPONSE_ACCEPT:
-    			
-    			m.signature =malloc(sizeof(char)*(strlen("message signé on stockera le hash de sha3")+1));
-                strcpy(m.signature,"message signé on stockera le hash de sha3");
-                m.signer =1; 
-               if ( !envoie_message(&m)) printf ("message envoyé !\n"); 
-               else printf ("problème d'écriture ou de boite");
+    			//mp_printf( "valeur  nomnbre  :%Zd\n",ret->nombre);
+    //gmp_printf( "valeur taille  :%d\n", mpz_sizeinbase(ret->nombre , 2));
+     mpz_set_ui(ret->taille , mpz_sizeinbase(ret->nombre,2));
+	
+     signer(sig,ret, &utilisateur.prive);
+
+   // probleme de signature pour linstant on fait ca histoire davoir un truc
+   //a presenter 
+   m.signature =malloc(sizeof(char)*(strlen(mpz_get_str(NULL,10,sig))+1));
+   strcpy(m.signature,mpz_get_str(NULL,10,sig));
+   m.signer = 1;  
+          
+
+           if ( !envoie_message(&m)) printf ("message envoyé !\n"); else printf ("problème d'écriture ");
+                
                 afficher_message_etat(NULL,NULL);
-         	    printf("OUI pour la signature \n");
+
          	    break;
 
     case GTK_RESPONSE_REJECT:
-    			m.signature =malloc (sizeof(char)*3);
+
+    			m.signature =malloc (sizeof(char)*50);
                 strcpy(m.signature,"message non signer");
                 m.signer =0;
                 if ( !envoie_message(&m)) printf ("message envoyé !\n"); 
-                else printf ("problème d'écriture ou de boite");
+                else printf ("problème d'écriture ");
                 afficher_message_etat(NULL,NULL);
-    	        printf("NON pour la signature \n");
     	        break;
     default:
-    		    m.signature =malloc (sizeof(char)*(strlen("message signé on stockera le hash de sha3")+1));
-                strcpy(m.signature,"message signé on stockera le hash de sha3");
-                m.signer =1; 
+    		    m.signature =malloc (sizeof(char)*50);
+                strcpy(m.signature,"message non signer");
+                m.signer =0;
                 if ( !envoie_message(&m)) printf ("message envoyé !\n"); 
-                else printf ("problème d'écriture ou de boite");
+                else printf ("problème d'écriture");
                 afficher_message_etat(NULL,NULL);
-    		    printf(" par defaut  NON pour la signature \n");
     		    break;
   }
   gtk_widget_destroy (GTK_WIDGET (dialog));
+  mpz_clear(sig);
 }
 
 //demande la signature 
@@ -575,23 +593,39 @@ void show_dialog (GtkButton *button, gpointer   user_data)
     gtk_text_buffer_get_end_iter(bufferE,&end);
    
 
-   // char *  str =gtk_text_buffer_get_text(bufferE,&start, &end,FALSE);
-    //snprintf (&utilisateur.email[strlen(utilisateur.email)-1] ,strlen("\0")+1,'\0');
-    //supprimer_antislashn(char * chaine)
+    mpz_init(sig);		
+    ch     = malloc (sizeof (message));
+    message *codage = malloc (sizeof (message));
+     ret = malloc (sizeof (message));
+
+    mpz_inits (ch->taille , codage->taille , ch->nombre,codage->nombre,ret -> taille , ret -> nombre ,NULL); 
+    
+    ch=conversion_char_mpz(gtk_text_buffer_get_text(bufferE,&start, &end,FALSE)); 
+    codage=conversion_char_mpz("ASCII");
+
+    mpz_set_ui (codage->taille , mpz_sizeinbase(codage->nombre,2));
+    //message *ret = malloc (sizeof (message));
+    //mpz_inits (ret->taille , ret->taille);
+
+    ret = chiffrement(ch, &utilisateur.publique , codage);
+    
+    printf("apres chiff de merde\n");
+    //gmp_printf("(cle) ; %Zd\n",utilisateur.prive.n );
     m.env_email = remove_n(utilisateur.email);
    // printf("mafonction%smafonction\n",m.env_email);
     strcpy(m.env_email,utilisateur.email);
     m.dest_email = remove_n((char *)gtk_entry_get_text(GTK_ENTRY(entreeE[0])));
      //printf("mafonction%smafonction\n",m.dest_email);
     m.titre =(char *)gtk_entry_get_text(GTK_ENTRY(entreeE[1]));
-    m.message = gtk_text_buffer_get_text(bufferE,&start, &end,FALSE);
+    m.message = malloc(sizeof(char)*2048);
+    mpz_get_str(m.message,0,ret->nombre);
    
    // printf ( "%s  %s   %s " , gtk_entry_get_text(GTK_ENTRY(entreeE[0])) ,gtk_entry_get_text(GTK_ENTRY(entreeE[1])) , str);
   g_signal_connect (GTK_DIALOG (dialog), "response", G_CALLBACK (on_response), NULL);
 }
 
 
-void page_message_envoyes()
+void messagerie_envoye()
 {
 
     imageEM =gtk_image_new_from_file("Icon/logo.png"); 
@@ -729,14 +763,22 @@ void afficher_contenu_message_envoyee(GtkWidget * sender , gpointer *data)
       
            for (int i = 0 ; i< 29 ; ++i )
            {
+           	//printf("ok\n");
 			 if (sender == BEM[i] && !data)
 			 {	
 
 				gtk_label_set_label (GTK_LABEL(labelEM[1]),boiteE.m[i].env_email);
 				gtk_label_set_label (GTK_LABEL(labelEM[2]),boiteE.m[i].titre);
 				printf("%s         \n" ,boiteE.m[i].titre);
+				message * msgcoder1 = malloc (sizeof(message));
+				mpz_inits (msgcoder1->taille,msgcoder1->nombre,NULL); 
+    			mpz_set_str(msgcoder1->nombre,boiteE.m[i].message,10);
+    			mpz_set_ui (msgcoder1->taille ,mpz_sizeinbase(msgcoder1->nombre,2) );
+				message * msgnoncoder1=dechiffrement(msgcoder1, &utilisateur.prive);
+				boiteE.m[i].message= malloc(sizeof(char*)*2048);
+				boiteE.m[i].message=conversion_mpz_char(msgnoncoder1);
 				gtk_text_buffer_set_text (bufferEM, boiteE.m[i].message, -1);
-			
+			     free(msgcoder1);
 			 } }
 }
 }
@@ -746,7 +788,7 @@ void afficher_contenu_message_envoyee(GtkWidget * sender , gpointer *data)
 //message indesirable
 
 
-void page_message_indesirable()
+void messagerie_indesirable()
 {
 	imageMI =gtk_image_new_from_file("Icon/logo.png"); 
 	labelMI[0]= gtk_label_new ("Messages Indésirables");
@@ -934,7 +976,15 @@ void reponse_a_utilisateur_supp_affiche(GtkWidget * sender , gpointer * data)
 			 {	
 				gtk_label_set_label (GTK_LABEL(labelMI[1]),BoiteInde.m[i].env_email);
 				gtk_label_set_label (GTK_LABEL(labelMI[2]),BoiteInde.m[i].titre);
+				message * msgcoder2 = malloc (sizeof(message));
+				mpz_inits (msgcoder2->taille,msgcoder2->nombre,NULL); 
+    			mpz_set_str(msgcoder2->nombre,BoiteInde.m[i].message,10);
+    			mpz_set_ui (msgcoder2->taille ,mpz_sizeinbase(msgcoder2->nombre,2) );
+				message * msgnoncoder2=dechiffrement(msgcoder2, &utilisateur.prive);
+				BoiteInde.m[i].message= malloc(sizeof(char*)*2048);
+				BoiteInde.m[i].message=conversion_mpz_char(msgnoncoder2);
 				gtk_text_buffer_set_text (bufferMI, BoiteInde.m[i].message, -1);
+				free(msgcoder2);
 			 }
 			
 			}

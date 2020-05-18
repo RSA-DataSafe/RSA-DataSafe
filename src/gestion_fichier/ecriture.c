@@ -118,14 +118,17 @@ int  Change_Email(char *email , char *mdp , char *newemail)
         {
           if(email[i]!=line_buf[i])
           {
-             test=1;break;
-         }
+             test=1;
+             break;
+          }
         }
         int test1=0;
         for(int j=0;j<strlen(line_buf1)-1;j++)
         {
-          if(line_buf1[j]!=mdp[j])
-            test1=1;break;
+          if(line_buf1[j]!=mdp[j]){
+            test1=1;
+            break;
+        	}
         }
       if(test==0 && test1==0)
       {
@@ -187,7 +190,9 @@ int  Change_MotDePasse (char*email , char *mdp , char* newmdp)
         for(int j=0;j<strlen(line_buf1)-1;j++)
         {
           if(line_buf1[j]!=mdp[j])
-            test1=1;break;
+          {
+           	 test1=1;break;
+          }
         }
       if(test==0 && test1==0)
       {
@@ -273,13 +278,13 @@ int envoie_message(mail *m)
               strcpy(tmp,m->titre);
               strcat(tmp,":sig");
               char *email=malloc((strlen(m->dest_email)+100)*sizeof(char));
-              strcpy(email,"Email : ");
+              strcpy(email,"");
 
               strcat(email,m->dest_email);
               
             
               char *message=malloc((strlen(m->message)+300)*sizeof(char));
-              strcpy(message,"Message Envoyé : ");
+              strcpy(message,"");
               strcat(message,m->message);
               char *signature = NULL; 
               if (m-> signature == NULL)
@@ -318,10 +323,10 @@ int envoie_message(mail *m)
               strcat(chemin,"MessageIndesirable.txt");
               printf(" %s  \n",chemin);
               res1=ecrire_fichier(chemin,tmp);
-              strcpy(email,"Email : ");
+              strcpy(email,"");
               strcat(email,m->env_email);
               res2=ecrire_fichier(chemin,email);
-              strcpy(message,"Message Recu : ");
+              strcpy(message,"");
               strcat(message,m->message);
               res3=ecrire_fichier(chemin,message);
               //strcpy(signature,"Signature Message : ");
@@ -342,11 +347,11 @@ int envoie_message(mail *m)
               strcat(tmp,":sig");
              
               char *email=malloc((strlen(m->dest_email)+50)*sizeof(char));
-              strcpy(email,"Email : ");
+              strcpy(email,"");
               strcat(email,m->dest_email);
               
               char *message=malloc((strlen(m->message)+200)*sizeof(char));
-              strcpy(message,"Message Envoyé : ");
+              strcpy(message,"");
               strcat(message,m->message);
              
               char *chemin=malloc(300*sizeof(char));
@@ -384,10 +389,10 @@ int envoie_message(mail *m)
               strcat(chemin,"/");
               strcat(chemin,"MessageRecu.txt");
               res1=ecrire_fichier(chemin,tmp);
-              strcpy(email,"Email : ");
+              strcpy(email,"");
               strcat(email,m->env_email);
               res2=ecrire_fichier(chemin,email);
-              strcpy(message,"Message Recu : ");
+              strcpy(message,"");
               strcat(message,m->message);
               res3=ecrire_fichier(chemin,message);
               res4=ecrire_fichier(chemin,signature);
@@ -399,19 +404,23 @@ int envoie_message(mail *m)
        }
        return 0;
 }
-int  stocker_message(char *email , char*  message , char *boite)
+int  stocker_message(char *email , mpz_t  message , char *boite)
 {   
-    int res;
+   int res;
+    char *str=malloc(1024*sizeof(char));
+    mpz_get_str(str,10,message);//conversion_mpz_char
     char dossier[300];
     strcpy(dossier,"../../RSA-DataSafe/rsa/");
     strcat(dossier,email);
     strcat(dossier,"/");
     strcat(dossier,boite);
-    res=ecrire_fichier(dossier,message);
+    res=ecrire_fichier(dossier,str);
     if(res!=0)
     {
       return ERR_ERCI;
     }
     
-    return 0;
+      return 0;
+    
 }
+

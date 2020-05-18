@@ -1,6 +1,6 @@
 #include "inter_inscription.h"
 
-void  Page_d_inscription ()
+void   page_inscription()
 {
 	imagec[1] = gtk_image_new_from_file("Icon/per.png"); 
 	minilogo[1] = gtk_image_new_from_file("Icon/logo.png"); 

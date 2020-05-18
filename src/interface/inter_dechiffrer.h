@@ -21,11 +21,13 @@ GtkWidget * vboxCD , * labelcharD ,*text_viewCD;
 message* messageclair;
 message* chiff;
 char *chaineD;
-void page_dechiffrer();
+char* pathD;
+
+void page_dechiffrement();
 void Slots_dechiffer(GtkWidget * sender , gpointer * data);
 void page_chargementD();
 int page_resultatD();
 void detuire_mini_f_resultatD();
-
+void fic_selected (GtkFileChooser *chooser, gpointer user_data);
 
 #endif

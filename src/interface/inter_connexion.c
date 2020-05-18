@@ -1,6 +1,6 @@
 #include "inter_connexion.h"
 
-void  Page_de_connection ()
+void  page_connexion ()
 {
 	imagec[0] = gtk_image_new_from_file("Icon/per.png"); 
 	minilogo[0] = gtk_image_new_from_file("Icon/logo.png");

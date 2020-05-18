@@ -1,5 +1,6 @@
 #include "inter_dechiffrer.h"
-void page_dechiffrer()
+
+void page_dechiffrement()
 {
 
 	imageD =gtk_image_new_from_file("Icon/logo.png"); 
@@ -83,20 +84,28 @@ void page_dechiffrer()
      gtk_box_pack_start (GTK_BOX(Dechiffrer),GTK_WIDGET(MAIN),TRUE,TRUE,0);
 	 
    	 for (int i = 0 ; i < 2 ; ++i) 
-	 
 	 	g_signal_connect(G_OBJECT(buttonD[i]),"clicked",G_CALLBACK(Slots_dechiffer),NULL);
+		g_signal_connect (G_OBJECT (buttonD[3]), "selection-changed", G_CALLBACK (fic_selected), NULL);
   }
 
 
-  void Slots_dechiffer(GtkWidget * sender , gpointer * data) 
-  {
+void Slots_dechiffer(GtkWidget * sender , gpointer * data) 
+{
     if ( (GTK_WIDGET(buttonD[1]) == sender )   && !data ) 
                                  gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (Connexion));
    
      if ( (GTK_WIDGET(buttonD[0]) == sender )   && !data )  
                                  gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (Menu));
-  }
+}
+void fic_selected (GtkFileChooser *chooser, gpointer user_data)
+{
+  gchar *filename = gtk_file_chooser_get_filename (chooser);
+  if (!filename) return;
 
+  pathD = malloc(sizeof (char) *(strlen(filename) +1));
+  strcpy(pathD,filename);
+  g_free (filename);
+}
 
 void page_chargementD()
 {
@@ -104,24 +113,32 @@ void page_chargementD()
     GtkTextIter end;
     gtk_text_buffer_get_start_iter(bufferD,&start);
     gtk_text_buffer_get_end_iter(bufferD,&end);
-    
-    chaineD= (char*)gtk_text_buffer_get_text(bufferD,&start, &end,FALSE);
-    chiff = malloc (sizeof (message));
-    printf ("la taille de la chaine : %d\n" ,strlen (chaineD));
-    mpz_init (chiff->taille); 
-    mpz_init_set_str(chiff->nombre ,chaineD, 10);
-    
-    mpz_set_ui (chiff->taille , mpz_sizeinbase(chiff->nombre,2));
-    chiff = conversion_hexa_mpz(chaineD);
-    gmp_printf ("chiff %Zd",chiff -> nombre );
-    printf("j ss avant dechiffrement \n");
-    messageclair=dechiffrement(chiff, &utilisateur.prive);
-    printf("apres  dechiffrement \n");
+    chaineD= malloc (sizeof(char) * strlen (gtk_text_buffer_get_text(bufferD,&start, &end,FALSE)) +1 );
+    strcpy(chaineD ,gtk_text_buffer_get_text(bufferD,&start, &end,FALSE));
+	if(pathD){
+		chaineD = NULL;
+       		chaineD = lire_fichier(pathD);
+       		printf("path : %s chaine : %s \n",pathD ,chaineD );
+       		free(pathD);
+          pathD =NULL;
+	}
 
+    gtk_text_buffer_set_text (bufferD, "", -1);
+    chiff = malloc (sizeof (message));
+    
+    mpz_inits (chiff->taille,chiff->nombre,NULL); 
+    mpz_set_str(chiff->nombre,chaineD,10);
+    int a=mpz_sizeinbase(chiff->nombre,2);
+    mpz_set_ui (chiff->taille ,a );
+   // printf("j ss avant dechiffrement et la taille %d \n",a);
+	//gmp_printf("le mess  a dech %Zd\n",chiff->nombre);
+    messageclair=dechiffrement(chiff, &utilisateur.prive);
+    //gmp_printf("le mess  apres dech %Zd\n",messageclair->nombre);
+	free(chiff);
   windowD = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   gtk_window_set_transient_for (GTK_WINDOW(windowD),GTK_WINDOW(MainWindow));
   gtk_window_set_position (GTK_WINDOW(windowD), GTK_WIN_POS_CENTER);
-  gtk_window_set_title (GTK_WINDOW(windowD),"          Data Safe");
+  gtk_window_set_title (GTK_WINDOW(windowD),"Data Safe");
   gtk_widget_set_size_request(GTK_WIDGET(windowD) ,500,500);
   vboxCD = gtk_box_new (GTK_ORIENTATION_VERTICAL,50); 
 
@@ -161,12 +178,15 @@ int page_resultatD()
         gtk_widget_set_name (GTK_WIDGET(Frame),"miniT");	
 		GtkWidget *scrolled_window = gtk_scrolled_window_new (NULL , NULL);
 	 	bufferCD= gtk_text_buffer_new (NULL);
-		
-		mpz_get_str(chaineD,10,messageclair);
+
+		//mpz_get_str(chaineD,0,messageclair->nombre);
+		chaineD = malloc(sizeof(char*)*2048);
 		chaineD=conversion_mpz_char(messageclair);
 		printf("le mess %s\n",chaineD);
-		gtk_text_buffer_set_text (bufferCD,chaineD, -1);
 
+
+		gtk_text_buffer_set_text (bufferCD,chaineD, -1);
+		free(chaineD);
 		text_viewCD= gtk_text_view_new_with_buffer (bufferCD);
 	   gtk_text_view_set_editable (GTK_TEXT_VIEW(text_viewCD), FALSE);
 	   gtk_container_set_border_width (GTK_CONTAINER (scrolled_window), 10);	   

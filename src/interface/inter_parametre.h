@@ -24,12 +24,13 @@
 	GtkWidget *imagesecurite , *imagebsecurite[2], *labelsecurite , *buttonsecurite[3] ;
 	GtkWidget * attention; 
 
-	void page_Parametre();
+	void page_parametre();
 	void Slots_parametre(GtkWidget * sender , gpointer * data);
-	void page_compte();
+	void parametre_compte();
 	void modificattion_donnes_compte(GtkWidget * sender , gpointer data);
 	
-	void page_securite();
+	void parametre_securite();
+	void parametre_Apropos();
 
 
 #endif
