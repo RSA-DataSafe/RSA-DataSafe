@@ -57,48 +57,24 @@ void invert (mpz_t x) {
 };
 
 block *decoupage_block(message* m, int taille) {
-    block *res = malloc (sizeof (res));                 // on réserve de l'espace mémoire pour res
-    int m_size = mpz_get_ui (m->taille) ;               // on récupère la taille de m
-    res->nb_block=  (m_size/ 1088)+1;
-    //printf("le nombre de blloc calculé %d\n",res->nb_block);
-    //gmp_printf("le nombre %Zd\n",m->nombre);
+    block *res = malloc (sizeof (res));
+    int m_size = mpz_get_ui (m->taille) ;
+    res->nb_block=  (m_size/ taille)+1;
     res->tab = malloc(sizeof(mpz_t) * res->nb_block);
        
     for(int i =0; i < res->nb_block; i++) {
         mpz_init(res->tab[i]);
-        mpz_tdiv_q_2exp(res->tab[i],m->nombre,taille-(i*1088));
+        mpz_tdiv_q_2exp(res->tab[i],m->nombre,taille-(i*taille));
          
         mpz_t base;
       	mpz_init(base);   
         mpz_add_ui(base,base, 2);
-        mpz_pow_ui(base,base,1088);  
+        mpz_pow_ui(base,base,taille);  
         mpz_sub_ui(base,base, 1);  
         mpz_and(res->tab[i],base,res->tab[i]); 
-        //gmp_printf("le nombre %Zd\n",res->tab[i]);
    }
-    //gmp_printf("a la fin decoupage ret %Zd\n",res->tab[1]);
     return res;
 };
-/*
-block *decoupage_block(message* m, int taille) {
-    block *res = malloc (sizeof (res));                 // on réserve de l'espace mémoire pour res
-    res->tab = malloc (sizeof (mpz_t));                 // on réserve de l'espace mémoire pour res
-    int j = 0,cnt = 0;                                      // cnt comptera le nombre de blocs, j sert d'indice au parcours du bloc en cours
-    int m_size = mpz_get_ui (m->taille);                // on récupère la taille de m
-    for (int i=0; i+j<m_size; cnt++) {                  // tant que la lecture de m n'est pas terminée, i sert à marquer l'endroit du début d'un bloc sur m
-        res->tab = realloc (res->tab, sizeof (res) * cnt+1); // on réserve une nouvelle "case mémoire" pour le nouveau bloc à ajouter
-        mpz_init (res->tab[cnt]);                       // on initialise ce nouveau bloc à 0
-        for (j=0; j<taille; j++) {                      // on parcours sur m le bloc en cours
-            int tmp = mpz_tstbit (m->nombre, i+j);      // on récupère la valeur du bit à l'endroit où on se trouve
-            mpz_add_ui (res->tab[cnt], res->tab[cnt], pow (2*tmp, j));       // on ajoute le bit lu dans le bloc courant
-        }
-        i+=j;                                           // on met le "curseur" sur m à l'endroit qui correspond à la fin du bloc qu'on vient d'ajouter
-    }
-    
-    res->nb_block = cnt;                                // on stocke le nombre de blocs
-    gmp_printf("a la fin decoupage ret %Zd\n",res->tab[0]);
-    return res;
-};*/
 
 void keccak_f(mpz_t **matrice, mpz_t RC) {
 
