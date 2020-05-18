@@ -532,13 +532,17 @@ void detuire_mini_f_resultat_envoie()
      mpz_set_ui(ret->taille , mpz_sizeinbase(ret->nombre,2));
 	
      signer(sig,ret, &utilisateur.prive);
-
-   // probleme de signature pour linstant on fait ca histoire davoir un truc
-   //a presenter 
-   m.signature =malloc(sizeof(char)*(strlen(mpz_get_str(NULL,10,sig))+1));
-   strcpy(m.signature,mpz_get_str(NULL,10,sig));
-   m.signer = 1;  
-          
+		gmp_printf("val de la signture %Zd\n",sig);
+     if (!verifie_signature(ret-> nombre, sig, &utilisateur.publique))
+     {
+     	printf("okkkkkkkkkkkkk ici \n");
+       m.signature =malloc(sizeof(char)*(strlen(mpz_get_str(NULL,10,sig))+1));
+       strcpy(m.signature,mpz_get_str(NULL,10,sig));
+       m.signer =1;
+     }
+    else m.signer = 0;  
+              printf("valeurrrrrrr sig %d\n", m.signer);
+        
 
            if ( !envoie_message(&m)) printf ("message envoyé !\n"); else printf ("problème d'écriture ");
                 

@@ -265,19 +265,23 @@ void modificattion_donnes_compte(GtkWidget * sender , gpointer data)
    	 {
        
        if (gtk_entry_get_text_length(GTK_ENTRY(entreecomp[0]))){
-       				if (!Change_Email(utilisateur.email , utilisateur.mdp, (char*)gtk_entry_get_text(GTK_ENTRY(entreecomp[0])))){
- 					utilisateur.email = (char*)gtk_entry_get_text(GTK_ENTRY(entreecomp[0]));	
- 					printf ("okkkkkkkkkk 1\n");
- 				 	char * nom= g_strdup_printf("%s  %s", "Bienvenue", utilisateur.email);
-                 	gtk_label_set_text(GTK_LABEL(lbcompte),nom);
-                 	free(nom);
-                 }
+       				
+       				if (!Change_Email(utilisateur.email , utilisateur.mdp, (char*)gtk_entry_get_text(GTK_ENTRY(entreecomp[0]))))
+       				{
+ 					  utilisateur.email = remove_n((char*)gtk_entry_get_text(GTK_ENTRY(entreecomp[0])));	
+ 					  printf ("okkkkkkkkkk 1\n");
+ 				 	  char * nom= g_strdup_printf("%s  %s", "Bienvenue", utilisateur.email);
+                 	  gtk_label_set_text(GTK_LABEL(lbcompte),nom);
+                 	  free(nom);
+                    }
              }
-  	    if (gtk_entry_get_text_length(GTK_ENTRY(entreecomp[1]))){
-  	   					if ( !Change_MotDePasse (utilisateur.email , utilisateur.mdp , (char*)gtk_entry_get_text(GTK_ENTRY(entreecomp[1])))){
-  	   	        		utilisateur.mdp = (char*)gtk_entry_get_text(GTK_ENTRY(entreecomp[1]));
-  	   	         		printf ("okkkkkkkkkk 2\n");
-  	   	         	}   
+  	    			if (gtk_entry_get_text_length(GTK_ENTRY(entreecomp[1])))
+  	    			{
+  	   					if ( !Change_MotDePasse (utilisateur.email , utilisateur.mdp , (char*)gtk_entry_get_text(GTK_ENTRY(entreecomp[1]))))
+  	   					{
+	  	   	        		utilisateur.mdp = remove_n((char*)gtk_entry_get_text(GTK_ENTRY(entreecomp[1])));
+	  	   	         		printf ("okkkkkkkkkk 2\n");
+  	   	         	    }   
          }
            utilisateur.email = remove_n(utilisateur.email);
            utilisateur.mdp = remove_n(utilisateur.mdp);

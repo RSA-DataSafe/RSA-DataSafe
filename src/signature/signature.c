@@ -16,7 +16,7 @@ void signer(mpz_t signature, message *mes, cle_prive *prive) {
 }
 
 int verifie_signature(mpz_t chiffre, mpz_t signature, cle_publique *publique) {
-
+			gmp_printf("val de la signture dansverif %Zd\n",signature );
 	mpz_t signature_prime;
 	mpz_init(signature_prime);
 	int res = 0;
@@ -27,11 +27,13 @@ int verifie_signature(mpz_t chiffre, mpz_t signature, cle_publique *publique) {
     printf("tailllle dans la fonction  %d \n" , taille );
 	mpz_set_ui(m.taille,taille);
 	printf("ok\n");
-	sha3(&m,512);
+	message *tmp_sha3 = NULL;
+	tmp_sha3=sha3(&m,512);
 	printf("ok2\n");
 	expo_mod(signature_prime, signature, publique->e, publique->n);
-	res = mpz_cmp(signature_prime,m.nombre);
-	mpz_clear(signature_prime);
+	res = mpz_cmp(signature_prime,tmp_sha3->nombre);
+	mpz_clears(signature_prime, m.nombre,m.taille,NULL);
+	free(tmp_sha3);
      printf("resssssss : %d\n", res );
 	return res;
 }
