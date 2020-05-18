@@ -32,15 +32,15 @@ block *creer_block_oaep(message *m,message *encodage, mpz_t donnee_alea) {
     mpz_t nb_block;
     mpz_init(nb_block);
 
-    mpz_div_ui(nb_block, m->taille, 1528);
+    mpz_div_ui(nb_block, m->taille, 1280);
 
     mpz_t rest;
     mpz_init(rest);
-    mpz_mod_ui(rest, m->taille, 1528);
+    mpz_mod_ui(rest, m->taille, 1280);
     if (mpz_cmp_ui(rest, 0) != 0) {
         mpz_add_ui(nb_block, nb_block, 1);
         int i_rest = mpz_get_ui(rest);
-        int zero_adding = 1528 - i_rest;
+        int zero_adding = 1280 - i_rest;
         mpz_mul_2exp(m->nombre,m->nombre,zero_adding);
         mpz_add_ui(m->taille, m->taille,zero_adding);
        
@@ -59,13 +59,13 @@ block *creer_block_oaep(message *m,message *encodage, mpz_t donnee_alea) {
     b->tab = malloc(sizeof(mpz_t) * i_block);
    for(int i = 0; i < i_block; i++) {
         mpz_init(b->tab[i]);
-        mpz_tdiv_q_2exp(b->tab[i],m->nombre,i_taille-((i+1)*1528));
+        mpz_tdiv_q_2exp(b->tab[i],m->nombre,i_taille-((i+1)*1280));
          
-        // Calcul 2^1528-1
+        // Calcul 2^1280-1
         mpz_t base;
       	mpz_init(base);   
         mpz_add_ui(base,base, 2);
-        mpz_pow_ui(base,base,1528);  
+        mpz_pow_ui(base,base,1280);  
         mpz_sub_ui(base,base, 1);  
         mpz_and(b->tab[i],base,b->tab[i]); 
         
@@ -157,12 +157,12 @@ message *recupere_message_oaep_1(block *b) {
     message *m  = malloc(sizeof(message));
     mpz_init(m->nombre);
     mpz_init(m->taille);
-    mpz_set_ui(m->taille, 1528);
+    mpz_set_ui(m->taille, 1280);
     mpz_mul_ui(m->taille, m->taille, b->nb_block);
 
     for (int i = 0; i < b->nb_block; i++)
     {
-        shift_gauche(m->nombre, 1528);
+        shift_gauche(m->nombre, 1280);
         shift_droite(b->tab[i], 512);
         mpz_add(m->nombre, m->nombre, b->tab[i]);
     }
