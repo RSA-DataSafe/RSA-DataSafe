@@ -47,7 +47,7 @@ void mgf(mpz_t res, message *graine, mpz_t taille) {
     mpz_div_ui(nb, taille, TAILLE_SHA3_256);
 
     mpz_set(tmp_i2osp->taille, graine->taille);
-    shift_gauche(tmp_i2osp->taille, TAILLE_INT);
+    mpz_add_ui(tmp_i2osp->taille, tmp_i2osp->taille, TAILLE_INT);
 
     for(mpz_set_ui(i, 0); mpz_cmp(i, nb) < 0; mpz_add_ui(i, i, 1)) {
         i2osp(tmp_i2osp->nombre, graine->nombre, i);
