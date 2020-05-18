@@ -72,7 +72,7 @@ void oaep_block(mpz_t premiere_entree, mpz_t deuxieme_entree, mpz_t premiere_sor
     // Init
     mpz_t TAILLE_BLOCK_GAUCHE;
     mpz_init(TAILLE_BLOCK_GAUCHE);
-    mpz_set_ui(TAILLE_BLOCK_GAUCHE, 1792);
+    mpz_set_ui(TAILLE_BLOCK_GAUCHE, 1536);
 
     mpz_t TAILLE_BLOCK_DROITE;
     mpz_init(TAILLE_BLOCK_DROITE);
