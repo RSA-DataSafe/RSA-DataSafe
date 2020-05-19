@@ -22,9 +22,6 @@ message *padding_sha3(message *m, int taille) {
     mpz_add (res->nombre, res->nombre, tmp);            // on ajoute tmp à res
 
     mpz_clears (pad, tmp, NULL);
-    /* TEST & DEBUG
-    printf ("Padding = "); mpz_out_str (stdout, 2, res->nombre); printf (" / taille = %d (réelle) / ", mpz_sizeinbase (res->nombre, 2)); mpz_out_str (stdout, 10, res->taille); printf (" (dans le struct)\n");
-    */
     return res;
 };
 
@@ -205,17 +202,16 @@ message *sha3(message *m, int taille) {
             b_size = 576;
             break;
         default :
-            fprintf (stderr, "Wrong size input for sha3\n");
+            fprintf (stderr, "Wrong input size for sha3\n");
             exit(107);
     }
 
     // on ajoute le padding
     message *res = padding_sha3 (m, b_size);
-	//gmp_printf("bnrjd  %Zd\n",res->nombre);
 
     // on découpe en blocs
     block *r = decoupage_block (res, b_size);
-	//gmp_printf("block apres decoupage  %Zd\n",r->tab[0]);
+	
     // on créé la matrice pour keccak (round)
     mpz_t **matrice = malloc (sizeof (*matrice) * 5);
     for (int i=0; i<5; i++) {
@@ -247,6 +243,7 @@ message *sha3(message *m, int taille) {
 
         cnt--;
     }
+
     // on met le résultat final dans res
     mpz_t output;
     mpz_init (output);
