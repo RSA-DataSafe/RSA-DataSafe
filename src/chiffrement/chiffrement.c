@@ -28,7 +28,7 @@ message *chiffrement(message *m, cle_publique *publique, message *encodage) {
     mpz_init(tmp);
 
     for(int i = 0;i<(b->nb_block); i++) {
-        mpz_powm(b->tab[i], b->tab[0], publique->e, publique->n);
+        mpz_powm(b->tab[i], b->tab[i], publique->e, publique->n);
     }
 
     message *k = recupere_message_oaep(b);

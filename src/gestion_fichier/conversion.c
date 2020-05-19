@@ -43,7 +43,7 @@ char * conversion_mpz_char( message * m ) {
 		mpz_and(tmp, tmp, AND);
 		ret[i] = mpz_get_ui(tmp);
 	}
-printf("dans conversion %s \n",ret);
+
 	return ret;
 }
 
@@ -78,7 +78,7 @@ message *conversion_hexa_mpz ( char *chaine ) {
 }
 
 char *conversion_mpz_hexa ( message *m ) {
-	//A revoir 
+	
 	mpz_t mpz_taille;
 	mpz_init(mpz_taille);
 	mpz_div_ui(mpz_taille, m->taille, 4);

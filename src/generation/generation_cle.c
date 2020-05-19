@@ -113,9 +113,7 @@ void genere_cle(cle_publique *publique, cle_prive *prive, int taille){
 	mpz_init(ex);
 	mpz_set_ui(ex,5);
 	mpz_powm(ex,ex,publique->e,publique->n);
-	gmp_printf("chiff %Zd \n",ex);
 	mpz_powm(ex,ex,prive->d,prive->n);
-	gmp_printf("dechiff %Zd \n",ex);
 	mpz_clear(ex);
 
 }
