@@ -92,15 +92,14 @@ int recupere_cle_publique(char * email, char * mdp, cle_publique * publique) {
 }
 
 int recupere_cle_privee(char * email, char * mdp, cle_prive * prive) {
-	if(chercher_utilisateur(email,mdp) != ERR_LECT) {
+	
 		char * chemin = calloc(sizeof(char)*MAX_CARACT + sizeof("rsa/") + sizeof("/Cles.txt"),sizeof(char));
 		char * e = NULL;
 		char * d = NULL;
 		char * n = NULL;
 		
-		if(chemin == NULL) {
+		if(chemin == NULL) 
 			return ERR_LECT;
-		}
 		
 		
 		int i = 0;
@@ -132,7 +131,7 @@ int recupere_cle_privee(char * email, char * mdp, cle_prive * prive) {
 		
 		fclose(fichier);
 		return 0;
-	}
+	
 	return ERR_LECT;
 }
 
@@ -192,7 +191,7 @@ int lire_boite(char *email, boite * b)
 			buff1[a] = c;
 			a++;
 		} while(c != '\n');
-				//printf("sigggggggggg  |%s|\n" , buff1);
+				
 		//entrer la valeur si signé ou pas
 		if(strcmp(buff1,"sig\n") == 0)
 
@@ -225,6 +224,7 @@ int lire_boite(char *email, boite * b)
 		do {
 				c = fgetc(fichier);
 				buff2[a] = c;
+
 				a++;
 			} while(c!= '\n' && c!= '\0');
 					
@@ -247,6 +247,7 @@ int lire_boite(char *email, boite * b)
 			do {
 				c = fgetc(fichier);
 				buff3[d] = c;
+				printf("#######%c",buff3[d] );
 				d++;
 				} while(c!= '\n' && c !=EOF);
 

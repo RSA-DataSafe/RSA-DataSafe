@@ -7,8 +7,14 @@
 #include "erreur.h"
 #include "conversion.h"
 #include "../structure/structure.h"
+#include "../structure/structure.h"
+#include "../chiffrement/chiffrement.h"
+#include "../chiffrement/gestion_block.h"
+#include "../dechiffrement/oaep_1.h"
+#include "../dechiffrement/dechiffrement.h"
 #include <sys/stat.h>
 #include <sys/types.h>
+#include "lecture.h"
 #ifndef _ecriture_h
 #define _ecriture_h
 

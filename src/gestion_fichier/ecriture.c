@@ -269,6 +269,49 @@ int  ecrire_fichier(char *chemin , char *message)
 }
 int envoie_message(mail *m)
 {
+   cle_publique sender  ;  cle_prive receveur ;   mpz_inits(sender.e , sender.n, receveur.d , receveur.n ,NULL);
+    printf (" mail 1  %s  mail2 %s " , m-> dest_email , m-> env_email);
+     if (!recupere_cle_privee(m->dest_email,NULL,&receveur))
+                        {
+                          gmp_printf ("cle  d recup :%Zd\n" , receveur.d);
+                          gmp_printf ("cle  n recup :%Zd\n" , receveur.n);
+                        }
+                     
+      if (!recupere_cle_publique(m->env_email,NULL,&sender)){
+                          gmp_printf ("cle  e recup :%Zd\n" , sender.e);
+                          gmp_printf ("cle  n recup :%Zd\n" , sender.n);
+        }
+
+        //dechiffrer le message avec la cle prive du receveur 
+        // pour ensuite le chiffrer avec la cle public de celui qui envoie (pour le stocker dans envoye comme cea il poura etre lu )
+        message * msgcoder = malloc (sizeof(message));  mpz_inits (msgcoder->taille,msgcoder->nombre,NULL); 
+        
+        mpz_set_str(msgcoder->nombre,m->message,10);  
+
+        mpz_set_ui (msgcoder->taille ,mpz_sizeinbase(msgcoder->nombre,2) );
+        
+        message * msgnoncoder=dechiffrement(msgcoder, &receveur);
+        
+        char * chaine_dans_envoie = malloc(sizeof(char*)*2100);
+        
+        chaine_dans_envoie =conversion_mpz_char(msgnoncoder);
+        printf("chaine envoie clair %s\n",chaine_dans_envoie);
+        //
+        message *ch     = malloc (sizeof (message));
+        message *codage = malloc (sizeof (message));
+        message *ret = malloc (sizeof (message));
+        mpz_inits (ch->taille , codage->taille , ch->nombre,codage->nombre,ret -> taille , ret -> nombre ,NULL);
+        
+        ch=conversion_char_mpz(chaine_dans_envoie); 
+        codage=conversion_char_mpz("ASCII");
+        mpz_set_ui (codage->taille , mpz_sizeinbase(codage->nombre,2));
+         ret = chiffrement(ch, &sender , codage);
+        free(chaine_dans_envoie); 
+        chaine_dans_envoie = malloc(sizeof(char*)*2100);
+        mpz_get_str(chaine_dans_envoie,0,ret->nombre);
+         printf("chaine envoie chiff %s\n",chaine_dans_envoie);
+
+
         int res1,res2,res3,res4;
         if(m->signer ==0)
         {
@@ -276,7 +319,7 @@ int envoie_message(mail *m)
 
               char *tmp =malloc(strlen(m->titre)*sizeof(char));
               strcpy(tmp,m->titre);
-              strcat(tmp,":sig");
+              strcat(tmp,":Nonsig");
               char *email=malloc((strlen(m->dest_email)+100)*sizeof(char));
               strcpy(email,"");
 
@@ -309,7 +352,7 @@ int envoie_message(mail *m)
             
               res1=ecrire_fichier(chemin,tmp);
               res2=ecrire_fichier(chemin,email);
-              res3=ecrire_fichier(chemin,message);
+              res3=ecrire_fichier(chemin,chaine_dans_envoie);
               //res4=ecrire_fichier(chemin,signature);
               if(res1!=0 || res2!=0 || res3!=0 )
               {

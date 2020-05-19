@@ -611,14 +611,29 @@ void show_dialog (GtkButton *button, gpointer   user_data)
     //message *ret = malloc (sizeof (message));
     //mpz_inits (ret->taille , ret->taille);
 
-    ret = chiffrement(ch, &utilisateur.publique , codage);
     
-    printf("apres chiff de merde\n");
     //gmp_printf("(cle) ; %Zd\n",utilisateur.prive.n );
     m.env_email = remove_n(utilisateur.email);
-   // printf("mafonction%smafonction\n",m.env_email);
-    strcpy(m.env_email,utilisateur.email);
+
+    cle_publique cle; 
+    mpz_inits(cle.e , cle.n,NULL);
     m.dest_email = remove_n((char *)gtk_entry_get_text(GTK_ENTRY(entreeE[0])));
+       
+                 	   if (!recupere_cle_publique(m.dest_email,NULL,&cle))
+                 	    {
+                 	        gmp_printf ("cle  e du destinataire recup :%Zd\n" , cle.e);
+                        	gmp_printf ("cle  n du detinataire  :%Zd\n" , cle.n);
+                        }
+                        else{
+                        	printf(" erreur de recuperation des clé \n");
+                        }
+   // printf("mafonction%smafonction\n",m.env_email);
+
+    ret = chiffrement(ch, &cle , codage);
+    
+    printf("apres chiff de merde\n");
+    strcpy(m.env_email,utilisateur.email);
+    
      //printf("mafonction%smafonction\n",m.dest_email);
     m.titre =(char *)gtk_entry_get_text(GTK_ENTRY(entreeE[1]));
     m.message = malloc(sizeof(char)*2048);
