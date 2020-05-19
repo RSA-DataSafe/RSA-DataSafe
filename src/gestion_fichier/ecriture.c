@@ -395,7 +395,7 @@ int envoie_message(mail *m)
               
               char *message=malloc((strlen(m->message)+200)*sizeof(char));
               strcpy(message,"");
-              strcat(message,m->message);
+              strcat(message,chaine_dans_envoie);
              
               char *chemin=malloc(300*sizeof(char));
               strcpy(chemin,"rsa/");
