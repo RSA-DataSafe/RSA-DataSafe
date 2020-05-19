@@ -56,7 +56,7 @@ int Change_MotDePasse (char*email, char *mdp, char* newmdp);
  * */
 int change_cle(informations * InfoUser,cle_publique * pub ,cle_prive * priv);
 
-/** ok mais dans cette fonction on a qu un seul parametre nn ?  ou
+/** 
  * Permet l'envoie d'un message
  * @param m :les informations des emails d'un utilisateur 
  * @return: 0 si ça fonctionne, sinon un des signaux d'erreur

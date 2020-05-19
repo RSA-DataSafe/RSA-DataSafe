@@ -22,14 +22,8 @@ message* dechiffrement(message *c, cle_prive *prive) {
 		
 	}
 	
-
 	// OAEP^(-1)
 	oaep_1(b);
-	
-	    				char* oui=malloc(sizeof(char)*3000);
-    				mpz_get_str(oui,2,b->tab[0]);
-    				
-				free(oui);
 			
 	m = recupere_message_oaep_1(b);
 				

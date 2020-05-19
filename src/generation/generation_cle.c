@@ -57,10 +57,12 @@ void calculerD(cle_prive *prive, cle_publique *publique){
 	mpz_t u,v,gcd;
 	mpz_inits(u,v,gcd,NULL);
 	euclide_etendu(u , v, prive->n, publique->e);
-	if(mpz_cmp_ui(v,0) < 0){
-		printf("dans l if  deh phi \n");
-		mpz_add(v,v,prive->n);}
-	gmp_printf("d  %Zd \n",v);
+	if(mpz_cmp_ui(v,0) < 0)
+	{
+		
+		mpz_add(v,v,prive->n);
+	}
+	
 	mpz_set(prive->d,v);
 	mpz_set(prive->n,publique->n);
 	mpz_clears(u,v,gcd,NULL);
@@ -75,14 +77,14 @@ void GenererPQRSA(mpz_t p, mpz_t q, mpz_t n, int taille){
 		do{
 			bbs(p,taille);
 			mpz_nextprime(p,p);
-			printf("dans q\n");
+			
 		}while(mpz_cmp_ui(p,0)<=0 || miller_rabbin(p,t)!=1  );
 
 		do{
 			bbs(q,taille-1);
 			mpz_nextprime(q,q);
 			mpz_mul(n,p,q);
-			printf("dans q\n");
+			
 	
 		}while( mpz_cmp(p,q)==0 || mpz_cmp_ui(q,0)<=0 || miller_rabbin(q,t)!=1|| (mpz_sizeinbase(n,2)!=2048));
 		

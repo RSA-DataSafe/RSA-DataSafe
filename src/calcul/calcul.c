@@ -6,6 +6,7 @@
 
 
 void expo_mod(mpz_t res, mpz_t num, mpz_t exp, mpz_t mod){
+    //A corriger parce que si on remplace mpz_powm par expo_mod ds la fct chiff et dechiff et sign ca donne pas d bn rslt 
     mpz_set(res, num);
     // taille de l'eposant "exp" en nombre de bit
     int j=mpz_sizeinbase(exp,2);
