@@ -24,6 +24,9 @@ void expo_mod(mpz_t res, mpz_t num, mpz_t exp, mpz_t mod){
             mpz_mod(res,res,mod);
 		}
     }
+
+   
+
 }
 
 void shift_gauche(mpz_t nombre, int decalage)
