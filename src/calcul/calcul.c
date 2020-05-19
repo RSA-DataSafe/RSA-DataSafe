@@ -5,19 +5,26 @@
 
 
 
-void expo_mod(mpz_t result, mpz_t number, mpz_t puissance, mpz_t mod){
-    mpz_set(result, number);
-    for(int i=mpz_sizeinbase(puissance,2)-2; i>=0; i--){
-        // si bit à 0
-        mpz_mul(result,result,result);
-        mpz_mod(result,result,mod);
-
-        if( mpz_tstbit(puissance, i) == 1 ) { // si bit à 1
-            mpz_mul(result,result, number);// r <- r.a
-            mpz_mod(result,result,mod);
-        }
+void expo_mod(mpz_t res, mpz_t num, mpz_t exp, mpz_t mod){
+    mpz_set(res, num);
+    // taille de l'eposant "exp" en nombre de bit
+    int j=mpz_sizeinbase(exp,2);
+    //-2 car on compte pas le bit de poid fort et on commence à partir de l'indice 0
+     j=j-2;
+   for(int i=j; i>=0; i--)
+    {
+        // si bit à 0 square
+        mpz_mul(res,res,res);
+        mpz_mod(res,res,mod);
+		// si bit à 1 mutiply en plus du square 
+        if( mpz_tstbit(exp, i) == 1 ) 
+        { 
+            mpz_mul(res,res, num);
+            mpz_mod(res,res,mod);
+		}
     }
 }
+
 void shift_gauche(mpz_t nombre, int decalage)
 {
   mpz_mul_2exp (nombre,nombre, decalage);
