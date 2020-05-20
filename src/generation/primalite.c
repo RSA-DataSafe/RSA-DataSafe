@@ -10,9 +10,9 @@ int temoin_de_miller(mpz_t a, mpz_t n){
 	
 	while(i){
 		//tmp=d mod 2
-		mpz_mod_ui(tp, d, 2);
+		mpz_mod_ui(t, d, 2);
 		//si tmp pair donc tmp=0 
-		if (mpz_sgn(tp) == 0 ){
+		if (mpz_sgn(t) == 0 ){
 			++s;
 			// d=d/2
 			mpz_cdiv_q_ui(d, d, 2);
@@ -25,8 +25,8 @@ int temoin_de_miller(mpz_t a, mpz_t n){
 	expo_mod(res,a,d,n);
 	mpz_sub_ui(t, n, 1);
 	// si res==1 ou res==n-1  alors pas temoin de miller 
-	if ((mpz_cmp_d(res, 1) == 0) || (mpz_cmp(res, tp) == 0)) {
-		mpz_clears(tp, d, res ,NULL);
+	if ((mpz_cmp_d(res, 1) == 0) || (mpz_cmp(res, t) == 0)) {
+		mpz_clears(t, d, res ,NULL);
 		return 1;
 	}
 	
@@ -39,15 +39,15 @@ int temoin_de_miller(mpz_t a, mpz_t n){
 		mpz_mod(res, res, n);
 		
 		// si res=n-1 alors pas temoin de miller
-		if (mpz_cmp(res, tp) == 0){
-			mpz_clears(tp, d , res, NULL);
+		if (mpz_cmp(res, t) == 0){
+			mpz_clears(t, d , res, NULL);
 			return 1;
 		}
 
 		i++;
 	}
 	
-	mpz_clears(tp, d , res, NULL);
+	mpz_clears(t, d , res, NULL);
 	//temoin de miller donc non premier
 	return 0;
 }
