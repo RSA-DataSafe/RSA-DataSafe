@@ -3,6 +3,7 @@
 #include <gmp.h>
 #include <math.h>
 #include <string.h>
+//cette procédure permet de calculer u et v tel que a*u + b*v=pgcd(a,b)=1
 void euclide_etendu(mpz_t u_1, mpz_t v_1, mpz_t phi_n, mpz_t e)
 {
   mpz_t r,u,v,r1,u1,v1,q,rs,us,vs,div,mu;
@@ -15,6 +16,7 @@ void euclide_etendu(mpz_t u_1, mpz_t v_1, mpz_t phi_n, mpz_t e)
   mpz_set(r1,e);
   mpz_init(div);
   mpz_init(mu);
+  //tant que e!=0 on boucle 
   while(mpz_cmp_ui(r1,0)!=0)
     {
           mpz_div(q,r,r1);
