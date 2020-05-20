@@ -8,23 +8,29 @@
 
 # Projet autour de l'algorithme de RSA
 
-Le but de ce projet est d'implémenter RSA. Nous auront la possibilité de signer et de vérifier un fichier pour s'assurer de l'identiter de l'envoyeur. 
+Le but de ce projet est d'implémenter RSA. Nous auront la possibilité de signer et de vérifier un fichier pour s'assurer de l'identité de l'envoyeur. 
 
 # Installation - Déployement du produit 
 
+## ⚒ Installation
+
+Notre installation ne supporte que les système d'exploitation basé sur Debian.
+
+<pre>./configure.sh</pre>
+
 ## ⚒ Compiler le projet
 
-make
+<pre>make</pre>
 
 ## ▶ Executer le projet
 
-make run
+<pre>make run</pre>
 
 ## ℹ Le code source
 
 Il se trouve dans le répertoire `src/`.
 
-`cd src/`
+<pre>cd src/</pre>
 
 # Module de notre projet
 
