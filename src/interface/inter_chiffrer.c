@@ -138,10 +138,10 @@ void page_chargementC()
     codage=conversion_char_mpz("ASCII" );
    
     mpz_set_ui (codage->taille , mpz_sizeinbase(codage->nombre,2));
-		gmp_printf("le mess  avant ch %Zd\n",messageachiff->nombre);
+		
 	
     messagechiff=chiffrement(messageachiff, &utilisateur.publique , codage);
-		gmp_printf("le mess  apres ch %Zd\n",messagechiff->nombre);
+		
 	free(messageachiff);
 	free(codage);
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
