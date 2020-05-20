@@ -9,39 +9,45 @@ int temoin_de_miller(mpz_t a, mpz_t n){
 	int i=1;
 	
 	while(i){
-		
-		mpz_mod_ui(t, d, 2);
-		
-		if (mpz_sgn(t) == 0 ){
+		//tmp=d mod 2
+		mpz_mod_ui(tp, d, 2);
+		//si tmp pair donc tmp=0 
+		if (mpz_sgn(tp) == 0 ){
 			++s;
-			
+			// d=d/2
 			mpz_cdiv_q_ui(d, d, 2);
 		}
-		
+		//si tmp impaire on sort de la boucle on a trouvé d
 		else
 			i=0;
 	}
 	
 	expo_mod(res,a,d,n);
 	mpz_sub_ui(t, n, 1);
-	if ((mpz_cmp_d(res, 1) == 0) || (mpz_cmp(res, t) == 0)) {
-		mpz_clears(t, d, res ,NULL);
+	// si res==1 ou res==n-1  alors pas temoin de miller 
+	if ((mpz_cmp_d(res, 1) == 0) || (mpz_cmp(res, tp) == 0)) {
+		mpz_clears(tp, d, res ,NULL);
 		return 1;
 	}
 	
+	//sinon on continu en incremetant i dans res = res(2^s i).d
 	while(i<s){
-		
+		//res= res^2 
 		mpz_mul(res,res,res);
+		
+		//res=res mod n
 		mpz_mod(res, res, n);
-		if (mpz_cmp(res, t) == 0){
-			mpz_clears(t, d , res, NULL);
+		
+		// si res=n-1 alors pas temoin de miller
+		if (mpz_cmp(res, tp) == 0){
+			mpz_clears(tp, d , res, NULL);
 			return 1;
 		}
 
 		i++;
 	}
 	
-	mpz_clears(t, d , res, NULL);
+	mpz_clears(tp, d , res, NULL);
 	//temoin de miller donc non premier
 	return 0;
 }
