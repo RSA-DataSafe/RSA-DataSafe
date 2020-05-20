@@ -1,6 +1,8 @@
 #include "ecriture.h"
 char nom[]="connexion.txt";
-
+//cette fonction permet d'ajouter un user dans la base de donnée ( connexion.txt)
+//pour chaque user on lui crée un dossier nommé par son email et 4 fichiers 
+//les 4 fichiers :Messagerecu , messageenvoyé ,messageinvisible et messageindésirable
 int  nouvel_utilisateur(char *email , char *mdp)
 {
        int taille= strlen(email);
@@ -78,7 +80,7 @@ int  nouvel_utilisateur(char *email , char *mdp)
        strcat(cm,nom);
        FILE *fichier=fopen(cm,"a");
        char ligne [300]; 
-       //char *line_buf = NULL;
+     
       if(fichier!=NULL)
        {
             while(fgets (ligne, sizeof ligne,fichier ) != NULL && strcmp(ligne,"")) ;
@@ -96,7 +98,7 @@ int  nouvel_utilisateur(char *email , char *mdp)
           return ERR_ERCI;
        
 }
-
+//cette fonction permet de changer l'email d'un utilisateur 
 int  Change_Email(char *email , char *mdp , char *newemail)
 {
   char nomtmp[]="test1.txt";
@@ -151,7 +153,8 @@ int  Change_Email(char *email , char *mdp , char *newemail)
      strcpy(dossier,"rsa/");
      strcat(dossier,email);
      strcpy(dossier1,"rsa/");
-     strcat(dossier1,newemail);
+     strcat(dossier1,newemail);//si on changer l'email on change le nom de son dossier par son nv email
+
      rename(dossier,dossier1);
      return 0;
    }
@@ -160,6 +163,8 @@ int  Change_Email(char *email , char *mdp , char *newemail)
     return ERR_ERCI;
    }  
 }
+
+//cette fonction permet de changer le mot de passe d'un user
 int  Change_MotDePasse (char*email , char *mdp , char* newmdp)
 {
   char nomtmp[20]="test1.txt";
@@ -218,6 +223,7 @@ int  Change_MotDePasse (char*email , char *mdp , char* newmdp)
     return ERR_ERCI;
    }
 }
+//cette fonction permet de changer les clés d'un utlisateur 
 int  change_cle(informations * InfoUser,cle_publique * pub ,cle_prive * priv)
 {
 
@@ -267,6 +273,7 @@ int  ecrire_fichier(char *chemin , char *message)
       return ERR_ERCI;
      
 }
+//cette fonction permet d'envoyer un message
 int envoie_message(mail *m)
 {
    cle_publique sender  ;  cle_prive receveur ;   mpz_inits(sender.e , sender.n, receveur.d , receveur.n ,NULL);
