@@ -182,7 +182,7 @@ int page_resultatD()
 		//mpz_get_str(chaineD,0,messageclair->nombre);
 		chaineD = malloc(sizeof(char*)*2048);
 		chaineD=conversion_mpz_char(messageclair);
-		printf("le mess %s\n",chaineD);
+		//printf("le mess %s\n",chaineD);
 
 
 		gtk_text_buffer_set_text (bufferCD,chaineD, -1);
