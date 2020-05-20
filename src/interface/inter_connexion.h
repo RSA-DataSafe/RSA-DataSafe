@@ -18,8 +18,13 @@ GtkWidget  *button[2] , *entree[2], *label[4] ,*PEM;
 GtkWidget  *MAIN , *horiz1; 
 
 
-
+/* Affiche la page de connexion */
 void  page_connexion ();
+/* Permet la gestion des intéractions avec les intéractions de connexion
+*
+* @param 	sender	widget émetteur
+* @param 	data 	donnée transmise par le widget emetteur
+*/
 void Verification_connexion(GtkWidget * sender , gpointer * data);
 
 #endif

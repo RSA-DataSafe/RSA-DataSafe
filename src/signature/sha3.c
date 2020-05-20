@@ -225,7 +225,7 @@ message *sha3(message *m, int taille) {
 
     // Pour chaque bloc, on xor un bloc avec la matrice puis on la traite (round, keccak-f)
     int cnt = r->nb_block-1;
-    printf("nombre de block %d \n",cnt);
+   
     while (cnt > 0) {
         for (int i=0; i<9; i++) {
             mpz_t tmp;
@@ -237,10 +237,9 @@ message *sha3(message *m, int taille) {
             mpz_xor (matrice[i%5][i%2], matrice[i%5][i%2], tmp);
             mpz_clear (tmp);
         }
-        gmp_printf("block 1 %Zd\n",r->tab[cnt]);
+      
         round_sha3 (matrice, 24);
-        gmp_printf("apres round %Zd\n",r->tab[cnt]);
-
+       
         cnt--;
     }
 

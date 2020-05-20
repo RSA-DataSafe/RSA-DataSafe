@@ -1,6 +1,6 @@
 #include "inter_menu.h"
 void menu_principal()
-{
+{ // disposition des widgets pour le menu principal
 	imageM= gtk_image_new_from_file("Icon/millogo.jpg"); 
 	labelMenu = gtk_label_new ("Menu");
 	lbmenu= gtk_label_new ("");
@@ -65,7 +65,7 @@ void menu_principal()
 }
 
 void slots_Menu(GtkWidget * sender, gpointer * data )
-{
+{ // gère la redirection en fonction du bouton cliqué
      gchar * nom= g_strdup_printf("%s  %s", "Bienvenue", utilisateur.email);
  if (GTK_WIDGET(buttonM[2]) == sender && !data )
  {
