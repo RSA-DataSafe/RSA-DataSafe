@@ -18,15 +18,15 @@ message *chiffrement(message *m, cle_publique *publique, message *encodage) {
     gmp_randinit_default(etat);
     gmp_randseed_ui(etat, rand());
     mpz_urandomb(alea, etat, 256);
-
-    // Code
+    //Diviser le message sous des blocks de 2048
     block *b = creer_block_oaep(m, encodage, alea);
 
     b = oaep(b, alea);
 
     mpz_t tmp;
     mpz_init(tmp);
-
+	
+    //Calcul de m^e[n]
     for(int i = 0;i<(b->nb_block); i++) {
         mpz_powm(b->tab[i], b->tab[i], publique->e, publique->n);
     }

@@ -2,7 +2,7 @@
 
 void page_dechiffrement()
 {
-
+  // Gère la dispostion des widgets pour la page de déchiffrement
 	imageD =gtk_image_new_from_file("Icon/logo.png"); 
 	labelD[0]= gtk_label_new ("Déchiffrement");
 	labelD[1]= gtk_label_new ("Ou");
@@ -90,7 +90,7 @@ void page_dechiffrement()
 
 
 void Slots_dechiffer(GtkWidget * sender , gpointer * data) 
-{
+{// Fonction callback pour les boutons de naviagation menu et deconnexion
     if ( (GTK_WIDGET(buttonD[1]) == sender )   && !data ) 
                                  gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (Connexion));
    
@@ -98,7 +98,7 @@ void Slots_dechiffer(GtkWidget * sender , gpointer * data)
                                  gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (Menu));
 }
 void fic_selected (GtkFileChooser *chooser, gpointer user_data)
-{
+{ 
   gchar *filename = gtk_file_chooser_get_filename (chooser);
   if (!filename) return;
 
@@ -122,7 +122,7 @@ void page_chargementD()
        		free(pathD);
           pathD =NULL;
 	}
-
+    // on récupére le texte entré
     gtk_text_buffer_set_text (bufferD, "", -1);
     chiff = malloc (sizeof (message));
     
@@ -130,10 +130,9 @@ void page_chargementD()
     mpz_set_str(chiff->nombre,chaineD,10);
     int a=mpz_sizeinbase(chiff->nombre,2);
     mpz_set_ui (chiff->taille ,a );
-   // printf("j ss avant dechiffrement et la taille %d \n",a);
-	//gmp_printf("le mess  a dech %Zd\n",chiff->nombre);
+   // On déchiffre le message
     messageclair=dechiffrement(chiff, &utilisateur.prive);
-    //gmp_printf("le mess  apres dech %Zd\n",messageclair->nombre);
+   
 	free(chiff);
   windowD = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   gtk_window_set_transient_for (GTK_WINDOW(windowD),GTK_WINDOW(MainWindow));
@@ -148,7 +147,7 @@ void page_chargementD()
    labelcharD= gtk_label_new("Veuillez patientez  Déchiffrement en cours ...\n");
    gtk_widget_set_name (GTK_WIDGET(labelcharD),"miniT");
    gtk_window_set_deletable (GTK_WINDOW(windowD),TRUE);
-  //gtk_widget_set_size_request(GTK_WIDGET(window) ,400,200);
+  
  
   gtk_container_add (GTK_CONTAINER (windowD),GTK_WIDGET(vboxCD));
 
@@ -159,13 +158,11 @@ void page_chargementD()
   g_timeout_add (2500,(GSourceFunc)page_resultatD, spinnerD);
   gtk_widget_show_all (GTK_WIDGET(windowD));
  
-  //g_signal_connect(window, "destroy", G_CALLBACK(detuire_mini_f_resultat), window);
-  	//g_signal_connect (GTK_DIALOG (dialog), "response", G_CALLBACK (on_response), NULL);
 }
 
 
 int page_resultatD()
-{     
+{     // affichage du résultat dans une fenêtre
       gtk_spinner_stop (GTK_SPINNER(spinnerD));
       gtk_container_remove (GTK_CONTAINER(vboxCD),GTK_WIDGET(spinnerD));
       gtk_widget_hide(GTK_WIDGET(vboxCD)); 
@@ -178,13 +175,8 @@ int page_resultatD()
         gtk_widget_set_name (GTK_WIDGET(Frame),"miniT");	
 		GtkWidget *scrolled_window = gtk_scrolled_window_new (NULL , NULL);
 	 	bufferCD= gtk_text_buffer_new (NULL);
-
-		//mpz_get_str(chaineD,0,messageclair->nombre);
 		chaineD = malloc(sizeof(char*)*2048);
 		chaineD=conversion_mpz_char(messageclair);
-		printf("le mess %s\n",chaineD);
-
-
 		gtk_text_buffer_set_text (bufferCD,chaineD, -1);
 		free(chaineD);
 		text_viewCD= gtk_text_view_new_with_buffer (bufferCD);

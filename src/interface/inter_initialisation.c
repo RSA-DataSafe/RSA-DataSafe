@@ -48,12 +48,12 @@ void initialisation()
     gtk_window_set_position(GTK_WINDOW(MainWindow) , GTK_WIN_POS_CENTER);
     gtk_container_add(GTK_CONTAINER( MainWindow),GTK_WIDGET (stack));
     
-    // le peyit logo en petit  en haut agauche 
+    // le petit logo en petit  en haut agauche 
     icon = create_pixbuf("Icon/logo.jpeg");  
-    //on a une pile de fenetre 
-	  // qui contenu dans la fenetre principale 
-	  // pour changer de fenetre on change juste le haut de ka stack 
-	  //nos pages 
+    //on a une pile de fenetres
+	  // qui est contenue dans la fenetre principale 
+	  // pour changer de fenetre on change juste le haut de cette pile 
+	  // voici nos pages 
 	  accueil = gtk_box_new (GTK_ORIENTATION_HORIZONTAL,0);
     Connexion =  gtk_box_new (GTK_ORIENTATION_HORIZONTAL,0);
     Inscription =  gtk_box_new (GTK_ORIENTATION_HORIZONTAL,0);

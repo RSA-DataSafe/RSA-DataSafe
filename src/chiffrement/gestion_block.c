@@ -28,20 +28,25 @@ void extraction(mpz_t x, mpz_t y, mpz_t b) {
 }
 
 block *creer_block_oaep(message *m,message *encodage, mpz_t donnee_alea) {
-    //block's number 
+    
     mpz_t nb_block;
     mpz_init(nb_block);
-
-    mpz_div_ui(nb_block, m->taille, 1528);
+	
+    //le nombre de block
+    mpz_div_ui(nb_block, m->taille, 1528); 
 
     mpz_t rest;
     mpz_init(rest);
     mpz_mod_ui(rest, m->taille, 1528);
+    //Si le reste de la division est different de 0 on rajoute un block .
     if (mpz_cmp_ui(rest, 0) != 0) {
         mpz_add_ui(nb_block, nb_block, 1);
         int i_rest = mpz_get_ui(rest);
+    //Le calcul du nombre de 0 à rajouter pour le dernier block . 
         int zero_adding = 1528 - i_rest;
+    //On shift à gauche de 'zero_adding'.
         mpz_mul_2exp(m->nombre,m->nombre,zero_adding);
+    //On rajoute les 0 necessaires
         mpz_add_ui(m->taille, m->taille,zero_adding);
        
 
@@ -57,8 +62,10 @@ block *creer_block_oaep(message *m,message *encodage, mpz_t donnee_alea) {
     mpz_init(tmp);
 
     b->tab = malloc(sizeof(mpz_t) * i_block);
+  //
    for(int i = 0; i < i_block; i++) {
         mpz_init(b->tab[i]);
+	//A chaque itération on shift à droite de i_taille-((i+1)*1528) pour qu'on puisse avoir un seul bloc  
         mpz_tdiv_q_2exp(b->tab[i],m->nombre,i_taille-((i+1)*1528));
          
         // Calcul 2^1528-1
@@ -67,13 +74,11 @@ block *creer_block_oaep(message *m,message *encodage, mpz_t donnee_alea) {
         mpz_add_ui(base,base, 2);
         mpz_pow_ui(base,base,1528);  
         mpz_sub_ui(base,base, 1);  
+	//On fait un "&" entre le contenu de chaque case du tableau et 2^1528 -1
         mpz_and(b->tab[i],base,b->tab[i]); 
         
    }
-  
-       
-       
-    	
+ 
     	//encodage+donne_alea
     for (int k = 0; k<i_block; k++) {
         mpz_mul_2exp(b->tab[k],b->tab[k],256);
@@ -81,9 +86,7 @@ block *creer_block_oaep(message *m,message *encodage, mpz_t donnee_alea) {
         mpz_mul_2exp(b->tab[k],b->tab[k],256);
         mpz_add(b->tab[k],b->tab[k],donnee_alea);
   }    
-       
-    	
-   
+     
     // Clear
     mpz_clears(nb_block,rest,tmp,NULL);
     
@@ -127,7 +130,7 @@ block *creer_block_oaep_1(message *m) {
 
 message *recupere_message_oaep(block *b){
     
-    //taille du message 
+    //Taille du message 
     mpz_t message_lenght;
     mpz_init(message_lenght);
     
@@ -139,8 +142,10 @@ message *recupere_message_oaep(block *b){
     mpz_set(m->taille,message_lenght);
     
     mpz_init(m->nombre);
+
     mpz_set(m->nombre,b->tab[0]);                           // on concatène le premier bloc
-    
+    //Recuperer le message depuis tab
+
     for(int i = 1; i < b->nb_block; i++){
          mpz_mul_2exp(m->nombre,m->nombre,2048);            // on décale de 2048 qui est la taille des bloc
          mpz_ior(m->nombre,m->nombre,b->tab[i]);            // on concatène le bloc i

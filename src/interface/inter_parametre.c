@@ -123,9 +123,6 @@ void Slots_parametre(GtkWidget * sender , gpointer * data)
 	   	         gtk_widget_set_name(attention ,"vert");
    	     }
    	     
-
-   	     //gtk_widget_hide (buttonsecurite[2]);
-   	     
    	     gtk_widget_show(attention); 
 
    }
@@ -269,7 +266,7 @@ void modificattion_donnes_compte(GtkWidget * sender , gpointer data)
        				if (!Change_Email(utilisateur.email , utilisateur.mdp, (char*)gtk_entry_get_text(GTK_ENTRY(entreecomp[0]))))
        				{
  					  utilisateur.email = remove_n((char*)gtk_entry_get_text(GTK_ENTRY(entreecomp[0])));	
- 					  printf ("okkkkkkkkkk 1\n");
+ 					 
  				 	  char * nom= g_strdup_printf("%s  %s", "Bienvenue", utilisateur.email);
                  	  gtk_label_set_text(GTK_LABEL(lbcompte),nom);
                  	  free(nom);
@@ -280,7 +277,7 @@ void modificattion_donnes_compte(GtkWidget * sender , gpointer data)
   	   					if ( !Change_MotDePasse (utilisateur.email , utilisateur.mdp , (char*)gtk_entry_get_text(GTK_ENTRY(entreecomp[1]))))
   	   					{
 	  	   	        		utilisateur.mdp = remove_n((char*)gtk_entry_get_text(GTK_ENTRY(entreecomp[1])));
-	  	   	         		printf ("okkkkkkkkkk 2\n");
+	  	   	         		
   	   	         	    }   
          }
            utilisateur.email = remove_n(utilisateur.email);
