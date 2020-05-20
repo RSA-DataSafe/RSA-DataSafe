@@ -280,7 +280,10 @@ char *lire_fichier(char * chemin) {
 		FILE * fichier = NULL;
 		fichier = fopen(chemin,"r");
 		
-		
+		if(fichier==NULL)
+		{
+			exit(-1);
+		}
 		char c;
 		
 		int i=0;
