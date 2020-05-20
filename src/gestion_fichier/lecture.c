@@ -293,7 +293,7 @@ char *lire_fichier(char * chemin) {
 					i++;
 		}
     res[i]='\n';
-		printf("la chaine ici = %s\n",res );
+		
 
 		fclose(fichier);
 		return res;
