@@ -131,19 +131,19 @@ message *recupere_message_oaep(block *b){
     mpz_t message_lenght;
     mpz_init(message_lenght);
     
-    int taille_m =b->nb_block * 2048 ;
-    mpz_add_ui(message_lenght,message_lenght,taille_m );
+    int taille_m =b->nb_block * 2048 ;                      // calcul la taille du message
+    mpz_add_ui(message_lenght,message_lenght,taille_m );    // affecte la taille du message
     
-    message *m  = malloc(sizeof(message));
+    message *m  = malloc(sizeof(message));                  // initialisation du message
     mpz_init(m->taille);
     mpz_set(m->taille,message_lenght);
     
     mpz_init(m->nombre);
-    mpz_set(m->nombre,b->tab[0]);
+    mpz_set(m->nombre,b->tab[0]);                           // on concatène le premier bloc
     
     for(int i = 1; i < b->nb_block; i++){
-         mpz_mul_2exp(m->nombre,m->nombre,2048);
-         mpz_ior(m->nombre,m->nombre,b->tab[i]);   
+         mpz_mul_2exp(m->nombre,m->nombre,2048);            // on décale de 2048 qui est la taille des bloc
+         mpz_ior(m->nombre,m->nombre,b->tab[i]);            // on concatène le bloc i
     } 
     
     // Clear
@@ -155,17 +155,17 @@ message *recupere_message_oaep(block *b){
     
 message *recupere_message_oaep_1(block *b) {
  
-    message *m  = malloc(sizeof(message));
+    message *m  = malloc(sizeof(message));                  // initialisation du message
     mpz_init(m->nombre);
     mpz_init(m->taille);
-    mpz_set_ui(m->taille, 1528);
-    mpz_mul_ui(m->taille, m->taille, b->nb_block);
+    mpz_set_ui(m->taille, 1528);                            // taille du message clair dans un bloc = 1528 bit
+    mpz_mul_ui(m->taille, m->taille, b->nb_block);          // calcul de la taille du message
 
     for (int i = 0; i < b->nb_block; i++)
     {
-        shift_gauche(m->nombre, 1528);
-        shift_droite(b->tab[i], 512);
-        mpz_add(m->nombre, m->nombre, b->tab[i]);
+        shift_gauche(m->nombre, 1528);                      // on décale de la taille du message clair dans un bloc
+        shift_droite(b->tab[i], 512);                       // on décale de 512 bit à droite pour retirer l'encodage et la donné aléatoire
+        mpz_add(m->nombre, m->nombre, b->tab[i]);           // on concatène le block
     }
 
     return m;
