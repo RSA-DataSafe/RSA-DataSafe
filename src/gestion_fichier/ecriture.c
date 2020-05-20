@@ -372,9 +372,6 @@ int envoie_message(mail *m)
               strcpy(message,"");
               strcat(message,m->message);
               res3=ecrire_fichier(chemin,message);
-              //strcpy(signature,"Signature Message : ");
-           // strcat(signature,m->signature);
-            //res4=ecrire_fichier(chemin,signature);
 
               if(res1!=0 || res2!=0 || res3!=0  )
               {
@@ -402,7 +399,6 @@ int envoie_message(mail *m)
               strcat(chemin,m->env_email);
               strcat(chemin,"/");
               strcat(chemin,"MessageEnvoyer.txt");
-              // printf ("hhhhchemin%shhhhhhhhhhh \n",chemin);
               char *signature = NULL; 
                if (m-> signature == NULL)
               {
@@ -420,7 +416,6 @@ int envoie_message(mail *m)
               res2=ecrire_fichier(chemin,email);
               res3=ecrire_fichier(chemin,message);
               res4=ecrire_fichier(chemin,signature);
-              //printf ("%d  %d   %d   %d ", res1 , res2 , res3 , res4);
               if(res1!=0 || res2!=0 || res3!=0 || res4 != 0)
               {
                 return ERR_ERCI;
@@ -451,7 +446,7 @@ int  stocker_message(char *email , mpz_t  message , char *boite)
 {   
    int res;
     char *str=malloc(1024*sizeof(char));
-    mpz_get_str(str,10,message);//conversion_mpz_char
+    mpz_get_str(str,10,message);
     char dossier[300];
     strcpy(dossier,"../../RSA-DataSafe/rsa/");
     strcat(dossier,email);

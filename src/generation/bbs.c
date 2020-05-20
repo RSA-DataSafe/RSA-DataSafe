@@ -15,9 +15,7 @@ void  blum_prime(mpz_t p, int  taille)
   
   for(;;)
  {
-  
-  
-    mpz_urandomb(p, etat, taille); 
+  mpz_urandomb(p, etat, taille); 
   mpz_nextprime(p,p);
 
   if( mpz_fdiv_ui(p,4)==3 )
@@ -44,8 +42,8 @@ void  GenererS(mpz_t s, mpz_t n)
   mpz_sub_ui(res, n, 2);
   mpz_urandomm (s, etat, res);
   mpz_add_ui(s, s, 1);
-    mpz_clear(res);
-    gmp_randclear( etat );
+  mpz_clear(res);
+  gmp_randclear( etat );
 
 }
 //générer un nombre res d taille souhaité 

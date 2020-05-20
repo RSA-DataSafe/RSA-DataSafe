@@ -66,5 +66,5 @@ block *oaep_1(block *b) {
     free(in);
 
     // return
-    return b; // sert à rien mais bon ...
+    return b; 
 }

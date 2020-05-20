@@ -159,7 +159,7 @@ void page_chargementC()
    labelcharc= gtk_label_new("Veuillez patientez  Chiffrement en cours !\n");
    gtk_widget_set_name (GTK_WIDGET(labelcharc),"miniT");
    gtk_window_set_deletable (GTK_WINDOW(window),TRUE);
-  //gtk_widget_set_size_request(GTK_WIDGET(window) ,400,200);
+ 
  
   gtk_container_add (GTK_CONTAINER (window),GTK_WIDGET(vboxCC));
 
@@ -170,8 +170,6 @@ void page_chargementC()
   g_timeout_add (2500,(GSourceFunc)page_resultatC, spinner);
   gtk_widget_show_all (GTK_WIDGET(window));
  
-  //g_signal_connect(window, "destroy", G_CALLBACK(detuire_mini_f_resultat), window);
-  	//g_signal_connect (GTK_DIALOG (dialog), "response", G_CALLBACK (on_response), NULL);
 }
 
 
@@ -195,7 +193,6 @@ int page_resultatC(gpointer * data)
   bufferCC= gtk_text_buffer_new (NULL);
 	
   chaine=malloc(2048*sizeof(char));
-  //chaine=conversion_mpz_char(messagechiff);
   mpz_get_str(chaine,0,messagechiff->nombre);
   gtk_text_buffer_set_text (bufferCC,chaine, -1);
 	

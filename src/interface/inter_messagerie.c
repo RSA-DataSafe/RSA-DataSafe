@@ -236,15 +236,12 @@ void messagerie_recu()
 
     //contenu email 
 	gtk_container_add (GTK_CONTAINER (Frame[1]), GTK_WIDGET(labelMR[3]));
-	//gtk_fixed_put(GTK_FIXED(MessagerieRecu), GTK_WIDGET(Frame[1]) ,450, 290);
 	gtk_widget_set_size_request(GTK_WIDGET(Frame[1]) , 450,30);
     //contenu objet 
     gtk_container_add (GTK_CONTAINER (Frame[2]), GTK_WIDGET(labelMR[4]));
  
     event_box = gtk_box_new (GTK_ORIENTATION_VERTICAL,0);
     
-    //sa sert a rien pourl nstant mais bn 
-
       	
          Framemessagerecu =gtk_frame_new ("Reçu");
          gtk_widget_set_name (GTK_WIDGET(Framemessagerecu),"miniT");
@@ -527,21 +524,20 @@ void detuire_mini_f_resultat_envoie()
  switch (response_id)
   {
     case GTK_RESPONSE_ACCEPT:
-    			//mp_printf( "valeur  nomnbre  :%Zd\n",ret->nombre);
-    //gmp_printf( "valeur taille  :%d\n", mpz_sizeinbase(ret->nombre , 2));
+    			
      mpz_set_ui(ret->taille , mpz_sizeinbase(ret->nombre,2));
 	
      signer(sig,ret, &utilisateur.prive);
-		//gmp_printf("val de la signture %Zd\n",sig);
+		
      if (!verifie_signature(ret-> nombre, sig, &utilisateur.publique))
      {
-     	//printf("okkkkkkkkkkkkk ici \n");
+     	
        m.signature =malloc(sizeof(char)*(strlen(mpz_get_str(NULL,10,sig))+1));
        strcpy(m.signature,mpz_get_str(NULL,10,sig));
        m.signer =1;
      }
     else m.signer = 0;  
-              //printf("valeurrrrrrr sig %d\n", m.signer);
+             
         
 
            if ( !envoie_message(&m)) printf ("message envoyé !\n"); else printf ("problème d'écriture ");
@@ -608,11 +604,7 @@ void show_dialog (GtkButton *button, gpointer   user_data)
     codage=conversion_char_mpz("ASCII");
 
     mpz_set_ui (codage->taille , mpz_sizeinbase(codage->nombre,2));
-    //message *ret = malloc (sizeof (message));
-    //mpz_inits (ret->taille , ret->taille);
-
     
-    //gmp_printf("(cle) ; %Zd\n",utilisateur.prive.n );
     m.env_email = remove_n(utilisateur.email);
 
     cle_publique cle; 
@@ -627,20 +619,17 @@ void show_dialog (GtkButton *button, gpointer   user_data)
                         else{
                         	printf(" erreur de recuperation des clé \n");
                         }
-   // printf("mafonction%smafonction\n",m.env_email);
-
+  
     ret = chiffrement(ch, &cle , codage);
     
     printf("apres chiff de merde\n");
     strcpy(m.env_email,utilisateur.email);
     
-     //printf("mafonction%smafonction\n",m.dest_email);
+    
     m.titre =(char *)gtk_entry_get_text(GTK_ENTRY(entreeE[1]));
     m.message = malloc(sizeof(char)*2048);
     mpz_get_str(m.message,0,ret->nombre);
-   
-   // printf ( "%s  %s   %s " , gtk_entry_get_text(GTK_ENTRY(entreeE[0])) ,gtk_entry_get_text(GTK_ENTRY(entreeE[1])) , str);
-    
+  
     	printf("ok 1 \n");
     	gtk_widget_show_all (dialog);
         g_signal_connect (GTK_DIALOG (dialog), "response", G_CALLBACK (on_response), NULL);
@@ -686,7 +675,7 @@ void detuire_mini_f_resultat_inexiste()
  int  check_user(char * name)
  {
    char*email=malloc(sizeof(char)*strlen(name)+100); 
-	strcpy(email,name); //ici tu mis l email du destinataire 
+	strcpy(email,name); 
     
 	FILE * fichier = NULL;
     fichier = fopen("rsa/connexion.txt","r");
@@ -704,10 +693,8 @@ void detuire_mini_f_resultat_inexiste()
     while(getline(&user, &size , fichier)>0 && getline(&opti ,&size,fichier)) {
         if(strcmp(user, tmp_email) == 0)
         {
-        	printf("okii\n");
-            
             fclose(fichier);
-           return 0;//ici tu fait l'opération d'envoi
+           return 0;
         }
     }
   
@@ -854,7 +841,7 @@ void afficher_contenu_message_envoyee(GtkWidget * sender , gpointer *data)
       
            for (int i = 0 ; i< 29 ; ++i )
            {
-           	//printf("ok\n");
+          
 			 if (sender == BEM[i] && !data)
 			 {	
 
@@ -1085,12 +1072,12 @@ void reponse_a_utilisateur_supp_affiche(GtkWidget * sender , gpointer * data)
 		for (int i = 0 ; i< 29 ; ++i){
 		if (BMI[i] == GTK_WIDGET(data))
 		{
-         //gtk_container_remove (GTK_CONTAINER(boxMI),GTK_WIDGET(BMI[i]));
+         
 			gtk_label_set_label (GTK_LABEL(labelMI[1]),"");
 			gtk_label_set_label (GTK_LABEL(labelMI[2]),"");
 			gtk_text_buffer_set_text (bufferMI, "", -1);
 			 gtk_widget_hide(BMI[i]);
-        //gtk_widget_destroy(GTK_WIDGET(BMI[i]));
+       
      	}
 
      }

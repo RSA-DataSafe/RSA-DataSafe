@@ -130,10 +130,7 @@ void page_chargementD()
     mpz_set_str(chiff->nombre,chaineD,10);
     int a=mpz_sizeinbase(chiff->nombre,2);
     mpz_set_ui (chiff->taille ,a );
-   // printf("j ss avant dechiffrement et la taille %d \n",a);
-	//gmp_printf("le mess  a dech %Zd\n",chiff->nombre);
     messageclair=dechiffrement(chiff, &utilisateur.prive);
-    //gmp_printf("le mess  apres dech %Zd\n",messageclair->nombre);
 	free(chiff);
   windowD = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   gtk_window_set_transient_for (GTK_WINDOW(windowD),GTK_WINDOW(MainWindow));
@@ -148,7 +145,6 @@ void page_chargementD()
    labelcharD= gtk_label_new("Veuillez patientez  Déchiffrement en cours ...\n");
    gtk_widget_set_name (GTK_WIDGET(labelcharD),"miniT");
    gtk_window_set_deletable (GTK_WINDOW(windowD),TRUE);
-  //gtk_widget_set_size_request(GTK_WIDGET(window) ,400,200);
  
   gtk_container_add (GTK_CONTAINER (windowD),GTK_WIDGET(vboxCD));
 
@@ -159,8 +155,6 @@ void page_chargementD()
   g_timeout_add (2500,(GSourceFunc)page_resultatD, spinnerD);
   gtk_widget_show_all (GTK_WIDGET(windowD));
  
-  //g_signal_connect(window, "destroy", G_CALLBACK(detuire_mini_f_resultat), window);
-  	//g_signal_connect (GTK_DIALOG (dialog), "response", G_CALLBACK (on_response), NULL);
 }
 
 
@@ -178,13 +172,8 @@ int page_resultatD()
         gtk_widget_set_name (GTK_WIDGET(Frame),"miniT");	
 		GtkWidget *scrolled_window = gtk_scrolled_window_new (NULL , NULL);
 	 	bufferCD= gtk_text_buffer_new (NULL);
-
-		//mpz_get_str(chaineD,0,messageclair->nombre);
 		chaineD = malloc(sizeof(char*)*2048);
 		chaineD=conversion_mpz_char(messageclair);
-		//printf("le mess %s\n",chaineD);
-
-
 		gtk_text_buffer_set_text (bufferCD,chaineD, -1);
 		free(chaineD);
 		text_viewCD= gtk_text_view_new_with_buffer (bufferCD);
