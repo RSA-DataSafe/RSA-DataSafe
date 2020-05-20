@@ -39,6 +39,7 @@
 	GtkWidget     *boxMI,*BMI[30], *windowMI , *vboxMI , *labelsuppinde , *btn_afficher_supp[2]; 
 	GtkWidget *Frameindesirables , *scrolled_windowmessageinde ;
    
+     GtkWidget* w;
   
      mail m ;
      //recu  
