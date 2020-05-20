@@ -10,21 +10,21 @@
 
 void extraction(mpz_t x, mpz_t y, mpz_t b) {
     // Init
-    mpz_t tmp;
+    mpz_t tmp;                                  // variable temporaire
     mpz_init(tmp);
     
     // Code
-    mpz_set(x, b);
-    shift_droite(x, TAILLE_SHA3_256);
+    mpz_set(x, b);                              // x = b
+    shift_droite(x, TAILLE_SHA3_256);           // x >>= 256 (pour récupere la partie droite du bloc)
 
-    mpz_set(y, b);
-    mpz_set_ui(tmp, 1);
-    shift_gauche(tmp, TAILLE_SHA3_256);
-    mpz_sub_ui(tmp, tmp, 1);
-    mpz_and(y, y, tmp);
+    mpz_set(y, b);                              // y = b
+    mpz_set_ui(tmp, 1);                         // tmp = 1
+    shift_gauche(tmp, TAILLE_SHA3_256);         // tmp = 1 << 256
+    mpz_sub_ui(tmp, tmp, 1);                    // tmp = 1 << 256 - 1 (un nombre en binaire avec 256 1)
+    mpz_and(y, y, tmp);                         // on extrait les 256 dernier bits
 
     // Clear
-    mpz_clear(tmp);
+    mpz_clear(tmp);                             // on libère la mémoire
 }
 
 block *creer_block_oaep(message *m,message *encodage, mpz_t donnee_alea) {
