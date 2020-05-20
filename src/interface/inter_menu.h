@@ -13,11 +13,19 @@
 #include "../structure/structure.h"
 #include "inter_initialisation.h"
 
-//menu 
+
+	// Variables environnement 
    extern int a ;
 	GtkWidget   *imageM , *imageBM[5] ,*buttonM[5] , *labelMenu , *labelBMenu ;
+	
+	/* Affiche le menu principal */
 	void menu_principal();
 
+	/* Permet la gestion des intéractions avec les boutons d'intéraction du menu
+	*
+	* @param 	sender	widget émetteur
+	* @param 	data 	donnée transmise par le widget emetteur
+	*/
 	void slots_Menu(GtkWidget * sender , gpointer *data);
 
 

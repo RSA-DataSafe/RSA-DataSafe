@@ -2,7 +2,7 @@
 
 void page_dechiffrement()
 {
-
+  // Gère la dispostion des widgets pour la page de déchiffrement
 	imageD =gtk_image_new_from_file("Icon/logo.png"); 
 	labelD[0]= gtk_label_new ("Déchiffrement");
 	labelD[1]= gtk_label_new ("Ou");
@@ -90,7 +90,7 @@ void page_dechiffrement()
 
 
 void Slots_dechiffer(GtkWidget * sender , gpointer * data) 
-{
+{// Fonction callback pour les boutons de naviagation menu et deconnexion
     if ( (GTK_WIDGET(buttonD[1]) == sender )   && !data ) 
                                  gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (Connexion));
    
@@ -98,7 +98,7 @@ void Slots_dechiffer(GtkWidget * sender , gpointer * data)
                                  gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (Menu));
 }
 void fic_selected (GtkFileChooser *chooser, gpointer user_data)
-{
+{ 
   gchar *filename = gtk_file_chooser_get_filename (chooser);
   if (!filename) return;
 
@@ -122,7 +122,7 @@ void page_chargementD()
        		free(pathD);
           pathD =NULL;
 	}
-
+    // on récupére le texte entré
     gtk_text_buffer_set_text (bufferD, "", -1);
     chiff = malloc (sizeof (message));
     
@@ -130,7 +130,9 @@ void page_chargementD()
     mpz_set_str(chiff->nombre,chaineD,10);
     int a=mpz_sizeinbase(chiff->nombre,2);
     mpz_set_ui (chiff->taille ,a );
+   // On déchiffre le message
     messageclair=dechiffrement(chiff, &utilisateur.prive);
+   
 	free(chiff);
   windowD = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   gtk_window_set_transient_for (GTK_WINDOW(windowD),GTK_WINDOW(MainWindow));
@@ -145,6 +147,7 @@ void page_chargementD()
    labelcharD= gtk_label_new("Veuillez patientez  Déchiffrement en cours ...\n");
    gtk_widget_set_name (GTK_WIDGET(labelcharD),"miniT");
    gtk_window_set_deletable (GTK_WINDOW(windowD),TRUE);
+  
  
   gtk_container_add (GTK_CONTAINER (windowD),GTK_WIDGET(vboxCD));
 
@@ -159,7 +162,7 @@ void page_chargementD()
 
 
 int page_resultatD()
-{     
+{     // affichage du résultat dans une fenêtre
       gtk_spinner_stop (GTK_SPINNER(spinnerD));
       gtk_container_remove (GTK_CONTAINER(vboxCD),GTK_WIDGET(spinnerD));
       gtk_widget_hide(GTK_WIDGET(vboxCD)); 

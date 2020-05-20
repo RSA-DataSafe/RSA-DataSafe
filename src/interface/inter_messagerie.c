@@ -438,7 +438,7 @@ void page_envoyer_unmsg()
 }
 
 
-//affiche a lutilisateur si le message est envoyee ou pas 
+//affiche à l'utilisateur si le message est envoye ou pas 
 void afficher_message_etat(GtkWidget * sender , gpointer *data)
 {
       
@@ -478,8 +478,7 @@ void page_chargement_envoi_msg()
    labelcharenvoie = gtk_label_new("Envoie en cours..!\n");
    gtk_widget_set_name (GTK_WIDGET(labelcharenvoie),"miniT");
    gtk_window_set_deletable (GTK_WINDOW(windowEM),TRUE);
-  //gtk_widget_set_size_request(GTK_WIDGET(window) ,400,200);
- 
+  
   gtk_container_add (GTK_CONTAINER (windowEM),GTK_WIDGET(vboxEM));
 
   gtk_box_pack_start( GTK_BOX(vboxEM),GTK_WIDGET(labelcharenvoie),TRUE,TRUE,0);
@@ -516,7 +515,7 @@ void detuire_mini_f_resultat_envoie()
 	gtk_text_buffer_set_text (bufferE,"", -1);
 	  gtk_widget_destroy(GTK_WIDGET(windowEM));
 }
-//exxutre un code fonction de la reponse de lutilisateur 
+//execute un code en fonction de la reponse de l'utilisateur 
  
  void on_response (GtkDialog *dialog, gint       response_id, gpointer   user_data)
 {

@@ -1,7 +1,7 @@
 #include "inter_connexion.h"
 
 void  page_connexion ()
-{
+{ // Gère la disposition des éléments pour l'affichage de la page de connexion
 	imagec[0] = gtk_image_new_from_file("Icon/per.png"); 
 	minilogo[0] = gtk_image_new_from_file("Icon/logo.png");
 
@@ -14,7 +14,7 @@ void  page_connexion ()
 	label[1] = gtk_label_new ("Mot de passe");
 	
 
-    //gtk_entry_set_input_hints (GTK_ENTRY(entree[0]),GTK_INPUT_PURPOSE_EMAIL);
+    
 	 horiz1 =gtk_box_new (GTK_ORIENTATION_HORIZONTAL,100);
 	 GtkWidget*vert =gtk_box_new (GTK_ORIENTATION_VERTICAL,50);
 	 GtkWidget*vert1 =gtk_box_new (GTK_ORIENTATION_VERTICAL,70);
@@ -70,8 +70,8 @@ void  page_connexion ()
  
 int  etat =0 ;
 void Verification_connexion(GtkWidget * sender , gpointer * data)
-{    
-// redirection vers la page dinscription
+{    // Fonction callback des boutons de la page de connexion 
+// redirection vers la page d'inscription 
 if ( PEM == sender && !data )
 {
         gtk_widget_hide(label[2]);
@@ -89,7 +89,7 @@ if ( PEM == sender && !data )
 	  strcpy(utilisateur.mdp,mdp);
 
 	
-	 //sinon button de connexion 
+	 //sinon  connexion de l'utilisateur
     if (button[0] ==sender && !data ){ 
 	int trouver = 0 ;
         if(!gtk_entry_get_text_length(GTK_ENTRY(entree[0])) || !gtk_entry_get_text_length(GTK_ENTRY(entree[1])))
@@ -122,7 +122,7 @@ if ( PEM == sender && !data )
                   }
 else{	         
                   
-               
+               			// On vérifie si l'utilisateur existe et on le connecte si oui sinon on affiche un message d'erreur
                       if (!chercher_utilisateur( utilisateur.email, utilisateur.mdp))
                       {	
 	 	           	    gtk_widget_hide(GTK_WIDGET(label[2]));
@@ -135,7 +135,7 @@ else{
                          
  
   							
-
+  							// récupération des clés de l'utilisateur
                         if (!recupere_cle_privee(utilisateur.email,utilisateur.mdp,&utilisateur.prive))
                         {
                         	gmp_printf ("cle  d recup :%Zd\n" , utilisateur.prive.d);

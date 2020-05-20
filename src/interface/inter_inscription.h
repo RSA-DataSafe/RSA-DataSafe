@@ -13,9 +13,15 @@
 #include "../structure/structure.h"
 #include "inter_initialisation.h"
 
-//inscroption
+	// Variables environnement 
 	GtkWidget   *buttoni[2]  , *entreei[4], *labeli[5] ;
-    GtkWidget * MAINi ; 
+    GtkWidget * MAINi ;
+    /* Affcihe la page d'inscription */
 	void  page_inscription();
+	/* Permet la gestion des intéractions avec les boutons de la page d'inscription
+	*
+	* @param 	sender	widget émetteur
+	* @param 	data 	donnée transmise par le widget emetteur
+	*/
 	void SLots_inscription(GtkWidget * sender , gpointer * data);
 #endif

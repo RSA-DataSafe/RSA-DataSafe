@@ -1,7 +1,7 @@
 #include "inter_chiffrer.h"
 
 void page_chiffrement()
-{
+{ // Disposition des différents éléments de la page chiffrement pour l'affichage
 
 	imageC =gtk_image_new_from_file("Icon/logo.png"); 
 	labelC[0]= gtk_label_new ("Chiffrement");
@@ -90,7 +90,7 @@ void page_chiffrement()
 
 
 void Slots_Chiffrer(GtkWidget * sender , gpointer *data)
-{
+{// Fonction callback pour les boutons de naviagation menu et deconnexion
 	if ( GTK_WIDGET(buttonC[1]) == sender    && !data ) 
    	                             gtk_stack_set_visible_child (GTK_STACK (stack), GTK_WIDGET (Connexion));
    
@@ -100,7 +100,7 @@ void Slots_Chiffrer(GtkWidget * sender , gpointer *data)
 }
 
 void file_selected (GtkFileChooser *chooser, gpointer user_data)
-{
+{ // Fonction callback pour le file selector
   gchar *filename = gtk_file_chooser_get_filename (chooser);
   if (!filename) return;
 
@@ -111,6 +111,7 @@ void file_selected (GtkFileChooser *chooser, gpointer user_data)
 
 void page_chargementC()
 {
+	// Fonction d'affichage de la page de chargement du chiffrement 
 
     
     GtkTextIter start;
@@ -129,19 +130,17 @@ void page_chargementC()
        	free(path);
         path = NULL;
 	}
-    gtk_text_buffer_set_text (bufferC, "",-1);
-   messageachiff = malloc (sizeof (message));
+    gtk_text_buffer_set_text (bufferC, "",-1);// on récupére le texte saisit
+   messageachiff = malloc (sizeof (message)); 
     codage = malloc (sizeof (message));
     mpz_inits (messageachiff->taille , codage->taille , messageachiff->nombre,codage->nombre,NULL ); 
-    //mpz_init_set_str(messageachiff->nombre ,chaine, 10);
-    messageachiff=conversion_char_mpz(chaine );
-    codage=conversion_char_mpz("ASCII" );
+    messageachiff=conversion_char_mpz(chaine ); // on le convertit en mpz
+    codage=conversion_char_mpz("ASCII" ); // idem avec la notion ASCII pour spécifier l'encodage
    
-    mpz_set_ui (codage->taille , mpz_sizeinbase(codage->nombre,2));
-		
+    mpz_set_ui (codage->taille , mpz_sizeinbase(codage->nombre,2));// On calcul la taille du message convertit
 	
-    messagechiff=chiffrement(messageachiff, &utilisateur.publique , codage);
-		
+    messagechiff=chiffrement(messageachiff, &utilisateur.publique , codage); // on chiffre le message
+
 	free(messageachiff);
 	free(codage);
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -159,7 +158,7 @@ void page_chargementC()
    labelcharc= gtk_label_new("Veuillez patientez  Chiffrement en cours !\n");
    gtk_widget_set_name (GTK_WIDGET(labelcharc),"miniT");
    gtk_window_set_deletable (GTK_WINDOW(window),TRUE);
- 
+
  
   gtk_container_add (GTK_CONTAINER (window),GTK_WIDGET(vboxCC));
 
@@ -167,15 +166,15 @@ void page_chargementC()
   gtk_box_pack_start( GTK_BOX(vboxCC),GTK_WIDGET(spinner),TRUE,TRUE,0);
   gtk_widget_set_name (spinner,"spin");
  
-  g_timeout_add (2500,(GSourceFunc)page_resultatC, spinner);
+  g_timeout_add (2500,(GSourceFunc)page_resultatC, spinner); // on affiche le resultat 
   gtk_widget_show_all (GTK_WIDGET(window));
- 
+
 }
 
 
 int page_resultatC(gpointer * data)
 {
-      
+      // Fonction permettant l'affichage du résultat de chiffrement dans une fenêtre pop-up
       gtk_spinner_stop (GTK_SPINNER(spinner));
       gtk_container_remove (GTK_CONTAINER(vboxCC),GTK_WIDGET(spinner));
       gtk_widget_hide(GTK_WIDGET(vboxCC)); 
@@ -216,7 +215,7 @@ int page_resultatC(gpointer * data)
 }
 
 void detuire_mini_f_resultat()
-{
+{	// fonction wrap
 	  gtk_widget_destroy(GTK_WIDGET(window));
 }
 

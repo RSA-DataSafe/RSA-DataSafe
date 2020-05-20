@@ -30,7 +30,7 @@
 
 
 
-
+	// Variables environnement
 
     GtkWidget  *MainWindow;
 	GtkWidget  *button[2]  ; 
@@ -48,11 +48,22 @@
    informations utilisateur; 
     
 
-
+/* Lie la feuille de style .css avec l'interface */
 void CSS();
+/* Gestion d'erreur */
 GdkPixbuf *create_pixbuf(const gchar * filename);
+/* Permet l'initialisation de la pile avec les différentes fenêtre existante
+* initialisées également 
+*/
 void initialisation();
+/*
+* Affiche une page d'ouverture de l'application avec le logo du projet
+*/
 void page_ouverture();
+/* Permet d'enlerver les "\n" d'une chaîne de caractère 
+* @param 	chaine	chaine à modifier
+* @return 	chaine sans le "\n"
+*/
 char * remove_n(char * chaine);
 
 #endif
