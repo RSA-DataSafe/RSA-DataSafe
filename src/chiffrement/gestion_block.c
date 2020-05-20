@@ -130,7 +130,7 @@ block *creer_block_oaep_1(message *m) {
 
 message *recupere_message_oaep(block *b){
     
-    //taille du message 
+    //Taille du message 
     mpz_t message_lenght;
     mpz_init(message_lenght);
     
@@ -143,7 +143,7 @@ message *recupere_message_oaep(block *b){
     
     mpz_init(m->nombre);
     mpz_set(m->nombre,b->tab[0]);
-    
+    //Recuperer le message depuis tab
     for(int i = 1; i < b->nb_block; i++){
          mpz_mul_2exp(m->nombre,m->nombre,2048);
          mpz_ior(m->nombre,m->nombre,b->tab[i]);   
