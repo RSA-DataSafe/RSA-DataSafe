@@ -272,21 +272,25 @@ int lire_boite(char *email, boite * b)
 
 char *lire_fichier(char * chemin) {
 		char * res = malloc(sizeof(char)*5000);
+
 		if(res == NULL) {
 			fprintf(stderr,"Erreur d'allocation Mémoire");
 			exit(1);
 		}
 		FILE * fichier = NULL;
 		fichier = fopen(chemin,"r");
-		if(fichier == NULL) {
-				res[0] = -1;
-				return res;
-		}
+		
 		
 		char c;
-		for(int i = 0; (c = fgetc(fichier)) != EOF; i++) {
+		
+		int i=0;
+			while((c=fgetc(fichier))!=EOF)
+		 {
 					res[i] = c;
+					i++;
 		}
+    res[i]='\n';
+		printf("la chaine ici = %s\n",res );
 
 		fclose(fichier);
 		return res;
