@@ -4,7 +4,9 @@
 #include <stdlib.h>
 
 
-
+/**
+ * Calcul L'exponentiation modulaire 
+ * */
 void expo_mod(mpz_t res, mpz_t num, mpz_t exp, mpz_t mod){
 
     
