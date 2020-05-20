@@ -19,7 +19,7 @@ int  nouvel_utilisateur(char *email , char *mdp)
        strcpy(dossier1,dossier);
        strcat(dossier,userfile1);
        int res1 = 0,res2 = 0;
-       FILE *userf1=fopen(dossier,"a+");
+       FILE *userf1=fopen(dossier,"a+"); //l'ouverture d fichier MessageRecu en mode écruture , si il existe pas on le crée
        if(userf1!=NULL)
        {
         fclose(userf1);
@@ -29,7 +29,7 @@ int  nouvel_utilisateur(char *email , char *mdp)
         printf("Erreur de création d fichier\n");
        }
        char *userfile2=malloc((taille+50)*sizeof(char));
-       strcpy(userfile2,"Cles.txt");
+       strcpy(userfile2,"Cles.txt");//l'ouverture d fichier cles.txt en mode écruture , si il existe pas on le crée
        strcat(dossier1,userfile2);
        FILE *userf2=fopen(dossier1,"a+");
        if(userf2!=NULL)
@@ -83,9 +83,9 @@ int  nouvel_utilisateur(char *email , char *mdp)
      
       if(fichier!=NULL)
        {
-            while(fgets (ligne, sizeof ligne,fichier ) != NULL && strcmp(ligne,"")) ;
-            res1=ecrire_fichier(cm,email);
-            res1=ecrire_fichier(cm,mdp);
+            while(fgets (ligne, sizeof ligne,fichier ) != NULL && strcmp(ligne,"")) ;//tant que la ligne d fichier est nn vide on continue la lecture
+            res1=ecrire_fichier(cm,email);//on ajoute l email d user
+            res1=ecrire_fichier(cm,mdp);//on ajoute le mdp
             if(res1!=0 || res2!=0)
             {
               return ERR_ERCI;
@@ -132,7 +132,7 @@ int  Change_Email(char *email , char *mdp , char *newemail)
             break;
         	}
         }
-      if(test==0 && test1==0)
+      if(test==0 && test1==0)// si l'email et le mdp d l'utilisateyr existe dans la base de donnée on change l'email
       {
             fputs(newemail,fichier);
             fputs("\n",fichier);
@@ -140,7 +140,7 @@ int  Change_Email(char *email , char *mdp , char *newemail)
               
       }
       else
-      {
+      {//sinon on recopier l'email et le mdp lu dans un autre fichier
          
           fputs(line_buf,fichier);
           fputs(line_buf1,fichier);     
@@ -449,6 +449,7 @@ int envoie_message(mail *m)
        }
        return 0;
 }
+//cette fonction permet de stocker un message
 int  stocker_message(char *email , mpz_t  message , char *boite)
 {   
    int res;
