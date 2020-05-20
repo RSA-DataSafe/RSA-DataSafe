@@ -98,18 +98,18 @@ block *creer_block_oaep_1(message *m) {
 
     mpz_t nb_block;
     mpz_init(nb_block);
-    mpz_div_ui(nb_block, m->taille, 2048);
-    if(mpz_cmp_ui(nb_block,0)==0)
+    mpz_div_ui(nb_block, m->taille, 2048);                                  // m->taille est forcement un multiple de 2048, donc on calcul la taille du message
+    if(mpz_cmp_ui(nb_block,0)==0)                                     
     	mpz_add_ui(nb_block, nb_block, 1);
 
-    block *b = malloc(sizeof(block));
+    block *b = malloc(sizeof(block));                                       // initialisation des blocs
     
     int int_nb_block = mpz_get_ui(nb_block);
     b->nb_block = int_nb_block;
     b->tab = malloc(sizeof(mpz_t) * int_nb_block);
 
-    mpz_t AND;
-    mpz_init(AND);
+    mpz_t AND;                                                              // creer un nombre de 2048 bit avec que des 1
+    mpz_init(AND);  
     mpz_set_ui(AND, 1);
     shift_gauche(AND, 2048);
     mpz_sub_ui(AND, AND, 1);
@@ -118,9 +118,9 @@ block *creer_block_oaep_1(message *m) {
     {
         mpz_init(b->tab[i]);
         mpz_set(b->tab[i], m->nombre);
-        shift_droite(b->tab[i], 2048 * ( int_nb_block - (i + 1) ) );
-        mpz_and(b->tab[i], b->tab[i], AND);
-    }
+        shift_droite(b->tab[i], 2048 * ( int_nb_block - (i + 1) ) );        // fait le bon shift pour avoir les bon bit a and
+        mpz_and(b->tab[i], b->tab[i], AND);                                 // garde uniquement les 2048 dernier bit
+    }   
     
     return b;
 }
