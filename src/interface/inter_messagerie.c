@@ -589,7 +589,7 @@ void show_dialog (GtkButton *button, gpointer   user_data)
   label = gtk_label_new ("Voulez vous signer votre message ?");
   gtk_container_add (GTK_CONTAINER (content_area), label);
 
-  gtk_widget_show_all (dialog);
+  
 
     GtkTextIter start;
     GtkTextIter end;
@@ -618,7 +618,7 @@ void show_dialog (GtkButton *button, gpointer   user_data)
     cle_publique cle; 
     mpz_inits(cle.e , cle.n,NULL);
     m.dest_email = remove_n((char *)gtk_entry_get_text(GTK_ENTRY(entreeE[0])));
-       
+    if (!check_user(m.dest_email)){
                  	   if (!recupere_cle_publique(m.dest_email,NULL,&cle))
                  	    {
                  	        gmp_printf ("cle  e du destinataire recup :%Zd\n" , cle.e);
@@ -640,8 +640,80 @@ void show_dialog (GtkButton *button, gpointer   user_data)
     mpz_get_str(m.message,0,ret->nombre);
    
    // printf ( "%s  %s   %s " , gtk_entry_get_text(GTK_ENTRY(entreeE[0])) ,gtk_entry_get_text(GTK_ENTRY(entreeE[1])) , str);
-  g_signal_connect (GTK_DIALOG (dialog), "response", G_CALLBACK (on_response), NULL);
+    
+    	printf("ok 1 \n");
+    	gtk_widget_show_all (dialog);
+        g_signal_connect (GTK_DIALOG (dialog), "response", G_CALLBACK (on_response), NULL);
+    }
+    else { printf("ok 2 \n");  page_resultat_inexiste(); } 
+
 }
+
+void  page_resultat_inexiste()
+{     
+      GtkWidget * buttonOK = gtk_button_new_with_label ("OK"); 
+      gtk_widget_set_name (buttonOK,"btnV");
+       w = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+  	  gtk_window_set_transient_for (GTK_WINDOW(w),GTK_WINDOW(MainWindow));
+  	  gtk_window_set_position (GTK_WINDOW(w), GTK_WIN_POS_CENTER);
+  	  gtk_window_set_title (GTK_WINDOW(w),"Data Safe");
+  	  gtk_widget_set_size_request(GTK_WIDGET(w) ,500,500);
+  	  gtk_window_set_deletable (GTK_WINDOW(w),TRUE);
+
+  	  GtkWidget * bv = gtk_box_new (GTK_ORIENTATION_VERTICAL,50);
+
+  	  GtkWidget * inexiste =gtk_label_new("E-mail d'utilisateur introuvable ! ") ;
+  	  gtk_widget_set_name (inexiste,"warning");
+
+	  gtk_box_pack_start( GTK_BOX(bv),GTK_WIDGET(inexiste),TRUE,TRUE,0);
+  	  gtk_box_pack_start( GTK_BOX(bv),GTK_WIDGET(buttonOK),TRUE,TRUE,0);
+  	  gtk_container_add (GTK_CONTAINER (w),GTK_WIDGET(bv));
+
+  	  gtk_widget_show_all (w);
+
+  	  g_signal_connect(G_OBJECT(buttonOK), "clicked",G_CALLBACK(detuire_mini_f_resultat_inexiste),NULL);
+	 
+
+	  
+}
+
+void detuire_mini_f_resultat_inexiste()
+{
+	  gtk_widget_destroy(GTK_WIDGET(w));
+}
+
+
+ int  check_user(char * name)
+ {
+   char*email=malloc(sizeof(char)*strlen(name)+100); 
+	strcpy(email,name); //ici tu mis l email du destinataire 
+    
+	FILE * fichier = NULL;
+    fichier = fopen("rsa/connexion.txt","r");
+    if (!fichier)
+    {
+        printf("erreurrrrrrrrrrrrrr ! \n");
+    }
+
+
+    char * tmp_email = malloc(sizeof(email)+2);   
+    char * user = NULL;
+    size_t size = 0;
+    strcpy(tmp_email, strcat(email, "\n"));
+    char *opti=NULL;
+    while(getline(&user, &size , fichier)>0 && getline(&opti ,&size,fichier)) {
+        if(strcmp(user, tmp_email) == 0)
+        {
+        	printf("okii\n");
+            
+            fclose(fichier);
+           return 0;//ici tu fait l'opération d'envoi
+        }
+    }
+  
+    fclose(fichier);
+    return 1 ; 
+ }
 
 
 void messagerie_envoye()

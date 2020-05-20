@@ -37,6 +37,8 @@
 	GtkTextBuffer *bufferMI;
 	GtkWidget     *boxMI,*BMI[30], *windowMI , *vboxMI , *labelsuppinde , *btn_afficher_supp[2]; 
 	GtkWidget *Frameindesirables , *scrolled_windowmessageinde ;
+
+	GtkWidget * w;
    
   
      mail m ;
@@ -68,6 +70,7 @@
     
     //appel un code enfonction de la reponse de lutilisateur oui non ou x
 	void on_response(GtkDialog *dialog, gint       response_id, gpointer   user_data);
+
 	//afficher une demande de signature sous forme de pop up 
 	void show_dialog (GtkButton *button, gpointer   user_data);
 	//afficher le contenu du message sur la droite uen fois quon a cliqué sur lun des messages (recu)
@@ -90,5 +93,11 @@
    void afficher_proposition_supp_afficher(GtkWidget * sender , gpointer *data);
    void afficher_supprimer_msg(gpointer  * sender );
    void reponse_a_utilisateur_supp_affiche(GtkWidget * sender , gpointer * data);
+    //utilisateur inexistant
+   void  page_resultat_inexiste();
+   // destruction de resultat inexistant
+   void detuire_mini_f_resultat_inexiste();
+   //verifie si l'utlisateur existe ou pas 
+   int  check_user(char * name); 
 
 #endif
