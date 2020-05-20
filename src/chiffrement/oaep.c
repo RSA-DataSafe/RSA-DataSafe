@@ -47,7 +47,7 @@ void mgf(mpz_t res, message *graine, mpz_t taille) {
     mpz_div_ui(nb, taille, TAILLE_SHA3_256);                            // calcul le nombre d'appel a sha3
 
     mpz_set(tmp_i2osp->taille, graine->taille);                         // tmp_i2osp->taille = graine->taille
-    shift_gauche(tmp_i2osp->taille, TAILLE_INT);                        // normalement il faut faire un add : mpz_add_ui(tmp_i2osp->taille, tmp_i2osp->taille, TAILLE_INT);, mais on m'a dit de laisser comme ça car cinon rein ne marche (ici on doit ajouter 32 car on a shift de 32 bit le nombre avec i2osp ) 
+    shift_gauche(tmp_i2osp->taille, TAILLE_INT);                        // normalement il faut faire un add : mpz_add_ui(tmp_i2osp->taille, tmp_i2osp->taille, TAILLE_INT);, mais on m'a dit de laisser comme ça car sinon rien ne marche ( ici on doit ajouter 32 à la taille car on a shift de 32 bit le nombre avec i2osp ) 
 
     for(mpz_set_ui(i, 0); mpz_cmp(i, nb) < 0; mpz_add_ui(i, i, 1)) {
         i2osp(tmp_i2osp->nombre, graine->nombre, i);                    // applique i2osp
