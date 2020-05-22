@@ -99,6 +99,14 @@ void messagerie_principale()
 										    		nom1= g_strdup_printf("%s%s", " ",b.m[i].titre);
 										    		B[i]=gtk_button_new_with_label(nom1);
 										    	 	gtk_widget_set_name (GTK_WIDGET(B[i]),"titremail");
+										    	 	message * msgcoder = malloc (sizeof (message));
+									    			mpz_inits (msgcoder->taille,msgcoder->nombre,NULL); 
+									    			mpz_set_str(msgcoder->nombre,b.m[i].message,10);
+									    			mpz_set_ui (msgcoder->taille ,mpz_sizeinbase(msgcoder->nombre,2) );
+													message * msgnoncoder=dechiffrement(msgcoder, &utilisateur.prive);
+													b.m[i].message= malloc(sizeof(char*)*2048);
+													b.m[i].message=conversion_mpz_char(msgnoncoder);
+									 				free(msgcoder);
 										    	 	g_signal_connect(G_OBJECT(B[i]), "clicked",G_CALLBACK(afficher_contenu_message), NULL);
 										    		gtk_box_pack_start (GTK_BOX(event_box),GTK_WIDGET(B[i]),FALSE,FALSE,0);
 										    		free(nom1); 
@@ -140,6 +148,14 @@ void messagerie_principale()
 								    				 nom1= g_strdup_printf("%s%s", "", boiteE.m[i].titre);
 								   					 BEM[i]=gtk_button_new_with_label(nom1);
 								   					 gtk_widget_set_name (GTK_WIDGET(BEM[i]),"titremail");
+								   					 message * msgcoder1 = malloc (sizeof(message));
+													 mpz_inits (msgcoder1->taille,msgcoder1->nombre,NULL); 
+										    		 mpz_set_str(msgcoder1->nombre,boiteE.m[i].message,10);
+										    		 mpz_set_ui (msgcoder1->taille ,mpz_sizeinbase(msgcoder1->nombre,2) );
+													 message * msgnoncoder1=dechiffrement(msgcoder1, &utilisateur.prive);
+													 boiteE.m[i].message= malloc(sizeof(char*)*2048);
+													 boiteE.m[i].message=conversion_mpz_char(msgnoncoder1);
+													 free(msgcoder1);
 								   					 g_signal_connect(G_OBJECT(BEM[i]), "clicked",G_CALLBACK(afficher_contenu_message_envoyee), NULL);
 								   					 gtk_box_pack_start (GTK_BOX(boxEM),GTK_WIDGET(BEM[i]),FALSE,FALSE,0);
 								  					 free(nom1);
@@ -164,9 +180,9 @@ void messagerie_principale()
                                          int nb = 0 ; 
                                          nb = BoiteInde.nb_mail;
                                          	
-                                         	printf ("%s        ",BoiteInde.m[0].titre);
-                                         	 printf ("%s       ",BoiteInde.m[0].env_email);
-                                            printf ("%s        ",BoiteInde.m[0].message);
+                                         	//printf ("%s        ",BoiteInde.m[0].titre);
+                                         	 //printf ("%s       ",BoiteInde.m[0].env_email);
+                                            //printf ("%s        ",BoiteInde.m[0].message);
                                     	     if (nb >29) nb = 29;
                                    				
                                            for (int i  = 0 ; i <nb ; ++i) {
@@ -174,6 +190,14 @@ void messagerie_principale()
 											    	nom1= g_strdup_printf("%s%s", "",BoiteInde.m[i].titre);
 											    	BMI[i]=gtk_button_new_with_label(nom1);
 											    	gtk_widget_set_name (GTK_WIDGET(BMI[i]),"titremail");
+											    	message * msgcoder2 = malloc (sizeof(message));
+													mpz_inits (msgcoder2->taille,msgcoder2->nombre,NULL); 
+									    			mpz_set_str(msgcoder2->nombre,BoiteInde.m[i].message,10);
+									    			mpz_set_ui (msgcoder2->taille ,mpz_sizeinbase(msgcoder2->nombre,2) );
+													message * msgnoncoder2=dechiffrement(msgcoder2, &utilisateur.prive);
+													BoiteInde.m[i].message= malloc(sizeof(char*)*2048);
+													BoiteInde.m[i].message=conversion_mpz_char(msgnoncoder2);
+													free(msgcoder2);
 											    	g_signal_connect(G_OBJECT(BMI[i]), "clicked",G_CALLBACK(afficher_proposition_supp_afficher),(gpointer)BMI[i]);
 											    	gtk_box_pack_start (GTK_BOX(boxMI),GTK_WIDGET(BMI[i]),FALSE,FALSE,0);
 											    	free(nom1); 
@@ -327,18 +351,9 @@ void afficher_contenu_message(GtkWidget * sender , gpointer *data)
 			 {	
 				gtk_label_set_label (GTK_LABEL(labelMR[3]),b.m[i].env_email);
 				gtk_label_set_label (GTK_LABEL(labelMR[4]),b.m[i].titre);
-				
-				message * msgcoder = malloc (sizeof (message));
-    
-    			mpz_inits (msgcoder->taille,msgcoder->nombre,NULL); 
-    			mpz_set_str(msgcoder->nombre,b.m[i].message,10);
-    			mpz_set_ui (msgcoder->taille ,mpz_sizeinbase(msgcoder->nombre,2) );
-				message * msgnoncoder=dechiffrement(msgcoder, &utilisateur.prive);
-				b.m[i].message= malloc(sizeof(char*)*2048);
-				b.m[i].message=conversion_mpz_char(msgnoncoder);
 				gtk_text_buffer_set_text (bufferMR, b.m[i].message, -1);
 
-				 free(msgcoder);
+				
 			 }
 			}
 			 	
@@ -847,15 +862,8 @@ void afficher_contenu_message_envoyee(GtkWidget * sender , gpointer *data)
 				gtk_label_set_label (GTK_LABEL(labelEM[1]),boiteE.m[i].env_email);
 				gtk_label_set_label (GTK_LABEL(labelEM[2]),boiteE.m[i].titre);
 				printf("%s         \n" ,boiteE.m[i].titre);
-				message * msgcoder1 = malloc (sizeof(message));
-				mpz_inits (msgcoder1->taille,msgcoder1->nombre,NULL); 
-    			mpz_set_str(msgcoder1->nombre,boiteE.m[i].message,10);
-    			mpz_set_ui (msgcoder1->taille ,mpz_sizeinbase(msgcoder1->nombre,2) );
-				message * msgnoncoder1=dechiffrement(msgcoder1, &utilisateur.prive);
-				boiteE.m[i].message= malloc(sizeof(char*)*2048);
-				boiteE.m[i].message=conversion_mpz_char(msgnoncoder1);
 				gtk_text_buffer_set_text (bufferEM, boiteE.m[i].message, -1);
-			     free(msgcoder1);
+			
 			 } }
 }
 }
@@ -1053,15 +1061,7 @@ void reponse_a_utilisateur_supp_affiche(GtkWidget * sender , gpointer * data)
 			 {	
 				gtk_label_set_label (GTK_LABEL(labelMI[1]),BoiteInde.m[i].env_email);
 				gtk_label_set_label (GTK_LABEL(labelMI[2]),BoiteInde.m[i].titre);
-				message * msgcoder2 = malloc (sizeof(message));
-				mpz_inits (msgcoder2->taille,msgcoder2->nombre,NULL); 
-    			mpz_set_str(msgcoder2->nombre,BoiteInde.m[i].message,10);
-    			mpz_set_ui (msgcoder2->taille ,mpz_sizeinbase(msgcoder2->nombre,2) );
-				message * msgnoncoder2=dechiffrement(msgcoder2, &utilisateur.prive);
-				BoiteInde.m[i].message= malloc(sizeof(char*)*2048);
-				BoiteInde.m[i].message=conversion_mpz_char(msgnoncoder2);
 				gtk_text_buffer_set_text (bufferMI, BoiteInde.m[i].message, -1);
-				free(msgcoder2);
 			 }
 			
 			}
