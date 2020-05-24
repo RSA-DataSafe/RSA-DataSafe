@@ -175,7 +175,7 @@ int page_resultatD()
         gtk_widget_set_name (GTK_WIDGET(Frame),"miniT");	
 		GtkWidget *scrolled_window = gtk_scrolled_window_new (NULL , NULL);
 	 	bufferCD= gtk_text_buffer_new (NULL);
-		chaineD = malloc(sizeof(char*)*2048);
+		chaineD = malloc(sizeof(char*)*50000);
 		chaineD=conversion_mpz_char(messageclair);
 		gtk_text_buffer_set_text (bufferCD,chaineD, -1);
 		free(chaineD);

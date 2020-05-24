@@ -130,8 +130,8 @@ void page_chargementC()
        	free(path);
         path = NULL;
 	}
-    gtk_text_buffer_set_text (bufferC, "",-1);// on récupére le texte saisit
-   messageachiff = malloc (sizeof (message)); 
+   gtk_text_buffer_set_text (bufferC, "",-1);// on récupére le texte saisit
+  messageachiff = malloc (sizeof (message)); 
     codage = malloc (sizeof (message));
     mpz_inits (messageachiff->taille , codage->taille , messageachiff->nombre,codage->nombre,NULL ); 
     messageachiff=conversion_char_mpz(chaine ); // on le convertit en mpz
@@ -141,8 +141,8 @@ void page_chargementC()
 	
     messagechiff=chiffrement(messageachiff, &utilisateur.publique , codage); // on chiffre le message
 
-	free(messageachiff);
-	free(codage);
+	//free(messageachiff);
+//	free(codage);
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 
   gtk_window_set_transient_for (GTK_WINDOW(window),GTK_WINDOW(MainWindow));
@@ -191,9 +191,10 @@ int page_resultatC(gpointer * data)
 	
   bufferCC= gtk_text_buffer_new (NULL);
 	
-  chaine=malloc(2048*sizeof(char));
+  chaine=malloc(50000*sizeof(char));
   mpz_get_str(chaine,0,messagechiff->nombre);
-  gtk_text_buffer_set_text (bufferCC,chaine, -1);
+
+  gtk_text_buffer_set_text (bufferCC,chaine, -1 );
 	
  free(chaine);
 

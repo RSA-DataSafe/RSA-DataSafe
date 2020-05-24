@@ -313,7 +313,7 @@ void parametre_securite()
 		gtk_widget_set_name (buttonsecurite[i],"ButtonC");
 	}
 	
-  	buttonsecurite[2] = gtk_button_new_with_label ("Renouveler Clées");
+  	buttonsecurite[2] = gtk_button_new_with_label ("Renouveler Clés");
   	gtk_widget_set_name (buttonsecurite[2],"btnCLE");
 
 

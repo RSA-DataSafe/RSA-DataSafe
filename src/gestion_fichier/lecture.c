@@ -271,7 +271,7 @@ int lire_boite(char *email, boite * b)
 }
 
 char *lire_fichier(char * chemin) {
-		char * res = malloc(sizeof(char)*5000);
+		char * res = malloc(sizeof(char)*20000);
 
 		if(res == NULL) {
 			fprintf(stderr,"Erreur d'allocation Mémoire");
