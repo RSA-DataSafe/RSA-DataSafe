@@ -8,7 +8,8 @@ declare -a tableau_fichier=(
 "obj/chiffrement" 
 "obj/dechiffrement" 
 "obj/signature" 
-"obj/calcul" 
+"obj/calcul"
+"obj/des"
 )
 
 mkdir ${tableau_fichier[@]} 2> /dev/null 
