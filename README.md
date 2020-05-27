@@ -18,7 +18,7 @@ Etre sous linux (ou equivalent) et avoir les logiciels de gestion graphique inst
 
 ## Lancement rapide du logiciel 
 Voici les différentes étapes pour essayer le logiciel:
-- Etape 1: Télécharger les sources: https://github.com/RSA-DataSafe/RSA-DataSafe/releases/download/V.0/RSA_DATASAFE.zip
+- Etape 1: Télécharger le fichier binaire: https://github.com/RSA-DataSafe/RSA-DataSafe/releases/download/V.0/RSA_DATASAFE.zip
 - Etape 2: Extraire le fichiers RSA-DataSafe.zip (Par exemple: ```unzip RSA_DATASAFE.zip  -d RSA_DATASAFE)```).
 - Etape 3: Executer le fichier source: ```./rsa``` 
 
