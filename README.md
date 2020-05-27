@@ -8,7 +8,19 @@
 
 # Projet autour de l'algorithme de RSA
 
-Le but de ce projet est d'implémenter RSA. Nous auront la possibilité de signer et de vérifier un fichier pour s'assurer de l'identité de l'envoyeur. 
+Le but de ce projet est d'implémenter RSA. Nous auront la possibilité de signer et de vérifier un fichier pour s'assurer de 
+l'identité de l'envoyeur. 
+
+# Quick-Start
+
+## Logiciel necessaire:
+Etre sous linux (ou equivalent) et avoir les logiciels de gestion graphique installé (xorg).
+
+## Lancement du logiciel rappide
+Voici les différentes étapes pour essayer le logiciel:
+- Etape 1: Télécharger les sources: https://github.com/RSA-DataSafe/RSA-DataSafe/releases/download/V.0/RSA_DATASAFE.zip
+- Etape 2: Extraire les fichiers.
+- Etape 3: Executer le fichier source: ```./rsa``` 
 
 # Installation - Déployement du produit 
 
