@@ -16,10 +16,10 @@ l'identité de l'envoyeur.
 ## Logiciel necessaire:
 Etre sous linux (ou equivalent) et avoir les logiciels de gestion graphique installé (xorg).
 
-## Lancement du logiciel rappide
+## Lancement rapide du logiciel 
 Voici les différentes étapes pour essayer le logiciel:
 - Etape 1: Télécharger les sources: https://github.com/RSA-DataSafe/RSA-DataSafe/releases/download/V.0/RSA_DATASAFE.zip
-- Etape 2: Extraire les fichiers.
+- Etape 2: Extraire le fichiers RSA-DataSafe.zip (Par exemple: ```unzip RSA_DATASAFE.zip  -d RSA_DATASAFE)```).
 - Etape 3: Executer le fichier source: ```./rsa``` 
 
 # Installation - Déployement du produit 
@@ -74,3 +74,12 @@ Déchiffre un message.
 ## Gestion de fichier
 
 Gére la connection à l'application ainsi que la sauvegarde des clés de l'utilisateur et de ses messages.
+
+# ScreenCapture
+
+![screen capture](capture/c1.png)
+![screen capture](capture/c2.png)
+![screen capture](capture/c3.png)
+![screen capture](capture/c4.png)
+![screen capture](capture/c5.png)
+![screen capture](capture/c6.png)
